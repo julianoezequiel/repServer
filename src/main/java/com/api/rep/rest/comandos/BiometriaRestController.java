@@ -25,7 +25,7 @@ public class BiometriaRestController extends ApiRestController {
 	@Autowired
 	private BiometriaService biometriaService;
 
-	@RequestMapping(value = CONSTANTES.URL_BIOMETRIA, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, method = RequestMethod.POST)
+	@RequestMapping(value = CONSTANTES.URL_BIOMETRIA, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
 	public ResponseEntity<?> receber(RequestEntity<InputStreamResource> entity) throws ServiceException {
 		this.biometriaService.receber(entity, this.getRepAutenticado());
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
