@@ -18,7 +18,6 @@ import com.api.rep.dao.EmpregadoRespository;
 import com.api.rep.dao.EmpregadorRepository;
 import com.api.rep.dao.RepRepository;
 import com.api.rep.dao.TarefaRepository;
-import com.api.rep.dto.comunicacao.TarefaDTO;
 import com.api.rep.entity.Coleta;
 import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Empregador;
