@@ -62,6 +62,7 @@ public class BiometriaService extends ApiService {
 
 	}
 
+	@SuppressWarnings("unused")
 	private static byte[] getStringFromInputStream(InputStream is) {
 
 		BufferedReader br = null;
