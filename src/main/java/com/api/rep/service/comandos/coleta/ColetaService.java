@@ -1,0 +1,101 @@
+package com.api.rep.service.comandos.coleta;
+
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
+import com.api.rep.contantes.DEF;
+import com.api.rep.dao.NsrRepository;
+import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
+import com.api.rep.dto.comunicacao.StatusColetaDTO;
+import com.api.rep.entity.Nsr;
+import com.api.rep.entity.Rep;
+import com.api.rep.service.ApiService;
+import com.api.rep.service.ServiceException;
+
+@Service
+public class ColetaService extends ApiService {
+
+	private static final String NUM_TRAILER = "999999999";
+	private static final String NUM_CABECALHO = "000000000";
+
+	@Autowired
+	private NsrRepository nsrRepository;
+
+	// recebe o NSR
+	public void coletaNsr(String registros, Rep rep) {
+
+		this.setRep(rep);
+
+		String[] registro = registros.split("\n");
+		for (int i = 0; i < registro.length; i++) {
+
+			String nsrRegistro = registro[i];
+
+			Integer numNsr = DecomporRegistro.getNumNsr(nsrRegistro);
+
+			if (!numNsr.equals(NUM_CABECALHO) && !numNsr.equals(NUM_TRAILER)) {
+				try {
+
+					Nsr nsr = this.nsrRepository.buscarPorNumNsr(numNsr);
+
+					if (nsr == null) {
+						nsr = DecomporRegistro.CONVERTER_NSR.get(nsrRegistro).convert(nsrRegistro, this);
+						nsr.setRepId(rep);
+						this.nsrRepository.saveAndFlush(nsr);
+						LOGGER.info("Novo NSR Coletado :" + registro[i].replace("\r", ""));
+					} else {
+						LOGGER.info("NSR Já coletado :" + registro[i].replace("\r", ""));
+					}
+
+				} catch (Exception e) {
+					System.err.println(e);
+				}
+
+			}
+		}
+	}
+
+	public RespostaSevidorDTO receber(String registros, Rep rep) throws ServiceException {
+		LOGGER.info("Inicio do recebimento do coleta");
+		if (rep == null) {
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não autorizado");
+		}
+		// busca a referencia correta do rep
+		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
+
+		if (rep != null) {
+			// coleta os registros
+			coletaNsr(registros, rep);
+			LOGGER.info("Término do recebimento do coleta");
+			return new RespostaSevidorDTO(HttpStatus.OK);
+		} else {
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");
+		}
+
+	}
+
+	public RespostaSevidorDTO statusColeta(StatusColetaDTO statusColetaDTO, Rep repAutenticado)
+			throws ServiceException {
+		LOGGER.info("Status da coleta : " + statusColetaDTO.getRegistrosColeto() + " Rep : "
+				+ repAutenticado.getNumeroSerie());
+		if (DEF.CANCELAR_COLETA) {
+			throw new ServiceException(HttpStatus.RESET_CONTENT, "cancelado pelo usuário");
+		} else {
+			return new RespostaSevidorDTO(HttpStatus.OK);
+		}
+	}
+
+	public Collection<Nsr> buscarNsrPorRep(Rep rep) throws ServiceException {
+		if (rep != null) {
+			rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
+			return this.nsrRepository.buscarPorRep(rep);
+		} else {
+			throw new ServiceException(HttpStatus.NOT_ACCEPTABLE);
+		}
+
+	}
+
+}
