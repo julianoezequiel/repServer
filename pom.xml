@@ -6,7 +6,7 @@
 	<groupId>com.api.rep</groupId>
 	<artifactId>RepAPI</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 
 	<name>RepAPI</name>
 	<description></description>
@@ -131,7 +131,7 @@
                                     <groupId>com.github.jsimone</groupId>
                                     <artifactId>webapp-runner</artifactId>
                                     <version>8.0.30.2</version>
-                                    <destFileName>RepAPI.war</destFileName>
+                                    <destFileName>0.0.1-SNAPSHOT.jar</destFileName>
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
