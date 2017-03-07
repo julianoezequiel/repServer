@@ -2,7 +2,6 @@ package com.api.rep.entity;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 public class UsuarioBio {
 

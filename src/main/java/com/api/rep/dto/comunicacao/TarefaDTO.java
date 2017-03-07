@@ -1,12 +1,9 @@
 package com.api.rep.dto.comunicacao;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.io.Serializable;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comandos.EmpregadorDTO;
 import com.api.rep.entity.Tarefa;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

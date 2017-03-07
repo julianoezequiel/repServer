@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.api.rep.entity.Empregador;
-import com.api.rep.entity.Rep;
 
 @Repository
 public interface EmpregadorRepository extends JpaRepository<Empregador, Integer> {

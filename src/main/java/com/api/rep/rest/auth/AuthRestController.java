@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comunicacao.RepDTO;
-import com.api.rep.dto.comunicacao.RespostaRepDTO;
 import com.api.rep.dto.comunicacao.TokenDTO;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.auth.AuthService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping(value = CONSTANTES.URL_AUTH)
