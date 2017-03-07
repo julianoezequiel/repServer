@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.api.rep.contantes.CONSTANTES;
@@ -19,10 +18,11 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Component
 public class JwtUtil {
 
-	public Rep parseToken(String token) throws ServiceException {
+	public Rep parseToken(String token) {
 		try {
 			if (token == null || token.equals("") || token.length() < 10) {
-				throw new ServiceException(HttpStatus.UNAUTHORIZED);
+				// throw new ServiceException(HttpStatus.UNAUTHORIZED);
+				return null;
 			}
 			Claims body = Jwts.parser().setSigningKey(CONSTANTES.AUTH_KEY).parseClaimsJws(token).getBody();
 

@@ -11,7 +11,7 @@ import com.api.rep.service.ServiceException;
 public class ControllerException {
 
 	@ExceptionHandler(ServiceException.class)
-	public ResponseEntity<RespostaException> handleException(ServiceException se) {
+	public ResponseEntity<?> handleException(ServiceException se) {
 		return new ResponseEntity<RespostaException>(new RespostaException(se.getMessage(), se.getHttpStatus()),
 				se.getHttpStatus());
 	}

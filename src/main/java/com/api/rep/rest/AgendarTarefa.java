@@ -58,7 +58,9 @@ public class AgendarTarefa extends ApiRestController {
 				tarefa = new Tarefa();
 				tarefa.setCpf(CONSTANTES.CPF_TESTE);
 				tarefa.setTipoTarefa(CONSTANTES.TIPO_CMD.BIOMETRIA.ordinal());
+				
 				tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+				
 				tarefa.setRepId(rep);
 
 				Optional<Empregado> empregadoOpt = this.empregadoRespository.buscarPorPis("010892044889");

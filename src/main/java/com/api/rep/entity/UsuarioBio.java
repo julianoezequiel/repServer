@@ -1,17 +1,30 @@
 package com.api.rep.entity;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Type;
+
+@Entity
 public class UsuarioBio {
 
 	@Id
 	@GeneratedValue
+	@Basic(optional = false)
+	@NotNull
+	@Column(name = "id")
 	private Integer id;
 
 	private String pis;
 
-	private Byte[] template;
+//	@Type(type = "org.hibernate.type.BinaryType")
+//	@Lob
+	private byte[] template;
 
 	public Integer getId() {
 		return id;
@@ -29,11 +42,11 @@ public class UsuarioBio {
 		this.pis = pis;
 	}
 
-	public Byte[] getTemplate() {
+	public byte[] getTemplate() {
 		return template;
 	}
 
-	public void setTemplate(Byte[] template) {
+	public void setTemplate(byte[] template) {
 		this.template = template;
 	}
 

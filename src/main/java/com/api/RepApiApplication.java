@@ -2,9 +2,12 @@ package com.api;
 
 import java.text.SimpleDateFormat;
 
+import javax.servlet.MultipartConfigElement;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
@@ -45,6 +48,15 @@ public class RepApiApplication {
 		b.failOnUnknownProperties(false);
 		b.configure(mapper);
 		return b;
+	}
+
+	@Bean
+	MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		factory.setMaxFileSize("1280KB");
+		factory.setMaxRequestSize("1280KB");
+		factory.setLocation(System.getProperty("java.io.tmpdir"));
+		return factory.createMultipartConfig();
 	}
 
 	// Start inicial do app
