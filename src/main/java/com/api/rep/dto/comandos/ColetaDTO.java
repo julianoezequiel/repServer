@@ -1,5 +1,7 @@
 package com.api.rep.dto.comandos;
 
+import com.api.rep.entity.Coleta;
+
 public class ColetaDTO extends ComandoAbstract {
 
 	private static final long serialVersionUID = 1L;
@@ -42,4 +44,12 @@ public class ColetaDTO extends ComandoAbstract {
 		this.coletaDataFim = coletaDataFim;
 	}
 
+	public Coleta toColeta(){
+		Coleta coleta = new Coleta();
+		coleta.setColetaDataFim(coletaDataFim);
+		coleta.setColetaDataInicio(coletaDataInicio);
+		coleta.setColetaNsrFim(coletaNsrFim);
+		coleta.setColetaNsrInicio(coletaNsrInicio);
+		return coleta; 
+	}
 }

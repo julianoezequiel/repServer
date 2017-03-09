@@ -6,14 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dao.EmpregadoRespository;
+import com.api.rep.dao.EmpregadoRepository;
 import com.api.rep.dao.TarefaRepository;
 import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comunicacao.RespostaRepDTO;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
-import com.api.rep.entity.Tarefa;
 import com.api.rep.entity.Rep;
+import com.api.rep.service.comandos.TratarResposta;
 import com.api.rep.service.rep.RepService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -29,10 +27,13 @@ public class ApiService {
 	private RepService repService;
 
 	@Autowired
-	private EmpregadoRespository empregadoRespository;
+	private EmpregadoRepository empregadoRespository;
 
 	@Autowired
 	private ObjectMapper mapper;
+
+	@Autowired
+	private TratarResposta tratarResposta;
 
 	private Rep rep;
 
@@ -76,36 +77,6 @@ public class ApiService {
 
 	}
 
-	public RespostaSevidorDTO validarRespostaRep(RespostaRepDTO respostaRep, Rep repAutenticado) {
-		RespostaSevidorDTO respostaSevidorDTO = new RespostaSevidorDTO();
-		// se existe um NSU
-		if (respostaRep.getNSU() != null && !respostaRep.getStatus().isEmpty()) {
-			// busca o NSU
-			Rep rep = this.getRepService().buscarPorNumeroSerie(repAutenticado.getNumeroSerie());
-			if (rep != null) {
-				// Teste basico, verifica se existe um status ok na resposta do
-				// rep
-				if (respostaRep.getStatus().stream().anyMatch(r -> r != CONSTANTES.STATUS_COM_REP.FALHA.ordinal())) {
-					Tarefa tarefa = this.getTarefaRepository().findOne(respostaRep.getNSU());
-					// se foi uma resposta de sucesso, excluir a Tarefa
-					if (tarefa != null) {
-
-						// Remove os vinculos
-						tarefa = Tarefa.clear(tarefa);
-
-						this.getTarefaRepository().save(tarefa);
-						this.getTarefaRepository().delete(tarefa);
-						respostaSevidorDTO.setHttpStatus(HttpStatus.OK);
-						LOGGER.info("Tarefa NSU : " + tarefa.getNsu() + " removida");
-					}
-				}
-			} else {
-				respostaSevidorDTO.setHttpStatus(HttpStatus.NOT_MODIFIED);
-			}
-		}
-		return respostaSevidorDTO;
-	}
-
 	public ObjectMapper getMapper() {
 		return mapper;
 	}
@@ -114,11 +85,11 @@ public class ApiService {
 		this.mapper = mapper;
 	}
 
-	public EmpregadoRespository getEmpregadoRespository() {
+	public EmpregadoRepository getEmpregadoRespository() {
 		return empregadoRespository;
 	}
 
-	public void setEmpregadoRespository(EmpregadoRespository empregadoRespository) {
+	public void setEmpregadoRespository(EmpregadoRepository empregadoRespository) {
 		this.empregadoRespository = empregadoRespository;
 	}
 
@@ -128,6 +99,11 @@ public class ApiService {
 
 	public void setRep(Rep rep) {
 		this.rep = rep;
+	}
+
+	public RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

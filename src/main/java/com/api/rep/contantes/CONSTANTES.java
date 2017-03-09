@@ -8,6 +8,7 @@ public class CONSTANTES {
 
 	public static final String URL_EMPREGADOR = "/restrict/empregador";
 	public static final String URL_EMPREGADO = "/restrict/empregado";
+	public static final String URL_LISTA_EMPREGADO = "/restrict/empregado/lista";
 	public static final String URL_COLETA = "/restrict/coleta";
 	public static final String URL_BIOMETRIA = "/restrict/empregado/bio";
 	public static final String URL_LISTA_BIOMETRIA = "/restrict/empregado/listabio";
@@ -18,78 +19,79 @@ public class CONSTANTES {
 	public static final String URL_AUTH = "/auth";
 	public static final String URL_STATUS = "/restrict/status";
 
-	public enum TIPO_CMD {
-		CMD_NENHUM() {// 0
-			@Override
-			public String getUrl() {
-				return null;
-			}
-		},
-		EMPREGADOR() {// 1
-			@Override
-			public String getUrl() {
-				return URL_EMPREGADOR;
-			}
-		},
-		EMPREGADO() {// 2
-			@Override
-			public String getUrl() {
-				return URL_EMPREGADO;
-			}
-		},
-		COLETA() {// 3
-			@Override
-			public String getUrl() {
-				return URL_COLETA;
-			}
-		},
-		BIOMETRIA() {// 4
-			@Override
-			public String getUrl() {
-				return URL_BIOMETRIA;
-			}
-		},
-		LISTA_BIOMETRIA() {// 5 pis dos funcionario bio
-			@Override
-			public String getUrl() {
-				return URL_LISTA_BIOMETRIA;
-			}
-		},
-		CONFIG() {// 6
-			@Override
-			public String getUrl() {
-				return URL_CONFIG;
-			}
-		},
-		INFO() {// 7
-			@Override
-			public String getUrl() {
-				return URL_INFO;
-			}
-		},
-		RELOGIO() {// 8
-			@Override
-			public String getUrl() {
-				return URL_RELOGIO;
-			}
-		};
-
-		public abstract String getUrl();
-
-		public static TIPO_CMD get(Integer tipo) {
-			if (tipo != null) {
-				for (TIPO_CMD operacaocao : values()) {
-					if (operacaocao.ordinal() == tipo) {
-						return operacaocao;
-					}
-				}
-			}
-			return null;
-		}
-	}
+//	public enum TIPO_CMD {
+//		CMD_NENHUM() {// 0
+//			@Override
+//			public String getUrl() {
+//				return null;
+//			}
+//		},
+//		EMPREGADOR() {// 1
+//			@Override
+//			public String getUrl() {
+//				return URL_EMPREGADOR;
+//			}
+//		},
+//		EMPREGADO() {// 2
+//			@Override
+//			public String getUrl() {
+//				return URL_EMPREGADO;
+//			}
+//		},
+//		COLETA() {// 3
+//			@Override
+//			public String getUrl() {
+//				return URL_COLETA;
+//			}
+//		},
+//		BIOMETRIA() {// 4
+//			@Override
+//			public String getUrl() {
+//				return URL_BIOMETRIA;
+//			}
+//		},
+//		LISTA_BIOMETRIA() {// 5 pis dos funcionario bio
+//			@Override
+//			public String getUrl() {
+//				return URL_LISTA_BIOMETRIA;
+//			}
+//		},
+//		CONFIG() {// 6
+//			@Override
+//			public String getUrl() {
+//				return URL_CONFIG;
+//			}
+//		},
+//		INFO() {// 7
+//			@Override
+//			public String getUrl() {
+//				return URL_INFO;
+//			}
+//		},
+//		RELOGIO() {// 8
+//			@Override
+//			public String getUrl() {
+//				return URL_RELOGIO;
+//			}
+//		};
+//
+//		public abstract String getUrl();
+//
+//		public static TIPO_CMD get(Integer tipo) {
+//			if (tipo != null) {
+//				for (TIPO_CMD operacaocao : values()) {
+//					if (operacaocao.ordinal() == tipo) {
+//						return operacaocao;
+//					}
+//				}
+//			}
+//			return null;
+//		}
+//	}
 
 	public enum TIPO_OPERACAO {
-		NENHUMA, ENVIAR, RECEBER, EXCLUIR;
+		NENHUMA,
+		ENVIAR, RECEBER, EXCLUIR;
 
 		public static TIPO_OPERACAO get(Integer tipo) {
 			if (tipo != null) {
@@ -115,22 +117,25 @@ public class CONSTANTES {
 	}
 
 	public enum STATUS_COM_REP {
-		OK, // 0
-		FALHA, // 1
-		NAO_AUTORIZADO, // 2
-		FALHA_JSON, // 3
-		DADOS_INVALIDOS, // 4
-		TAMANHO_DADOS_EXCEDIDO, // 5
-		TAM_BUFFER_EXCEDIDO, // 6
-		COMANDO_INVALIDO, // 7
-		EMPRESA_NAO_CADASTRADA, // 8
-		BASE_CHEIA, //9
-		MEMORIA_CHEIA, // 10
-		CADASTRO_SUCESSO, // 11
-		ALTERADO_SUCESSO, // 12
-		NAO_ALTERADO,//13 
-		OCUPADO,// 14
-		EMPREGADO_NAO_CAD;
+		HTTPC_RESULT_OK, // 0
+		HTTPC_RESULT_FALHA, // 1
+		HTTPC_RESULT_NAO_AUTORIZADO, // 2
+		HTTPC_RESULT_FALHA_JSON, // 3
+		HTTPC_RESULT_DADOS_INVALIDOS, // 4
+		HTTPC_RESULT_TAMANHO_DADOS_EXCEDIDO, // 5
+		HTTPC_RESULT_TAM_BUFFER_EXCEDIDO, // 6
+		HTTPC_RESULT_COMANDO_INVALIDO, // 7
+		HTTPC_RESULT_EMPRESA_NAO_CADASTRADA, // 8
+		HTTPC_RESULT_BASE_CHEIA, // 9
+		HTTPC_RESULT_MEMORIA_CHEIA, // 10
+		HTTPC_RESULT_CADASTRO_SUCESSO, // 11
+		HTTPC_RESULT_ALTERADO_SUCESSO, // 12
+		HTTPC_RESULT_NAO_ALTERADO, // 13
+		HTTPC_RESULT_OCUPADO, // 14
+		HTTPC_RESULT_EMPREGADO_NAO_CAD, // 15
+		HTTPC_RESULT_EMPREGADO_EXCLUIDO_SUCESSO, // 16
+		HTTPC_RESULT_BIO_NAO_CADASTRADA, // 17
+		HTTPC_RESULT_BIO_EXCLUIDA_SUCESSO;// 18
 
 		public static STATUS_COM_REP get(Integer tipo) {
 			if (tipo != null) {

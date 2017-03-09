@@ -1,6 +1,7 @@
 package com.api.rep.service.comandos.empregado;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,23 +9,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dao.EmpregadoRespository;
+import com.api.rep.dao.EmpregadoRepository;
 import com.api.rep.dto.comandos.ComandoAbstract;
 import com.api.rep.dto.comandos.EmpregadoDTO;
-import com.api.rep.dto.comandos.EmpregadorDTO;
-import com.api.rep.dto.comunicacao.RespostaRepDTO;
-import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.entity.Empregado;
-import com.api.rep.entity.Tarefa;
 import com.api.rep.entity.Rep;
+import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
+import com.api.rep.service.tarefa.TarefaHandler;
 
 @Service
 public class EmpregadoService extends ApiService {
 
 	@Autowired
-	private EmpregadoRespository empregadoRespository;
+	private EmpregadoRepository empregadoRespository;
 
 	public Collection<Empregado> listar() {
 		return this.empregadoRespository.findAll();
@@ -61,7 +60,7 @@ public class EmpregadoService extends ApiService {
 			tarefa.setCpf("04752873982");
 			tarefa.setRepId(rep);
 			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
-			tarefa.setTipoTarefa(CONSTANTES.TIPO_CMD.EMPREGADO.ordinal());
+			tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADO.ordinal());
 
 			// salva ou atualiza o empregado
 			empregado = this.empregadoRespository.save(empregado);
@@ -75,16 +74,6 @@ public class EmpregadoService extends ApiService {
 			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Empregado inválido");
 		}
 
-	}
-
-	@Override
-	public RespostaSevidorDTO validarRespostaRep(RespostaRepDTO respostaRep, Rep repAutenticado) {
-		// TODO : Tratar a resposta de comando de forma especifica
-		if (respostaRep.getStatus().stream()
-				.anyMatch(s -> s == CONSTANTES.STATUS_COM_REP.EMPREGADO_NAO_CAD.ordinal())) {
-			LOGGER.info("Empregado não cadastrado");
-		}
-		return super.validarRespostaRep(respostaRep, repAutenticado);
 	}
 
 	@Override
@@ -113,6 +102,20 @@ public class EmpregadoService extends ApiService {
 			}
 		}
 
+	}
+
+	public void receberLista(List<EmpregadoDTO> empregadoDTOList, Rep repAutenticado) {
+		
+		LOGGER.info("Lista Recebida : " + empregadoDTOList.toString());
+
+		empregadoDTOList.stream().forEach(e -> {
+			Optional<Empregado> empregadoOptional = this.empregadoRespository.buscarPorPis(e.getEmpregadoPis());
+			Empregado empregado = e.toEmpregado();
+			if (empregadoOptional.isPresent()) {
+				empregado.setId(empregadoOptional.get().getId());
+			}
+			this.empregadoRespository.save(empregado);
+		});
 	}
 
 }

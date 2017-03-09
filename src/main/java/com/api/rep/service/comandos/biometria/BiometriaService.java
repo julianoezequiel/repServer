@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.api.rep.dao.UsuarioBioRepository;
-import com.api.rep.dto.comandos.FPIDDTO;
+import com.api.rep.dto.comandos.ListaBio;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.entity.UsuarioBio;
@@ -92,10 +92,13 @@ public class BiometriaService extends ApiService {
 
 	}
 
-	public void receberListaBio(FPIDDTO fpiddto, Object repAutenticado) throws JsonProcessingException {
-		if (fpiddto != null && !fpiddto.getPisList().isEmpty()) {
-			LOGGER.info("Total Funcionários :" + fpiddto.getPisList().size());
-			LOGGER.info(this.getMapper().writeValueAsString(fpiddto));
+	public static HashMap<String, ListaBio> LISTA_BIO = new HashMap<>();
+
+	public void receberListaBio(ListaBio listaBio, Rep repAutenticado) throws JsonProcessingException {
+		if (listaBio != null && !listaBio.getPisList().isEmpty()) {
+			LISTA_BIO.put(repAutenticado.getNumeroSerie(), listaBio);
+			LOGGER.info("Total Funcionários :" + listaBio.getPisList().size());
+			LOGGER.info(this.getMapper().writeValueAsString(listaBio));
 		}
 
 	}

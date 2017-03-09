@@ -1,30 +1,32 @@
 package com.api.rep.rest;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Example;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dao.EmpregadoRespository;
+import com.api.rep.dao.ColetaRepository;
+import com.api.rep.dao.EmpregadoRepository;
 import com.api.rep.dao.EmpregadorRepository;
 import com.api.rep.dao.RepRepository;
 import com.api.rep.dao.TarefaRepository;
+import com.api.rep.dto.comandos.ColetaDTO;
+import com.api.rep.dto.comandos.EmpregadoDTO;
+import com.api.rep.dto.comandos.EmpregadorDTO;
 import com.api.rep.entity.Coleta;
 import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Empregador;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ServiceException;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.api.rep.service.tarefa.TarefaHandler;
 
 @RestController
 @RequestMapping(value = "agendarTarefa")
@@ -34,120 +36,114 @@ public class AgendarTarefa extends ApiRestController {
 	private TarefaRepository tarefaRepository;
 
 	@Autowired
-	private EmpregadoRespository empregadoRespository;
+	private EmpregadoRepository empregadoRepository;
 
 	@Autowired
 	private EmpregadorRepository empregadorRepository;
 
 	@Autowired
+	private ColetaRepository coletaRepository;
+
+	@Autowired
 	private RepRepository repRepository;
 
-	@RequestMapping(value = "{tipo}/{operacao}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<?> status(@PathVariable Integer tipo, @PathVariable Integer operacao)
-			throws ServiceException, JsonProcessingException {
-		ApiRestController.LOGGER.info("Solicitando comando : " + CONSTANTES.TIPO_CMD.get(tipo));
+	@RequestMapping(value = "coleta", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa coleta(@RequestBody ColetaDTO coletaDTO) throws ServiceException {
+		Tarefa tarefa = Tarefa.padraoTeste();
 
-		Tarefa tarefa;
-		Rep rep = this.getRepAutenticado();
-		if (rep != null && rep.getNumeroSerie() != null) {
-			rep = this.repRepository.buscarPorNumeroSerie(rep.getNumeroSerie());
+		Coleta coleta = coletaDTO.toColeta();
+		coleta = this.coletaRepository.save(coleta);
 
-			switch (CONSTANTES.TIPO_CMD.get(tipo)) {
-			case BIOMETRIA:
-				tarefa = new Tarefa();
-				tarefa.setCpf(CONSTANTES.CPF_TESTE);
-				tarefa.setTipoTarefa(CONSTANTES.TIPO_CMD.BIOMETRIA.ordinal());
-				
-				tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
-				
-				tarefa.setRepId(rep);
+		tarefa.setColetaId(coleta);
+		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.COLETA.ordinal());
 
-				Optional<Empregado> empregadoOpt = this.empregadoRespository.buscarPorPis("010892044889");
-				if (empregadoOpt.isPresent()) {
-					tarefa.setEmpregadoId(empregadoOpt.get());
-					this.tarefaRepository.save(tarefa);
-				}
-				break;
+		return this.tarefaRepository.save(tarefa);
+	}
 
-			case COLETA:
+	@RequestMapping(value = "empregado/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa empregado(@RequestBody EmpregadoDTO empregadoDTO, @PathVariable Integer operacao)
+			throws ServiceException {
 
-				tarefa = Tarefa.padraoTeste();
-				tarefa.setColetaId(new Coleta(1, 1000));
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Tarefa tarefa = Tarefa.padraoTeste();
 
-				this.tarefaRepository.save(tarefa);
-
-				break;
-
-			case CONFIG:
-
-				break;
-
-			case EMPREGADO:
-
-				List<Empregado> empregados = this.empregadoRespository.findAll();
-				if (!empregados.isEmpty()) {
-					tarefa = Tarefa.padraoTeste();
-					if (!empregados.isEmpty()) {
-						Empregado e = empregados.get(new Random().nextInt(empregados.size()));
-						tarefa.setEmpregadoId(e);
-						LOGGER.info("Agendar solicitação empregado PIS :" + e.getEmpregadoPis());
-						tarefa.setRepId(rep);
-						tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
-						tarefa.setTipoTarefa(CONSTANTES.TIPO_CMD.EMPREGADO.ordinal());
-						this.tarefaRepository.save(tarefa);
-					}
-				}
-				break;
-
-			case EMPREGADOR:
-
-				Empregador empregador = rep.getEmpregadorId();
-
-				if (operacao == 2) {
-					empregador.setEmpregadorCei(ceiRandom());
-				}
-				if (empregador != null) {
-					tarefa = Tarefa.padraoTeste();
-					tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
-					tarefa.setTipoTarefa(CONSTANTES.TIPO_CMD.EMPREGADOR.ordinal());
-					tarefa.setEmpregadorId(empregador);
-					tarefa.setRepId(rep);
-					this.tarefaRepository.save(tarefa);
-				}
-				break;
-
-			case INFO:
-
-				break;
-
-			case LISTA_BIOMETRIA:
-
-				tarefa = new Tarefa();
-				tarefa.setCpf(CONSTANTES.CPF_TESTE);
-				tarefa.setTipoTarefa(CONSTANTES.TIPO_CMD.LISTA_BIOMETRIA.ordinal());
-				tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
-				tarefa.setRepId(rep);
-				this.tarefaRepository.save(tarefa);
-
-				break;
-
-			case RELOGIO:
-
-				break;
-
-			case CMD_NENHUM:
-			default:
-				break;
-			}
-			return new ResponseEntity<>(HttpStatus.OK);
+		Optional<Empregado> empregado = this.empregadoRepository.buscarPorPis(empregadoDTO.getEmpregadoPis());
+		if (empregado.isPresent()) {
+			tarefa.setEmpregadoId(empregado.get());
 		} else {
-			throw new ServiceException(HttpStatus.UNAUTHORIZED);
+			Empregado empregado2 = empregadoDTO.toEmpregado();
+			empregado2 = this.empregadoRepository.save(empregado2);
+			tarefa.setEmpregadoId(empregado2);
 		}
+
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADO.ordinal());
+		return this.tarefaRepository.save(tarefa);
+
 	}
 
-	private String ceiRandom() {
-		Integer i = (int) (Math.random() * (999999999 - 1)) + 999999999;
-		return i.toString();
+	@RequestMapping(value = "empregador/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa empregador(@RequestBody EmpregadorDTO empregadorDTO, @PathVariable Integer operacao)
+			throws ServiceException {
+
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Tarefa tarefa = Tarefa.padraoTeste();
+
+		Empregador empregador = empregadorDTO.toEmpregador();
+
+		empregador.setId(rep.getEmpregadorId() != null ? rep.getEmpregadorId().getId() : null);
+
+		empregador = this.empregadorRepository.save(empregador);
+		rep.setEmpregadorId(empregador);
+		this.repRepository.save(rep);
+		tarefa.setEmpregadorId(empregador);
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADOR.ordinal());
+		return this.tarefaRepository.save(tarefa);
+
 	}
 
+	@RequestMapping(value = "biometria/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa biometria(@RequestBody EmpregadoDTO empregadoDTO, @PathVariable Integer operacao)
+			throws ServiceException {
+
+		Tarefa tarefa = Tarefa.padraoTeste();
+
+		Empregado empregado = empregadoDTO.toEmpregado();
+		empregado = this.empregadoRepository.findOne(Example.of(empregado));
+		if (empregado != null) {
+			tarefa.setEmpregadoId(empregado);
+		}
+		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.BIOMETRIA.ordinal());
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "listabiometria", method = RequestMethod.GET)
+	public Tarefa listabiometria() throws ServiceException {
+		Tarefa tarefa = new Tarefa();
+		tarefa.setCpf(CONSTANTES.CPF_TESTE);
+		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.LISTA_BIOMETRIA.ordinal());
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "listaempregados", method = RequestMethod.GET)
+	public Tarefa listaempreagados() throws ServiceException {
+		Tarefa tarefa = new Tarefa();
+		tarefa.setCpf(CONSTANTES.CPF_TESTE);
+		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.LISTA_EMPREGADO.ordinal());
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
+		return this.tarefaRepository.save(tarefa);
+
+	}
 }

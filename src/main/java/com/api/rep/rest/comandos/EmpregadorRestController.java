@@ -70,7 +70,7 @@ public class EmpregadorRestController extends ApiRestController {
 	}
 
 	/**
-	 * Recebe os dados solicitado do Rep
+	 * Recebe do Rep o empregador
 	 * 
 	 * @param empregadorDTO
 	 * @return

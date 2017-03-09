@@ -1,6 +1,7 @@
 package com.api.rep.rest.comandos;
 
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,46 @@ public class ColetaRestController extends ApiRestController {
 	@Autowired
 	private ColetaService coletaService;
 
+	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
+	public ResponseEntity<?> statusColeta(@RequestBody StatusColetaDTO statusColetaDTO) throws ServiceException {
+		return new ResponseEntity<RespostaSevidorDTO>(
+				this.coletaService.statusColeta(statusColetaDTO, this.getRepAutenticado()), HttpStatus.OK);
+	}
+
+	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<Collection<Nsr>> bucarPorRep() throws ServiceException {
+		return new ResponseEntity<>(this.coletaService.buscarNsrPorRep(this.getRepAutenticado()), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "removertodos", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<?> excluirTodos() throws ServiceException {
+		HashMap<String, Long> total = new HashMap<>();
+		total.put("Registro excluido", this.coletaService.excluirTodos(this.getRepAutenticado()));
+		return new ResponseEntity<>(total, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "total", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<?> total() throws ServiceException {
+		HashMap<String, Long> total = new HashMap<>();
+		total.put("Total", this.coletaService.total(this.getRepAutenticado()));
+		return new ResponseEntity<HashMap<String, Long>>(total, HttpStatus.OK);
+	}
+
 	/**
-	 * Recebe os registro de NSR em formato texto
+	 * Cancela um coleta em andamento
+	 * 
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "cancelar", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<?> cancelar() throws ServiceException {
+		HashMap<String, Boolean> total = new HashMap<>();
+		total.put("Coleta cancelada", this.coletaService.cancelar(this.getRepAutenticado()));
+		return new ResponseEntity<HashMap<String, Boolean>>(total, HttpStatus.OK);
+	}
+
+	/**
+	 * Recebe do Rep os registro de NSR em formato texto
 	 * 
 	 * @param registros
 	 * @return
@@ -38,17 +77,6 @@ public class ColetaRestController extends ApiRestController {
 	public ResponseEntity<?> receber(@RequestBody String registros) throws ServiceException {
 		this.coletaService.receber(registros, this.getRepAutenticado());
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
-	}
-
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
-	public ResponseEntity<?> statusColeta(@RequestBody StatusColetaDTO statusColetaDTO) throws ServiceException {
-		return new ResponseEntity<RespostaSevidorDTO>(
-				this.coletaService.statusColeta(statusColetaDTO, this.getRepAutenticado()), HttpStatus.OK);
-	}
-
-	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<Collection<Nsr>> bucarPorRep() throws ServiceException {
-		return new ResponseEntity<>(this.coletaService.buscarNsrPorRep(this.getRepAutenticado()), HttpStatus.OK);
 	}
 
 }

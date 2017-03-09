@@ -62,6 +62,6 @@ public class ApiRestController {
 		if (rep == null) {
 			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Token inválido");
 		}
-		return rep;
+		return  rep;
 	}
 }

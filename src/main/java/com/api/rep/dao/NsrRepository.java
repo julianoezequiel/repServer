@@ -2,6 +2,8 @@ package com.api.rep.dao;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,7 +24,7 @@ public interface NsrRepository extends JpaRepository<Nsr, Integer> {
 		return buscarPorRep(rep, new PageRequest(0, 1));
 	}
 
-	@Query(value = "select * from Nsr order by id desc LIMIT 1", nativeQuery = true)
+	@Query(value = "select * from Nsr order by numero_nsr desc LIMIT 1", nativeQuery = true)
 	public Nsr findLast();
 
 	@Query(value = "select n from Nsr n where n.numeroNsr = :numNsr")
@@ -30,5 +32,12 @@ public interface NsrRepository extends JpaRepository<Nsr, Integer> {
 
 	@Query(value = "select n from Nsr n where n.repId = :prep")
 	public List<Nsr> buscarPorRep(@Param("prep") Rep rep);
+
+	// @Query(value = "delete from Nsr where rep_id = :id", nativeQuery = true)
+	@Transactional
+	public long removeByrepId(Rep rep);
+
+	// @Query(value = "select count(n) from Nsr n where n.repId = :rep")
+	// public Long total(@Param("rep") Rep rep);
 
 }

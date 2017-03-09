@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comandos.ComandoAbstract;
 import com.api.rep.dto.comunicacao.TarefaDTO;
+import com.api.rep.service.tarefa.TarefaHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -207,8 +208,8 @@ public class Tarefa implements Serializable {
 			dto.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(this.tipoOperacao).ordinal());
 		}
 		if (this.tipoTarefa != null) {
-			dto.setUrl(CONSTANTES.TIPO_CMD.get(this.tipoTarefa).getUrl());
-			dto.setTipoComando(CONSTANTES.TIPO_CMD.get(this.tipoTarefa).ordinal());
+			dto.setUrl(TarefaHandler.TIPO_CMD.get(this.tipoTarefa).getUrl());
+			dto.setTipoComando(TarefaHandler.TIPO_CMD.get(this.tipoTarefa).ordinal());
 		}
 		dto.setCpf(cpf);
 		dto.setDadosComando(this.toComandoDTO());

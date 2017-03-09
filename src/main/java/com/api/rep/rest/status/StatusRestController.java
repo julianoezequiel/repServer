@@ -13,16 +13,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comunicacao.TarefaDTO;
 import com.api.rep.dto.comunicacao.RespostaRepDTO;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.dto.comunicacao.StatusDTO;
+import com.api.rep.dto.comunicacao.TarefaDTO;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.status.StatusService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+/**
+ * Requisições Rest de status. O rep utiliza o status para realizar o polling
+ * com o servidor.O status também possuo um método para receber o resultado de
+ * um um comando solicitado
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @RestController
 @RequestMapping(value = CONSTANTES.URL_STATUS)
 public class StatusRestController extends ApiRestController {
@@ -32,7 +40,7 @@ public class StatusRestController extends ApiRestController {
 
 	/**
 	 * O Rep envia periodicamente o comando de status, atravez do método POST.
-	 * Deve se retornar a última pendencia ou nada para O Rep. Caso seja
+	 * Deve se retornar a última tarefa(Comando) ou nada para o Rep. Caso seja
 	 * retornada uma {@link TarefaDTO}, o Rep irá executar o
 	 * {@link ComandoAbstract} informado na {@link TarefaDTO}.
 	 * 
@@ -50,21 +58,8 @@ public class StatusRestController extends ApiRestController {
 				HttpStatus.OK);
 	}
 
-	// Método somente para testes
-	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<Collection<TarefaDTO>> listar() throws ServiceException, JsonProcessingException {
-		return new ResponseEntity<Collection<TarefaDTO>>(this.statusService.buscarTarefas(this.getRepAutenticado()),
-				HttpStatus.OK);
-	}
-
-	// Método somente para testes
-	@RequestMapping(value = "todas", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<Collection<Tarefa>> listarTodos() throws ServiceException {
-		return new ResponseEntity<Collection<Tarefa>>(this.statusService.buscarTarefas(), HttpStatus.OK);
-	}
-
 	/**
-	 * Retorno do status do comando e operacao realizada pelo Rep
+	 * Retorno do status do comando e operação realizada pelo Rep
 	 * 
 	 * @param empregador
 	 * @return
@@ -83,5 +78,18 @@ public class StatusRestController extends ApiRestController {
 
 		return new ResponseEntity<RespostaSevidorDTO>(
 				this.statusService.validarRespostaRep(respostaRep, this.getRepAutenticado()), HttpStatus.OK);
+	}
+
+	// Método somente para testes
+	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<Collection<TarefaDTO>> listar() throws ServiceException, JsonProcessingException {
+		return new ResponseEntity<Collection<TarefaDTO>>(this.statusService.buscarTarefas(this.getRepAutenticado()),
+				HttpStatus.OK);
+	}
+
+	// Método somente para testes
+	@RequestMapping(value = "todas", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<Collection<Tarefa>> listarTodos() throws ServiceException {
+		return new ResponseEntity<Collection<Tarefa>>(this.statusService.buscarTarefas(), HttpStatus.OK);
 	}
 }

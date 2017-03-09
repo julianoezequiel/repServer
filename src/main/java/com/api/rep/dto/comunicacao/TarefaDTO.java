@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comandos.ComandoAbstract;
 import com.api.rep.entity.Tarefa;
+import com.api.rep.service.tarefa.TarefaHandler;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
@@ -33,7 +34,7 @@ public class TarefaDTO implements Serializable {
 	public TarefaDTO() {
 	}
 
-	public TarefaDTO(CONSTANTES.TIPO_OPERACAO TIPO_OPERACAO, CONSTANTES.TIPO_CMD TIPO_CMD, Integer nsu) {
+	public TarefaDTO(CONSTANTES.TIPO_OPERACAO TIPO_OPERACAO, TarefaHandler.TIPO_CMD TIPO_CMD, Integer nsu) {
 		super();
 		this.tipoOperacao = TIPO_OPERACAO.ordinal();
 		this.tipoComando = TIPO_CMD.ordinal();
@@ -44,7 +45,7 @@ public class TarefaDTO implements Serializable {
 		super();
 		this.tipoOperacao = CONSTANTES.TIPO_OPERACAO.get(tarefa.getTipoOperacao()).ordinal();
 		this.nsu = tarefa.getNsu();
-		this.url = CONSTANTES.TIPO_CMD.get(tarefa.getTipoTarefa()).getUrl();
+		this.url = TarefaHandler.TIPO_CMD.get(tarefa.getTipoTarefa()).getUrl();
 	}
 
 	public Integer getNsu() {
@@ -94,11 +95,11 @@ public class TarefaDTO implements Serializable {
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
-	
-	public Tarefa toTarefa(){
+
+	public Tarefa toTarefa() {
 		Tarefa tarefa = new Tarefa();
 		this.dadosComando.getClass().getSuperclass();
-		
+
 		return tarefa;
 	}
 

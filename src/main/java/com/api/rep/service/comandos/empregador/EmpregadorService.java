@@ -18,6 +18,7 @@ import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
+import com.api.rep.service.tarefa.TarefaHandler;
 
 @Service
 public class EmpregadorService extends ApiService {
@@ -57,7 +58,7 @@ public class EmpregadorService extends ApiService {
 			tarefa.setCpf(CONSTANTES.CPF_TESTE);
 			tarefa.setRepId(rep);
 			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
-			tarefa.setTipoTarefa(CONSTANTES.TIPO_CMD.EMPREGADOR.ordinal());
+			tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADOR.ordinal());
 
 			empregador = this.empregadorRepository.save(empregador);
 
@@ -71,12 +72,6 @@ public class EmpregadorService extends ApiService {
 		} else {
 			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Empregador Inválido");
 		}
-	}
-
-	@Override
-	public RespostaSevidorDTO validarRespostaRep(RespostaRepDTO respostaRep, Rep repAutenticado) {
-		// TODO : Tratar a resposta de comando de forma especifica
-		return super.validarRespostaRep(respostaRep, repAutenticado);
 	}
 
 	@Override

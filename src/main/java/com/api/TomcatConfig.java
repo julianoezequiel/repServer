@@ -6,15 +6,18 @@ import org.springframework.boot.context.embedded.ConfigurableEmbeddedServletCont
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuração para o Servidor Tomcat funcionar dois connector. Neste caso
- * utilizamos a porta 80 para conexões não seguras.
+ * utilizamos a porta 80 para conexões não seguras.Somenete para desenvolvimento
+ * para realizar a instalação em um servido externo deve-se comentar a anotação
+ * de configuração do spring
  * 
  * @author juliano.ezequiel
  *
  */
-//@Configuration
+@Configuration
 public class TomcatConfig {
 
 	@Value("${http.port}")
