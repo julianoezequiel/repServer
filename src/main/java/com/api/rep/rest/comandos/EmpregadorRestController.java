@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dto.comandos.EmpregadorDTO;
+import com.api.rep.dto.comandos.EmpregadorCmd;
 import com.api.rep.entity.Empregador;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
@@ -26,7 +26,7 @@ public class EmpregadorRestController extends ApiRestController {
 	@Autowired
 	private EmpregadorService empregadorService;
 
-	// TODO: Converter os objetos empregador em EmpregadorDTO
+	// TODO: Converter os objetos empregador em EmpregadorCmd
 
 	/**
 	 * Busca todos os Empregador, independente do numero do Rep
@@ -72,13 +72,13 @@ public class EmpregadorRestController extends ApiRestController {
 	/**
 	 * Recebe do Rep o empregador
 	 * 
-	 * @param empregadorDTO
+	 * @param empregadorCmd
 	 * @return
 	 * @throws ServiceException
 	 */
 	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<?> receber(@RequestBody EmpregadorDTO empregadorDTO) throws ServiceException {
-		this.empregadorService.receber(empregadorDTO, this.getRepAutenticado());
+	public ResponseEntity<?> receber(@RequestBody EmpregadorCmd empregadorCmd) throws ServiceException {
+		this.empregadorService.receber(empregadorCmd, this.getRepAutenticado());
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 

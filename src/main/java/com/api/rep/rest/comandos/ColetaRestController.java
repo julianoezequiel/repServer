@@ -61,7 +61,7 @@ public class ColetaRestController extends ApiRestController {
 	@RequestMapping(value = "cancelar", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<?> cancelar() throws ServiceException {
 		HashMap<String, Boolean> total = new HashMap<>();
-		total.put("Coleta cancelada", this.coletaService.cancelar(this.getRepAutenticado()));
+		total.put("ColetaCmd cancelada", this.coletaService.cancelar(this.getRepAutenticado()));
 		return new ResponseEntity<HashMap<String, Boolean>>(total, HttpStatus.OK);
 	}
 

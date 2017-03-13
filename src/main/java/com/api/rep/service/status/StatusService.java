@@ -17,19 +17,19 @@ import com.api.rep.contantes.DEF;
 import com.api.rep.dao.ColetaRepository;
 import com.api.rep.dao.ConfiguracaoRepository;
 import com.api.rep.dao.NsrRepository;
+import com.api.rep.dto.comunicacao.ComandoDeEnvio;
 import com.api.rep.dto.comunicacao.RespostaRepDTO;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.dto.comunicacao.StatusDTO;
-import com.api.rep.dto.comunicacao.TarefaDTO;
 import com.api.rep.entity.Coleta;
-import com.api.rep.entity.Configuracao;
+import com.api.rep.entity.ConfiguracoesRede;
 import com.api.rep.entity.Nsr;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ComandosTeste;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.tarefa.TarefaHandler;
+import com.api.rep.service.tarefa.CmdHandler;
 import com.api.rep.service.tarefa.TarefaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -66,7 +66,7 @@ public class StatusService extends ApiService {
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
-	public TarefaDTO validarStatus(StatusDTO status, Rep rep) throws ServiceException, JsonProcessingException {
+	public ComandoDeEnvio validarStatus(StatusDTO status, Rep rep) throws ServiceException, JsonProcessingException {
 
 		rep = validarDadosEntrada(status, rep);
 
@@ -95,17 +95,17 @@ public class StatusService extends ApiService {
 
 	}
 
-	public Collection<TarefaDTO> buscarTarefas(Rep rep) {
+	public Collection<ComandoDeEnvio> buscarTarefas(Rep rep) {
 
 		if (rep != null && rep.getNumeroSerie() != null) {
 			rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
 		}
 
-		Collection<TarefaDTO> tarefasList = new ArrayList<>();
+		Collection<ComandoDeEnvio> tarefasList = new ArrayList<>();
 
 		if (rep != null && !rep.getTarefaCollection().isEmpty()) {
 			rep.getTarefaCollection().stream().forEach(r -> {
-				tarefasList.add(r.toTarefaDTO());
+				tarefasList.add(r.toComandoDeEnvio());
 			});
 
 			return tarefasList;
@@ -120,21 +120,20 @@ public class StatusService extends ApiService {
 	}
 
 	// busca a ultima Tarefa para Rep executar
-	public TarefaDTO proximaTarefa(Rep rep) throws ServiceException {
+	public ComandoDeEnvio proximaTarefa(Rep rep) throws ServiceException {
 
 		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
 
-		TarefaDTO dto = rep.getTarefaCollection().iterator().hasNext()
-				? rep.getTarefaCollection().iterator().next().toTarefaDTO() : null;
+		ComandoDeEnvio dto = rep.getTarefaCollection().iterator().hasNext()
+				? rep.getTarefaCollection().iterator().next().toComandoDeEnvio() : null;
 
 		if (dto != null) {
-			LOGGER.info("Tarefa NSU : {} - Tipo Tarefa : {} - Operação : {}",
-					new Object[] { dto.getNsu(), TarefaHandler.TIPO_CMD.get(dto.getTipoComando()),
-							CONSTANTES.TIPO_OPERACAO.get(dto.getTipoOperacao()) });
+			LOGGER.info("Tarefa NSU : {} - Tipo Tarefa : {} - Operação : {}", new Object[] { dto.getNsu(),
+					CmdHandler.TIPO_CMD.get(dto.gettCmd()), CONSTANTES.TIPO_OPERACAO.get(dto.gettOp()) });
 			return dto;
 		} else {
-			dto = new TarefaDTO();
-			dto.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.NENHUMA.ordinal());
+			dto = new ComandoDeEnvio();
+			dto.settOp(CONSTANTES.TIPO_OPERACAO.NENHUMA.ordinal());
 			LOGGER.info("Sem pendencia");
 			return dto;
 		}
@@ -160,24 +159,24 @@ public class StatusService extends ApiService {
 	}
 
 	private void agendarReceberConfiguracao(Rep rep, StatusDTO status) {
-
+		// TODO : colocar o tipo especifico de configurações
 		if (status.getConfig() == true) {
 
 			List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
 
-			Configuracao configuracao = new Configuracao();
+			ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
 			Tarefa tarefa = tarefaList.stream().filter(
-					p -> p.getNsu() != null && (p.getTipoTarefa().equals(TarefaHandler.TIPO_CMD.CONFIG.ordinal())
+					p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.CONFIG_SENHA.ordinal())
 							&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
 					.findFirst().orElse(new Tarefa());
 
-			// se ja existe uma Tarefa do tipo Configuracao, não agenda
+			// se ja existe uma Tarefa do tipo ConfiguracoesRede, não agenda
 			// //
 			// outra solicitação
 			if (tarefa.getColetaId() == null) {
 				tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
-				tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.CONFIG.ordinal());
-				tarefa.setConfiguracaoId(this.configuracaoRepository.save(configuracao));
+				tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_SENHA.ordinal());
+				tarefa.setConfiguracoesRedeId(this.configuracaoRepository.save(configuracoesRede));
 				tarefa.setRepId(rep);
 				this.getTarefaRepository().save(tarefa);
 			}
@@ -204,8 +203,8 @@ public class StatusService extends ApiService {
 
 			List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
 
-			Tarefa tarefa = tarefaList.stream().filter(
-					p -> p.getNsu() != null && (p.getTipoTarefa().equals(TarefaHandler.TIPO_CMD.COLETA.ordinal())
+			Tarefa tarefa = tarefaList.stream()
+					.filter(p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA.ordinal())
 							&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
 					.findFirst().orElse(new Tarefa());
 			// se ja existe uma Tarefa do tipo coleta, atualiza o range
@@ -217,7 +216,7 @@ public class StatusService extends ApiService {
 				tarefa.setRepId(rep);
 				tarefa.setColetaId(
 						this.coletaRepository.save(new Coleta(ultimoNsr.getNumeroNsr(), status.getUltimoNsr())));
-				tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.COLETA.ordinal());
+				tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA.ordinal());
 				tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
 			}
 

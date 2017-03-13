@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.api.rep.dao.EmpregadoRepository;
 import com.api.rep.dao.TarefaRepository;
-import com.api.rep.dto.comandos.ComandoAbstract;
+import com.api.rep.dto.comandos.Cmd;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.entity.Rep;
 import com.api.rep.service.comandos.TratarResposta;
@@ -61,7 +61,7 @@ public class ApiService {
 		}
 	}
 
-	public void receber(ComandoAbstract comandoAbstract, Rep rep) throws ServiceException {
+	public void receber(Cmd cmd, Rep rep) throws ServiceException {
 
 		if (rep == null) {
 			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não autorizado");

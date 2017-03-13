@@ -1,12 +1,12 @@
 package com.api.rep.service;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dto.comandos.BiometriaDTO;
-import com.api.rep.dto.comunicacao.TarefaDTO;
+import com.api.rep.dto.comandos.BiometriaCmd;
+import com.api.rep.dto.comunicacao.ComandoDeEnvio;
 import com.api.rep.entity.Coleta;
 import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Empregador;
-import com.api.rep.service.tarefa.TarefaHandler;
+import com.api.rep.service.tarefa.CmdHandler;
 
 public class ComandosTeste {
 
@@ -15,14 +15,14 @@ public class ComandosTeste {
 	 * 
 	 * @return
 	 */
-	public static TarefaDTO enviarEmpregador() {
+	public static ComandoDeEnvio enviarEmpregador() {
 
-		TarefaDTO pendenciaDTO = new TarefaDTO();
+		ComandoDeEnvio pendenciaDTO = new ComandoDeEnvio();
 		pendenciaDTO.setCpf(CONSTANTES.CPF_TESTE);
 		pendenciaDTO.setNsu(1000);
-		pendenciaDTO.setTipoComando(TarefaHandler.TIPO_CMD.EMPREGADOR.ordinal());
-		pendenciaDTO.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
-		pendenciaDTO.setUrl(TarefaHandler.TIPO_CMD.EMPREGADOR.getUrl());
+		pendenciaDTO.settCmd(CmdHandler.TIPO_CMD.EMPREGADOR.ordinal());
+		pendenciaDTO.settOp(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		pendenciaDTO.setUrl(CmdHandler.TIPO_CMD.EMPREGADOR.getUrl());
 
 		Empregador empregador = new Empregador();
 		empregador.setEmpregadorCei("11111111111");
@@ -31,7 +31,7 @@ public class ComandosTeste {
 		empregador.setEmpregadorRazao("Razao");
 		empregador.setEmpregadorTipoIdent("1");
 
-		pendenciaDTO.setDadosComando(empregador.toEmpregadorDTO());
+		pendenciaDTO.setdCmd(empregador.toEmpregadorDTO());
 
 		return pendenciaDTO;
 	}
@@ -41,13 +41,13 @@ public class ComandosTeste {
 	 * 
 	 * @return
 	 */
-	public static TarefaDTO solicitarEmpregador() {
-		TarefaDTO pendenciaDTO = new TarefaDTO();
+	public static ComandoDeEnvio solicitarEmpregador() {
+		ComandoDeEnvio pendenciaDTO = new ComandoDeEnvio();
 		pendenciaDTO.setCpf(CONSTANTES.CPF_TESTE);
 		pendenciaDTO.setNsu(1000);
-		pendenciaDTO.setTipoComando(TarefaHandler.TIPO_CMD.EMPREGADOR.ordinal());
-		pendenciaDTO.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-		pendenciaDTO.setUrl(TarefaHandler.TIPO_CMD.EMPREGADOR.getUrl());
+		pendenciaDTO.settCmd(CmdHandler.TIPO_CMD.EMPREGADOR.ordinal());
+		pendenciaDTO.settOp(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		pendenciaDTO.setUrl(CmdHandler.TIPO_CMD.EMPREGADOR.getUrl());
 
 		return pendenciaDTO;
 
@@ -58,38 +58,38 @@ public class ComandosTeste {
 	 * 
 	 * @return
 	 */
-	public static TarefaDTO solicitarColetaPorNumNSR() {
+	public static ComandoDeEnvio solicitarColetaPorNumNSR() {
 
-		TarefaDTO pendenciaDTO = new TarefaDTO();
+		ComandoDeEnvio pendenciaDTO = new ComandoDeEnvio();
 		pendenciaDTO.setCpf(CONSTANTES.CPF_TESTE);
 		pendenciaDTO.setNsu(1000);
-		pendenciaDTO.setTipoComando(TarefaHandler.TIPO_CMD.COLETA.ordinal());
-		pendenciaDTO.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-		pendenciaDTO.setUrl(TarefaHandler.TIPO_CMD.COLETA.getUrl());
+		pendenciaDTO.settCmd(CmdHandler.TIPO_CMD.COLETA.ordinal());
+		pendenciaDTO.settOp(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		pendenciaDTO.setUrl(CmdHandler.TIPO_CMD.COLETA.getUrl());
 
 		Coleta coleta = new Coleta();
 		coleta.setColetaNsrFim(1294820);
 		coleta.setColetaNsrInicio(1294820 - 200);
 
-		pendenciaDTO.setDadosComando(coleta.toColetaDTO());
+		pendenciaDTO.setdCmd(coleta.toColetaCmd());
 
 		return pendenciaDTO;
 
 	}
 
-	public static TarefaDTO solictarBiometria() {
+	public static ComandoDeEnvio solictarBiometria() {
 
-		TarefaDTO pendenciaDTO = new TarefaDTO();
+		ComandoDeEnvio pendenciaDTO = new ComandoDeEnvio();
 		pendenciaDTO.setCpf(CONSTANTES.CPF_TESTE);
 		pendenciaDTO.setNsu(1000);
-		pendenciaDTO.setTipoComando(TarefaHandler.TIPO_CMD.BIOMETRIA.ordinal());
-		pendenciaDTO.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-		pendenciaDTO.setUrl(TarefaHandler.TIPO_CMD.BIOMETRIA.getUrl());
+		pendenciaDTO.settCmd(CmdHandler.TIPO_CMD.BIOMETRIA.ordinal());
+		pendenciaDTO.settOp(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		pendenciaDTO.setUrl(CmdHandler.TIPO_CMD.BIOMETRIA.getUrl());
 
-		BiometriaDTO biometriaDTO = new BiometriaDTO();
-		biometriaDTO.setPis("");
+		BiometriaCmd biometriaCmd = new BiometriaCmd();
+		biometriaCmd.setPis("");
 
-		pendenciaDTO.setDadosComando(biometriaDTO);
+		pendenciaDTO.setdCmd(biometriaCmd);
 
 		return pendenciaDTO;
 	}
@@ -99,15 +99,15 @@ public class ComandosTeste {
 	 * 
 	 * @return
 	 */
-	public static TarefaDTO solicitarListaBio() {
-		TarefaDTO tarefaDTO = new TarefaDTO();
-		tarefaDTO.setCpf(CONSTANTES.CPF_TESTE);
-		tarefaDTO.setNsu(1000);
-		tarefaDTO.setTipoComando(TarefaHandler.TIPO_CMD.LISTA_BIOMETRIA.ordinal());
-		tarefaDTO.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-		tarefaDTO.setUrl(TarefaHandler.TIPO_CMD.LISTA_BIOMETRIA.getUrl());
+	public static ComandoDeEnvio solicitarListaBio() {
+		ComandoDeEnvio comandoDeEnvio = new ComandoDeEnvio();
+		comandoDeEnvio.setCpf(CONSTANTES.CPF_TESTE);
+		comandoDeEnvio.setNsu(1000);
+		comandoDeEnvio.settCmd(CmdHandler.TIPO_CMD.LISTA_BIO.ordinal());
+		comandoDeEnvio.settOp(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		comandoDeEnvio.setUrl(CmdHandler.TIPO_CMD.LISTA_BIO.getUrl());
 
-		return tarefaDTO;
+		return comandoDeEnvio;
 
 	}
 
@@ -116,14 +116,14 @@ public class ComandosTeste {
 	 * 
 	 * @return
 	 */
-	public static TarefaDTO enviarEmpregado() {
+	public static ComandoDeEnvio enviarEmpregado() {
 
-		TarefaDTO tarefaDTO = new TarefaDTO();
-		tarefaDTO.setCpf(CONSTANTES.CPF_TESTE);
-		tarefaDTO.setNsu(1000);
-		tarefaDTO.setTipoComando(TarefaHandler.TIPO_CMD.EMPREGADO.ordinal());
-		tarefaDTO.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
-		tarefaDTO.setUrl(TarefaHandler.TIPO_CMD.EMPREGADO.getUrl());
+		ComandoDeEnvio comandoDeEnvio = new ComandoDeEnvio();
+		comandoDeEnvio.setCpf(CONSTANTES.CPF_TESTE);
+		comandoDeEnvio.setNsu(1000);
+		comandoDeEnvio.settCmd(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
+		comandoDeEnvio.settOp(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		comandoDeEnvio.setUrl(CmdHandler.TIPO_CMD.EMPREGADO.getUrl());
 
 		Empregado empregado = new Empregado();
 
@@ -135,9 +135,9 @@ public class ComandosTeste {
 		empregado.setEmpregadoPis("77777777777");
 		empregado.setEmpregadoPossuiBio(false);
 
-		tarefaDTO.setDadosComando(empregado.toEmpregadoDTO());
+		comandoDeEnvio.setdCmd(empregado.toEmpregadoDTO());
 
-		return tarefaDTO;
+		return comandoDeEnvio;
 
 	}
 
@@ -146,21 +146,21 @@ public class ComandosTeste {
 	 * 
 	 * @return
 	 */
-	public static TarefaDTO solicitarEmpregado() {
+	public static ComandoDeEnvio solicitarEmpregado() {
 
-		TarefaDTO tarefaDTO = new TarefaDTO();
-		tarefaDTO.setCpf(CONSTANTES.CPF_TESTE);
-		tarefaDTO.setNsu(1000);
-		tarefaDTO.setTipoComando(TarefaHandler.TIPO_CMD.EMPREGADO.ordinal());
-		tarefaDTO.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-		tarefaDTO.setUrl(TarefaHandler.TIPO_CMD.EMPREGADO.getUrl());
+		ComandoDeEnvio comandoDeEnvio = new ComandoDeEnvio();
+		comandoDeEnvio.setCpf(CONSTANTES.CPF_TESTE);
+		comandoDeEnvio.setNsu(1000);
+		comandoDeEnvio.settCmd(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
+		comandoDeEnvio.settOp(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		comandoDeEnvio.setUrl(CmdHandler.TIPO_CMD.EMPREGADO.getUrl());
 
 		Empregado empregado = new Empregado();
 		empregado.setEmpregadoPis("77777777777");
 
-		tarefaDTO.setDadosComando(empregado.toEmpregadoDTO());
+		comandoDeEnvio.setdCmd(empregado.toEmpregadoDTO());
 
-		return tarefaDTO;
+		return comandoDeEnvio;
 
 	}
 

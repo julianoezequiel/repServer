@@ -9,89 +9,28 @@ public class CONSTANTES {
 	public static final String URL_EMPREGADOR = "/restrict/empregador";
 	public static final String URL_EMPREGADO = "/restrict/empregado";
 	public static final String URL_LISTA_EMPREGADO = "/restrict/empregado/lista";
+	public static final String URL_LISTA_EMPREGADO_DUMPING = "/restrict/empregado/lista";
 	public static final String URL_COLETA = "/restrict/coleta";
 	public static final String URL_BIOMETRIA = "/restrict/empregado/bio";
 	public static final String URL_LISTA_BIOMETRIA = "/restrict/empregado/listabio";
-	public static final String URL_CONFIG = "/restrict/config";
+	public static final String URL_CONFIG_SENHA = "/restrict/config/senha";
+	public static final String URL_CONFIG_CARTOES = "/restrict/config/cartoes";
+	public static final String URL_CONFIG_REDE = "/restrict/config/rede";
+	public static final String URL_CONFIG_HORARIO_VERAO = "/restrict/config/horarioverao";
 	public static final String URL_INFO = "/restrict/info";
 	public static final String URL_RELOGIO = "/restrict/relogio";
+
+	public static final String URL_IDENTFICACAO = "/restrict/identificacao";
+	public static final String URL_ATUALIZACAO_FW = "/restrict/atualizarfw";
 
 	public static final String URL_AUTH = "/auth";
 	public static final String URL_STATUS = "/restrict/status";
 
-//	public enum TIPO_CMD {
-//		CMD_NENHUM() {// 0
-//			@Override
-//			public String getUrl() {
-//				return null;
-//			}
-//		},
-//		EMPREGADOR() {// 1
-//			@Override
-//			public String getUrl() {
-//				return URL_EMPREGADOR;
-//			}
-//		},
-//		EMPREGADO() {// 2
-//			@Override
-//			public String getUrl() {
-//				return URL_EMPREGADO;
-//			}
-//		},
-//		COLETA() {// 3
-//			@Override
-//			public String getUrl() {
-//				return URL_COLETA;
-//			}
-//		},
-//		BIOMETRIA() {// 4
-//			@Override
-//			public String getUrl() {
-//				return URL_BIOMETRIA;
-//			}
-//		},
-//		LISTA_BIOMETRIA() {// 5 pis dos funcionario bio
-//			@Override
-//			public String getUrl() {
-//				return URL_LISTA_BIOMETRIA;
-//			}
-//		},
-//		CONFIG() {// 6
-//			@Override
-//			public String getUrl() {
-//				return URL_CONFIG;
-//			}
-//		},
-//		INFO() {// 7
-//			@Override
-//			public String getUrl() {
-//				return URL_INFO;
-//			}
-//		},
-//		RELOGIO() {// 8
-//			@Override
-//			public String getUrl() {
-//				return URL_RELOGIO;
-//			}
-//		};
-//
-//		public abstract String getUrl();
-//
-//		public static TIPO_CMD get(Integer tipo) {
-//			if (tipo != null) {
-//				for (TIPO_CMD operacaocao : values()) {
-//					if (operacaocao.ordinal() == tipo) {
-//						return operacaocao;
-//					}
-//				}
-//			}
-//			return null;
-//		}
-//	}
-
 	public enum TIPO_OPERACAO {
-		NENHUMA,
-		ENVIAR, RECEBER, EXCLUIR;
+		NENHUMA, // 0
+		ENVIAR, // 1
+		RECEBER, // 2
+		EXCLUIR;// 3
 
 		public static TIPO_OPERACAO get(Integer tipo) {
 			if (tipo != null) {

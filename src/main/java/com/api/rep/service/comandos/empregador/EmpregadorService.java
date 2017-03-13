@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dao.EmpregadorRepository;
-import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comandos.EmpregadorDTO;
+import com.api.rep.dto.comandos.Cmd;
+import com.api.rep.dto.comandos.EmpregadorCmd;
 import com.api.rep.dto.comunicacao.RespostaRepDTO;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.entity.Empregador;
@@ -18,7 +18,7 @@ import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.tarefa.TarefaHandler;
+import com.api.rep.service.tarefa.CmdHandler;
 
 @Service
 public class EmpregadorService extends ApiService {
@@ -58,7 +58,7 @@ public class EmpregadorService extends ApiService {
 			tarefa.setCpf(CONSTANTES.CPF_TESTE);
 			tarefa.setRepId(rep);
 			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
-			tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADOR.ordinal());
+			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADOR.ordinal());
 
 			empregador = this.empregadorRepository.save(empregador);
 
@@ -75,25 +75,25 @@ public class EmpregadorService extends ApiService {
 	}
 
 	@Override
-	public void receber(ComandoAbstract comandoAbstract, Rep rep) throws ServiceException {
+	public void receber(Cmd cmd, Rep rep) throws ServiceException {
 
 		// TODO : Tratar os dados do comando de forma específica
 
-		if (comandoAbstract instanceof EmpregadorDTO) {
+		if (cmd instanceof EmpregadorCmd) {
 
-			EmpregadorDTO empregadorDTO = (EmpregadorDTO) comandoAbstract;
+			EmpregadorCmd empregadorCmd = (EmpregadorCmd) cmd;
 
 			LOGGER.info("----------- Empresa recebida --------------");
-			LOGGER.info("Razão : " + empregadorDTO.getEmpregadorRazao());
-			LOGGER.info("Identificador : " + empregadorDTO.getEmpregadorIdent());
-			LOGGER.info("Cei : " + empregadorDTO.getEmpregadorCei());
-			LOGGER.info("Local : " + empregadorDTO.getEmpregadorLocal());
-			LOGGER.info("Tipo ident : " + empregadorDTO.getEmpregadorTipoIdent());
+			LOGGER.info("Razão : " + empregadorCmd.geteRS());
+			LOGGER.info("Identificador : " + empregadorCmd.geteId());
+			LOGGER.info("Cei : " + empregadorCmd.geteCei());
+			LOGGER.info("Local : " + empregadorCmd.geteLoc());
+			LOGGER.info("Tipo ident : " + empregadorCmd.geteTpId());
 
-			Optional<Empregador> empregador = this.buscarPorIndentificador(empregadorDTO.getEmpregadorIdent());
+			Optional<Empregador> empregador = this.buscarPorIndentificador(empregadorCmd.geteId());
 
 			if (empregador.isPresent()) {
-				Empregador empregador2 = empregadorDTO.toEmpregador();
+				Empregador empregador2 = empregadorCmd.toEmpregador();
 				empregador2.setId(empregador.get().getId());
 				this.empregadorRepository.save(empregador2);
 			}

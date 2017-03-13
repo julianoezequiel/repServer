@@ -21,9 +21,9 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comunicacao.TarefaDTO;
-import com.api.rep.service.tarefa.TarefaHandler;
+import com.api.rep.dto.comandos.Cmd;
+import com.api.rep.dto.comunicacao.ComandoDeEnvio;
+import com.api.rep.service.tarefa.CmdHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -81,9 +81,17 @@ public class Tarefa implements Serializable {
 	@ManyToOne
 	private Empregador empregadorId;
 
-	@JoinColumn(name = "configuracao_id", referencedColumnName = "id")
+	@JoinColumn(name = "configuracoes_rede_id", referencedColumnName = "id")
 	@ManyToOne
-	private Configuracao configuracaoId;
+	private ConfiguracoesRede configuracoesRedeId;
+
+	@JoinColumn(name = "configuracoes_senha_id", referencedColumnName = "id")
+	@ManyToOne
+	private ConfiguracoesSenha configurcacoesSenhaId;
+
+	@JoinColumn(name = "configuracoes_cartoes_id", referencedColumnName = "id")
+	@ManyToOne
+	private ConfiguracoesCartoes configuracoesCartoesId;
 
 	public Tarefa() {
 	}
@@ -148,12 +156,12 @@ public class Tarefa implements Serializable {
 		this.empregadoId = empregadoId;
 	}
 
-	public Configuracao getConfiguracaoId() {
-		return configuracaoId;
+	public ConfiguracoesRede getConfiguracoesRedeId() {
+		return configuracoesRedeId;
 	}
 
-	public void setConfiguracaoId(Configuracao configuracaoId) {
-		this.configuracaoId = configuracaoId;
+	public void setConfiguracoesRedeId(ConfiguracoesRede configuracaoId) {
+		this.configuracoesRedeId = configuracaoId;
 	}
 
 	public String getCpf() {
@@ -170,6 +178,26 @@ public class Tarefa implements Serializable {
 
 	public void setEmpregadorId(Empregador empregadorId) {
 		this.empregadorId = empregadorId;
+	}
+
+	public ConfiguracoesSenha getConfigurcacoesSenhaId() {
+		return configurcacoesSenhaId;
+	}
+
+	public void setConfigurcacoesSenhaId(ConfiguracoesSenha configurcacoesSenha) {
+		this.configurcacoesSenhaId = configurcacoesSenha;
+	}
+
+	public ConfiguracoesCartoes getConfiguracoesCartoesId() {
+		return configuracoesCartoesId;
+	}
+
+	public void setConfiguracoesCartoesId(ConfiguracoesCartoes configuracoesCartoesId) {
+		this.configuracoesCartoesId = configuracoesCartoesId;
+	}
+
+	public static synchronized long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
@@ -200,19 +228,19 @@ public class Tarefa implements Serializable {
 	/**
 	 * Converte a entidade para objeto DTO
 	 * 
-	 * @return TarefaDTO
+	 * @return ComandoDeEnvio
 	 */
-	public TarefaDTO toTarefaDTO() {
-		TarefaDTO dto = new TarefaDTO();
+	public ComandoDeEnvio toComandoDeEnvio() {
+		ComandoDeEnvio dto = new ComandoDeEnvio();
 		if (this.tipoOperacao != null) {
-			dto.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(this.tipoOperacao).ordinal());
+			dto.settOp(CONSTANTES.TIPO_OPERACAO.get(this.tipoOperacao).ordinal());
 		}
 		if (this.tipoTarefa != null) {
-			dto.setUrl(TarefaHandler.TIPO_CMD.get(this.tipoTarefa).getUrl());
-			dto.setTipoComando(TarefaHandler.TIPO_CMD.get(this.tipoTarefa).ordinal());
+			dto.setUrl(CmdHandler.TIPO_CMD.get(this.tipoTarefa).getUrl());
+			dto.settCmd(CmdHandler.TIPO_CMD.get(this.tipoTarefa).ordinal());
 		}
 		dto.setCpf(cpf);
-		dto.setDadosComando(this.toComandoDTO());
+		dto.setdCmd(this.toComandoDTO());
 		dto.setNsu(this.nsu);
 		return dto;
 	}
@@ -222,16 +250,20 @@ public class Tarefa implements Serializable {
 	 * 
 	 * @return DadosComando
 	 */
-	public ComandoAbstract toComandoDTO() {
+	public Cmd toComandoDTO() {
 
 		if (this.coletaId != null) {
-			return this.coletaId.toColetaDTO();
-		} else if (this.configuracaoId != null) {
-			return this.configuracaoId.toConfiguracaoDTO();
+			return this.coletaId.toColetaCmd();
+		} else if (this.configuracoesRedeId != null) {
+			return this.configuracoesRedeId.toConfiguracoesRedeCmd();
 		} else if (this.empregadoId != null) {
 			return this.empregadoId.toEmpregadoDTO();
 		} else if (this.empregadorId != null) {
 			return this.empregadorId.toEmpregadorDTO();
+		} else if (this.configuracoesCartoesId != null) {
+			return null;
+		} else if (this.configurcacoesSenhaId != null) {
+			return this.configurcacoesSenhaId.toConfiguracaoCmd();
 		} else {
 			return null;
 		}
@@ -239,16 +271,18 @@ public class Tarefa implements Serializable {
 
 	public static Tarefa clear(Tarefa tarefa) {
 		tarefa.setColetaId(null);
-		tarefa.setConfiguracaoId(null);
+		tarefa.setConfiguracoesRedeId(null);
 		tarefa.setEmpregadoId(null);
 		tarefa.setEmpregadorId(null);
 		tarefa.setRepId(null);
+		tarefa.setConfiguracoesCartoesId(null);
+		tarefa.setConfigurcacoesSenhaId(null);
 		return tarefa;
 
 	}
 
 	public static Tarefa padraoTeste() {
-		
+
 		Tarefa tarefa = new Tarefa();
 		tarefa.setCpf(CONSTANTES.CPF_TESTE);
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());

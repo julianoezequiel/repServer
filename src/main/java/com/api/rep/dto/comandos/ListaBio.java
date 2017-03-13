@@ -2,7 +2,7 @@ package com.api.rep.dto.comandos;
 
 import java.util.List;
 
-public class ListaBio extends ComandoAbstract {
+public class ListaBio implements Cmd {
 
 	private static final long serialVersionUID = 1L;
 

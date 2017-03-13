@@ -75,6 +75,10 @@ public class Rep implements Serializable {
 	@JsonIgnore
 	private Empregador empregadorId;
 
+	@JoinColumn(name = "configuracoes_senha_id", referencedColumnName = "id")
+	@ManyToOne
+	private ConfiguracoesSenha configurcacoesSenhaId;
+
 	public Rep() {
 	}
 
@@ -119,6 +123,18 @@ public class Rep implements Serializable {
 
 	public void setTarefaCollection(Collection<Tarefa> tarefaCollection) {
 		this.tarefaCollection = tarefaCollection;
+	}
+
+	public synchronized ConfiguracoesSenha getConfigurcacoesSenhaId() {
+		return configurcacoesSenhaId;
+	}
+
+	public synchronized void setConfigurcacoesSenhaId(ConfiguracoesSenha configurcacoesSenhaId) {
+		this.configurcacoesSenhaId = configurcacoesSenhaId;
+	}
+
+	public static synchronized long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.api.rep.dto.comandos.ColetaDTO;
+import com.api.rep.dto.comandos.ColetaCmd;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -52,8 +52,6 @@ public class Coleta {
 		this.id = id;
 	}
 
-	
-	
 	public synchronized Integer getColetaNsrInicio() {
 		return coletaNsrInicio;
 	}
@@ -93,15 +91,15 @@ public class Coleta {
 	public void setTarefaCollection(Collection<Tarefa> tarefaCollection) {
 		this.tarefaCollection = tarefaCollection;
 	}
-	
-	public ColetaDTO toColetaDTO(){
-		ColetaDTO dto  = new ColetaDTO();
-		dto.setColetaNsrFim(this.coletaNsrFim);
-		dto.setColetaNsrInicio(this.coletaNsrInicio);
-		dto.setColetaDataFim(coletaDataFim);
-		dto.setColetaDataInicio(coletaDataInicio);
-//		dto.setTIPO_CMD(CONSTANTES.TIPO_CMD.NSR);
+
+	public ColetaCmd toColetaCmd() {
+		ColetaCmd dto = new ColetaCmd();
+		dto.setcNsrF(this.coletaNsrFim);
+		dto.setcNsrI(this.coletaNsrInicio);
+		dto.setcDtF(coletaDataFim);
+		dto.setcDtI(coletaDataInicio);
+		// dto.setTIPO_CMD(CONSTANTES.TIPO_CMD.NSR);
 		return dto;
-		
+
 	}
 }

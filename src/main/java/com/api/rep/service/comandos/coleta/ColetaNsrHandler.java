@@ -9,7 +9,7 @@ import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Nsr;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
-import com.api.rep.service.tarefa.TarefaHandler;
+import com.api.rep.service.tarefa.CmdHandler;
 import com.api.rep.utils.Utils;
 
 public class ColetaNsrHandler {
@@ -115,7 +115,7 @@ public class ColetaNsrHandler {
 
 		Tarefa tarefa = new Tarefa();
 		tarefa.setCpf(CONSTANTES.CPF_TESTE);
-		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADOR.ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADOR.ordinal());
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefa.setRepId(apiService.getRep());
 
@@ -152,7 +152,7 @@ public class ColetaNsrHandler {
 
 		Tarefa tarefa = new Tarefa();
 		tarefa.setCpf(CONSTANTES.CPF_TESTE);
-		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.RELOGIO.ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_RELOGIO.ordinal());
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefa.setRepId(apiService.getRep());
 
@@ -180,7 +180,7 @@ public class ColetaNsrHandler {
 
 		Tarefa tarefa = new Tarefa();
 		tarefa.setCpf(CONSTANTES.CPF_TESTE);
-		tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADO.ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefa.setRepId(apiService.getRep());
 

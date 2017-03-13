@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dto.comandos.ComandoAbstract;
+import com.api.rep.dto.comandos.Cmd;
 import com.api.rep.dto.comunicacao.RespostaRepDTO;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.dto.comunicacao.StatusDTO;
-import com.api.rep.dto.comunicacao.TarefaDTO;
+import com.api.rep.dto.comunicacao.ComandoDeEnvio;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
@@ -41,20 +41,20 @@ public class StatusRestController extends ApiRestController {
 	/**
 	 * O Rep envia periodicamente o comando de status, atravez do método POST.
 	 * Deve se retornar a última tarefa(Comando) ou nada para o Rep. Caso seja
-	 * retornada uma {@link TarefaDTO}, o Rep irá executar o
-	 * {@link ComandoAbstract} informado na {@link TarefaDTO}.
+	 * retornada uma {@link ComandoDeEnvio}, o Rep irá executar o
+	 * {@link Cmd} informado na {@link ComandoDeEnvio}.
 	 * 
 	 * 
 	 * @param status
-	 * @return {@link TarefaDTO}
+	 * @return {@link ComandoDeEnvio}
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
 	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<TarefaDTO> status(@RequestBody StatusDTO status)
+	public ResponseEntity<ComandoDeEnvio> status(@RequestBody StatusDTO status)
 			throws ServiceException, JsonProcessingException {
 		ApiRestController.LOGGER.info("Status Recebido : " + this.getMapper().writeValueAsString(status));
-		return new ResponseEntity<TarefaDTO>(this.statusService.validarStatus(status, this.getRepAutenticado()),
+		return new ResponseEntity<ComandoDeEnvio>(this.statusService.validarStatus(status, this.getRepAutenticado()),
 				HttpStatus.OK);
 	}
 
@@ -82,8 +82,8 @@ public class StatusRestController extends ApiRestController {
 
 	// Método somente para testes
 	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<Collection<TarefaDTO>> listar() throws ServiceException, JsonProcessingException {
-		return new ResponseEntity<Collection<TarefaDTO>>(this.statusService.buscarTarefas(this.getRepAutenticado()),
+	public ResponseEntity<Collection<ComandoDeEnvio>> listar() throws ServiceException, JsonProcessingException {
+		return new ResponseEntity<Collection<ComandoDeEnvio>>(this.statusService.buscarTarefas(this.getRepAutenticado()),
 				HttpStatus.OK);
 	}
 

@@ -1,27 +1,37 @@
 package com.api.rep.service.comandos.empregado;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dao.EmpregadoRepository;
-import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comandos.EmpregadoDTO;
+import com.api.rep.dto.comandos.Cmd;
+import com.api.rep.dto.comandos.EmpregadoCmd;
 import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.tarefa.TarefaHandler;
+import com.api.rep.service.tarefa.CmdHandler;
 
 @Service
 public class EmpregadoService extends ApiService {
 
+	public static HashMap<String, byte[]> dumpingMap = new HashMap<>();
 	@Autowired
 	private EmpregadoRepository empregadoRespository;
 
@@ -60,7 +70,7 @@ public class EmpregadoService extends ApiService {
 			tarefa.setCpf("04752873982");
 			tarefa.setRepId(rep);
 			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
-			tarefa.setTipoTarefa(TarefaHandler.TIPO_CMD.EMPREGADO.ordinal());
+			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
 
 			// salva ou atualiza o empregado
 			empregado = this.empregadoRespository.save(empregado);
@@ -77,24 +87,24 @@ public class EmpregadoService extends ApiService {
 	}
 
 	@Override
-	public void receber(ComandoAbstract comandoAbstract, Rep rep) throws ServiceException {
+	public void receber(Cmd cmd, Rep rep) throws ServiceException {
 
 		// TODO : Tratar os dados do comando de forma específica
 
-		if (comandoAbstract instanceof EmpregadoDTO) {
-			EmpregadoDTO empregadorDTO = (EmpregadoDTO) comandoAbstract;
+		if (cmd instanceof EmpregadoCmd) {
+			EmpregadoCmd empregadorDTO = (EmpregadoCmd) cmd;
 
 			LOGGER.info("----------- Funcionário recebido --------------");
-			LOGGER.info("Nome : " + empregadorDTO.getEmpregadoNome());
-			LOGGER.info("Nome exibição : " + empregadorDTO.getEmpregadoNomeExibe());
-			LOGGER.info("Pis : " + empregadorDTO.getEmpregadoPis());
-			LOGGER.info("Número Teclado : " + empregadorDTO.getEmpregadoCartaoTeclado());
-			LOGGER.info("Número prox : " + empregadorDTO.getEmpregadoCartaoProx());
-			LOGGER.info("Número barras : " + empregadorDTO.getEmpregadoCartaoBarras());
-			LOGGER.info("Possui Bio : " + empregadorDTO.getEmpregadoPossuiBio());
+			LOGGER.info("Nome : " + empregadorDTO.getfNome());
+			LOGGER.info("Nome exibição : " + empregadorDTO.getfNEx());
+			LOGGER.info("Pis : " + empregadorDTO.getfPis());
+			LOGGER.info("Número Teclado : " + empregadorDTO.getfCT());
+			LOGGER.info("Número prox : " + empregadorDTO.getfCP());
+			LOGGER.info("Número barras : " + empregadorDTO.getfCB());
+			LOGGER.info("Possui Bio : " + empregadorDTO.getfPB());
 
 			Optional<Empregado> empregado = this.getEmpregadoRespository()
-					.buscarPorPis(empregadorDTO.getEmpregadoPis());
+					.buscarPorPis(empregadorDTO.getfPis());
 			if (empregado.isPresent()) {
 				Empregado empregado2 = empregadorDTO.toEmpregado();
 				empregado2.setId(empregado.get().getId());
@@ -104,18 +114,59 @@ public class EmpregadoService extends ApiService {
 
 	}
 
-	public void receberLista(List<EmpregadoDTO> empregadoDTOList, Rep repAutenticado) {
-		
+	public void receberLista(List<EmpregadoCmd> empregadoDTOList, Rep repAutenticado) {
+
 		LOGGER.info("Lista Recebida : " + empregadoDTOList.toString());
 
 		empregadoDTOList.stream().forEach(e -> {
-			Optional<Empregado> empregadoOptional = this.empregadoRespository.buscarPorPis(e.getEmpregadoPis());
+			Optional<Empregado> empregadoOptional = this.empregadoRespository.buscarPorPis(e.getfPis());
 			Empregado empregado = e.toEmpregado();
 			if (empregadoOptional.isPresent()) {
 				empregado.setId(empregadoOptional.get().getId());
 			}
 			this.empregadoRespository.save(empregado);
 		});
+	}
+
+	public void receberDumping(MultipartFile arquivoListaEmpregados, Rep repAutenticado, Integer nsu) {
+		try {
+			EmpregadoService.dumpingMap.put(repAutenticado.getNumeroSerie(),
+					IOUtils.toByteArray(arquivoListaEmpregados.getInputStream()));
+			LOGGER.info("Dumping de empregados recebido");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public HashMap<String, Object> enviarDump(Integer nsu, Rep repAutenticado) {
+
+		List<Tarefa> tarefas = this.getTarefaRepository().buscarPorNsu(nsu);
+		InputStreamResource isr = null;
+		HashMap<String, Object> map = new HashMap<>();
+
+		if (!tarefas.isEmpty()) {
+
+			if (EmpregadoService.dumpingMap.containsKey(repAutenticado.getNumeroSerie())) {
+				try {
+					File convFile = File.createTempFile("dump", ".txt");
+					FileOutputStream fos = new FileOutputStream(convFile);
+					fos.write(EmpregadoService.dumpingMap.get(repAutenticado.getNumeroSerie()));
+					fos.close();
+					InputStream inputStream;
+					inputStream = new FileInputStream(convFile);
+
+					isr = new InputStreamResource(inputStream);
+					map.put("dump", isr);
+					map.put("tamanho", convFile.length());
+					convFile.deleteOnExit();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		return map;
 	}
 
 }

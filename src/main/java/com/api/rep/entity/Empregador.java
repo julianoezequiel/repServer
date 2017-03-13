@@ -12,8 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comandos.EmpregadorDTO;
+import com.api.rep.dto.comandos.Cmd;
+import com.api.rep.dto.comandos.EmpregadorCmd;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -107,15 +107,13 @@ public class Empregador implements Serializable {
 		this.repCollection = repCollection;
 	}
 
-	public ComandoAbstract toEmpregadorDTO() {
-		EmpregadorDTO dto = new EmpregadorDTO();
-		dto.setEmpregadorCei(empregadorCei);
-		dto.setId(id);
-		dto.setEmpregadorIdent(empregadorIdent);
-		dto.setEmpregadorLocal(empregadorLocal);
-		dto.setEmpregadorRazao(empregadorRazao);
-		// dto.setRepCollection(repCollection);
-		dto.setEmpregadorTipoIdent(empregadorTipoIdent);
+	public Cmd toEmpregadorDTO() {
+		EmpregadorCmd dto = new EmpregadorCmd();
+		dto.seteCei(empregadorCei);
+		dto.seteId(empregadorIdent);
+		dto.seteLoc(empregadorLocal);
+		dto.seteRS(empregadorRazao);
+		dto.seteTpId(empregadorTipoIdent);
 		return dto;
 	}
 

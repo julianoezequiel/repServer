@@ -109,16 +109,15 @@ public class BiometriaService extends ApiService {
 
 		InputStreamResource isr = null;
 
-		List<Tarefa> t = this.getTarefaRepository().buscarPorNsu(nsu);
+		List<Tarefa> tarefas = this.getTarefaRepository().buscarPorNsu(nsu);
 		UsuarioBio usuarioBio;
-		if (!t.isEmpty()) {
-			Tarefa tarefa = t.iterator().next();
+		if (!tarefas.isEmpty()) {
+			Tarefa tarefa = tarefas.iterator().next();
 			if (tarefa.getEmpregadoId() != null) {
 				usuarioBio = this.usuarioBioRepository.buscarPorPis(tarefa.getEmpregadoId().getEmpregadoPis());
 				if (usuarioBio != null) {
 					try {
 						File convFile = File.createTempFile("arquivo", ".txt");
-						convFile.getAbsolutePath();
 						FileOutputStream fos = new FileOutputStream(convFile);
 						fos.write(usuarioBio.getTemplate());
 						fos.close();
@@ -128,6 +127,7 @@ public class BiometriaService extends ApiService {
 						isr = new InputStreamResource(inputStream);
 						map.put("arquivo", isr);
 						map.put("tamanho", convFile.length());
+						convFile.deleteOnExit();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

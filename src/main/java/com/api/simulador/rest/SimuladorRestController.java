@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.rep.service.ServiceException;
 import com.api.simulador.entity.Iniciar;
 import com.api.simulador.entity.RepSimulador;
-import com.api.simulador.service.ClienteRep;
+//import com.api.simulador.service.ClienteRep;
 import com.api.simulador.service.RepSimuladorService;
 
 @RestController
@@ -42,20 +42,20 @@ public class SimuladorRestController {
 		this.init = iniciar.getIniciar();
 		this.intevalo = iniciar.getIntervalo();
 		
-		Thread thread = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				try {
-					ClienteRep.execut();
-				} catch (ServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}); 
+//		Thread thread = new Thread(new Runnable() {
+//			
+//			@Override
+//			public void run() {
+//				try {
+//					ClienteRep.execut();
+//				} catch (ServiceException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		}); 
 		
-		thread.start();
+//		thread.start();
 		return new ResponseEntity<>(iniciar, HttpStatus.CREATED);
 	}
 

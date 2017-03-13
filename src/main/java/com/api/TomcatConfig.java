@@ -34,6 +34,7 @@ public class TomcatConfig {
 
 					Connector connector = new Connector(TomcatEmbeddedServletContainerFactory.DEFAULT_PROTOCOL);
 					connector.setPort(httpPort);
+//					connector.setMaxPostSize(100000000);
 					containerFactory.addAdditionalTomcatConnectors(connector);
 				}
 			}

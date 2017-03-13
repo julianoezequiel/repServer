@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.api.rep.dto.comandos.ComandoAbstract;
-import com.api.rep.dto.comandos.EmpregadoDTO;
+import com.api.rep.dto.comandos.Cmd;
+import com.api.rep.dto.comandos.EmpregadoCmd;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -42,9 +42,8 @@ public class Empregado implements Serializable {
 	private String empregadoCartaoProx;
 	private String empregadoCartaoTeclado;
 	private Boolean empregadoPossuiBio;
+	private String empregadoSenha;
 
-	
-	
 	public Empregado(String empregadoPis) {
 		super();
 		this.empregadoPis = empregadoPis;
@@ -134,16 +133,24 @@ public class Empregado implements Serializable {
 		this.empregadoPossuiBio = empregadoPossuiBio;
 	}
 
-	public ComandoAbstract toEmpregadoDTO() {
-		EmpregadoDTO dto = new EmpregadoDTO();
-		dto.setEmpregadoCartaoBarras(empregadoCartaoBarras);
-		dto.setEmpregadoCartaoProx(empregadoCartaoProx);
-		dto.setEmpregadoCartaoTeclado(empregadoCartaoTeclado);
-		dto.setEmpregadoNome(empregadoNome);
-		dto.setEmpregadoNomeExibe(empregadoNomeExibe);
-		dto.setEmpregadoPis(empregadoPis);
-		dto.setEmpregadoPossuiBio(empregadoPossuiBio);
+	public String getEmpregadoSenha() {
+		return empregadoSenha;
+	}
 
+	public void setEmpregadoSenha(String empregadoSenha) {
+		this.empregadoSenha = empregadoSenha;
+	}
+
+	public Cmd toEmpregadoDTO() {
+		EmpregadoCmd dto = new EmpregadoCmd();
+		dto.setfCB(empregadoCartaoBarras);
+		dto.setfCP(empregadoCartaoProx);
+		dto.setfCT(empregadoCartaoTeclado);
+		dto.setfNome(empregadoNome);
+		dto.setfNEx(empregadoNomeExibe);
+		dto.setfPis(empregadoPis);
+		dto.setfPB(empregadoPossuiBio);
+		dto.setfSenha(empregadoSenha);
 		return dto;
 	}
 

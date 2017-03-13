@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.api.rep.dao.ConfiguracaoRepository;
-import com.api.rep.entity.Configuracao;
+import com.api.rep.entity.ConfiguracoesRede;
 import com.api.rep.entity.Rep;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
@@ -18,25 +18,25 @@ public class ConfiguracaoService extends ApiService {
 	@Autowired
 	private ConfiguracaoRepository configuracaoRepository;
 
-	public Collection<Configuracao> listar() {
+	public Collection<ConfiguracoesRede> listar() {
 		return this.configuracaoRepository.findAll();
 	}
 
-	public Configuracao salvar(Configuracao configuracao, Rep repAutenticado) {
-		return this.configuracaoRepository.save(configuracao);
+	public ConfiguracoesRede salvar(ConfiguracoesRede configuracoesRede, Rep repAutenticado) {
+		return this.configuracaoRepository.save(configuracoesRede);
 	}
 
 	public String excluirPorId(Integer id) throws ServiceException {
 
-		Configuracao configuracao = buscaPorId(id);
-		if (configuracao != null) {
-			this.configuracaoRepository.delete(configuracao);
+		ConfiguracoesRede configuracoesRede = buscaPorId(id);
+		if (configuracoesRede != null) {
+			this.configuracaoRepository.delete(configuracoesRede);
 			return "Configuração excluida com sucesso";
 		}
-		throw new ServiceException(HttpStatus.NO_CONTENT, "Configuracao não encontrada");
+		throw new ServiceException(HttpStatus.NO_CONTENT, "ConfiguracoesRede não encontrada");
 	}
 
-	public Configuracao buscaPorId(Integer id) {
+	public ConfiguracoesRede buscaPorId(Integer id) {
 		return this.configuracaoRepository.findOne(id);
 	}
 

@@ -4,10 +4,13 @@ import java.text.SimpleDateFormat;
 
 import javax.servlet.MultipartConfigElement;
 
+//import org.glassfish.jersey.servlet.ServletContainer;
+//import org.glassfish.jersey.servlet.ServletProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 
@@ -18,6 +21,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootApplication
 public class RepApiApplication {
+
+//	@Bean
+//	public ServletRegistrationBean jerseyServlet() {
+//		ServletRegistrationBean registration = new ServletRegistrationBean(new ServletContainer(), "/*");
+//		registration.addInitParameter(ServletProperties.JAXRS_APPLICATION_CLASS, JerseyInitialization.class.getName());
+//		return registration;
+//	}
 
 	// filtro para debug,
 	@Bean
