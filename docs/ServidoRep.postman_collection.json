@@ -1,0 +1,691 @@
+{
+	"variables": [],
+	"info": {
+		"name": "ServidoRep",
+		"_postman_id": "89ca656f-f193-5646-6c73-2e706844e013",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Heroku",
+			"description": "",
+			"item": [
+				{
+					"name": "solicitarDados",
+					"request": {
+						"url": "https://inner-rep-api.herokuapp.com/agendarTarefa/3/2",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg4OTc5ODQ5fQ.QH1G-vFZokNIu4mA1jJHFPU6pLq2ASWF8YWVJ0vKgVQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Rep HEROKU",
+					"request": {
+						"url": "https://inner-rep-api.herokuapp.com/rep/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg4OTU3Nzk2fQ.cLTfhDX5zm_7BU-dzve-xcqC1onLq072PlM1gPcFtFM",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"numeroSerie\": \"1111251212121212\",\n    \"chaveComunicacao\":\"**AUTENTICACAO**\"\n  }"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Autenticacao",
+					"request": {
+						"url": "https://inner-rep-api.herokuapp.com/auth",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numeroSerie\" : \"1111251212121212\",\n  \"chaveComunicacao\":\"**AUTENTICCAO**\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Status",
+					"request": {
+						"url": "https://inner-rep-api.herokuapp.com/restrict/status/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5MDMxNTAzfQ.dcxMMnbbcAoTtQyTdqmy700I6pJndK4BVpTLX7PdFy8",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n   \"ultimoNsr\":101,\n   \"config\":0\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "COLETA",
+					"request": {
+						"url": "https://inner-rep-api.herokuapp.com/restrict/coleta",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg4OTc5ODQ5fQ.QH1G-vFZokNIu4mA1jJHFPU6pLq2ASWF8YWVJ0vKgVQ",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "000000001619092016084002\r\n000000002619092016084502\r\n000000003619092016084702\r\n000000004619092016095502\r\n000000005419092016100019092016095811144477735\r\n0000000062190920161001   11144477735112345670010191            UNIVERSIDADE DEMONSTRAÇÃO                                                                                                                             RUA JOINVILLE                                                                                       \r\n0000000075190920161006I010072598147FERNANDA SOUSA MARTINE                                  11144477735\r\n0000000085190920161006I010256524502ROBERTO MATTOS                                          11144477735\r\n0000000095190920161006I010257528099MARCELO ARAÚJO                                          11144477735\r\n0000000105190920161006I010258024647TADEU CARVALHO                                          11144477735\r\n0000000115190920161006I010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000125190920161006I010744242603JOÃO DA SILVA                                           11144477735\r\n0000000135190920161006I010833437957AUGUSTO ALBUQUERQUE FIGUEIROA                           11144477735\r\n0000000145190920161006I010833563723MARCO ANTÔNIO DA SILVAS                                 11144477735\r\n0000000155190920161006I010861380085ADALBERTO SOARES FILHO                                  11144477735\r\n0000000165190920161006I010877996196RICARDO DA SILVA                                        11144477735\r\n0000000175190920161006I012050866463JOSÉ CARLOS MACORATTI                                   11144477735\r\n0000000185190920161006I012078962130FILHO DO REI                                            11144477735\r\n0000000195190920161006I012183223113JULIANA ALVARO FONSECA                                  11144477735\r\n0000000205190920161006I012203703654ADRIANA CONCEIÇÃO                                       11144477735\r\n0000000215190920161006I012243121729FABIANA BORGES                                          11144477735\r\n0000000225190920161006I012326053348NATHAN CESAR PRUDENTE                                   11144477735\r\n0000000235190920161006I012418812563VICTOR MATHEUS BEDUSCHI                                 11144477735\r\n0000000245190920161006I012972521724EMANUEL LAMIM                                           11144477735\r\n0000000255190920161006I013875968092BEATRIZ DA SILVA                                        11144477735\r\n0000000265190920161006I019523072229KATIA SOBRAL                                            11144477735\r\n0000000275190920161006I022222880229ISAURA MOURA                                            11144477735\r\n0000000285190920161006I023180609865PAMELA RUARO                                            11144477735\r\n0000000295190920161006I030226977856ROSELI SARNEY                                           11144477735\r\n0000000305190920161006I035203470110OTTO GONSALVEZ                                          11144477735\r\n0000000315190920161006I036223172279ADILSON OLIVEIRA                                        11144477735\r\n0000000325190920161006I038278686947RAID KOMANI                                             11144477735\r\n0000000335190920161006I055992038283ISRAEL SUBIRA                                           11144477735\r\n0000000345190920161006I060035088765GETULIO VARGAS                                          11144477735\r\n0000000355190920161006I073888441113JULIA PEREIRA SANTANA                                   11144477735\r\n0000000365190920161006I077297094538BERNARDO NORGENS                                        11144477735\r\n0000000375190920161006I096909513010MARIA CAMILA SOARES                                     11144477735\r\n0000000383190920161009012203703654\r\n0000000395190920161011E019523072229KATIA SOBRAL                                            11144477735\r\n0000000405190920161011I019523072229KATIA SOBRAL                                            11144477735\r\n0000000413190920161017012203703654\r\n0000000425190920161019E010256524502ROBERTO MATTOS                                          11144477735\r\n0000000435190920161019E010257528099MARCELO ARAÚJO                                          11144477735\r\n0000000445190920161019E010744242603JOÃO DA SILVA                                           11144477735\r\n0000000455190920161019E010833437957AUGUSTO ALBUQUERQUE FIGUEIROA                           11144477735\r\n0000000465190920161019E010833563723MARCO ANTÔNIO DA SILVAS                                 11144477735\r\n0000000475190920161019E010861380085ADALBERTO SOARES FILHO                                  11144477735\r\n0000000485190920161019E010877996196RICARDO DA SILVA                                        11144477735\r\n0000000495190920161019E012050866463JOSÉ CARLOS MACORATTI                                   11144477735\r\n0000000505190920161019E012183223113JULIANA ALVARO FONSECA                                  11144477735\r\n0000000515190920161019E012203703654ADRIANA CONCEIÇÃO                                       11144477735\r\n0000000525190920161019E012326053348NATHAN CESAR PRUDENTE                                   11144477735\r\n0000000535190920161019A019523072229KATIA SOBRAL                                            11144477735\r\n0000000545190920161019E060035088765GETULIO VARGAS                                          11144477735\r\n000000055419092016101919092016101911144477735\r\n0000000565190920161019I010256524502ROBERTO MATTOS                                          11144477735\r\n0000000575190920161019I010257528099MARCELO ARAÚJO                                          11144477735\r\n0000000585190920161019I010744242603JOÃO DA SILVA                                           11144477735\r\n0000000595190920161019I010833437957AUGUSTO ALBUQUERQUE FIGUEIROA                           11144477735\r\n0000000605190920161019I010833563723MARCO ANTÔNIO DA SILVAS                                 11144477735\r\n0000000615190920161019I010861380085ADALBERTO SOARES FILHO                                  11144477735\r\n0000000625190920161019I010877996196RICARDO DA SILVA                                        11144477735\r\n0000000635190920161019I012050866463JOSÉ CARLOS MACORATTI                                   11144477735\r\n0000000645190920161019I012183223113JULIANA ALVARO FONSECA                                  11144477735\r\n0000000655190920161019I012203703654ADRIANA CONCEIÇÃO                                       11144477735\r\n0000000665190920161019I012326053348NATHAN CESAR PRUDENTE                                   11144477735\r\n0000000675190920161019I060035088765GETULIO VARGAS                                          11144477735\r\n0000000683190920161020012203703654\r\n0000000695190920161022A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000703190920161022012203703654\r\n0000000713190920161022010628390057\r\n0000000725190920161023A010628390057ANA CLÁUDIA AMARAL                                      11111111111\r\n0000000733190920161027010628390057\r\n0000000743190920161027010628390057\r\n0000000753190920161030010628390057\r\n0000000765190920161032A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000773190920161033010628390057\r\n0000000785190920161036E010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000795190920161038I010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000803190920161047010628390057\r\n0000000815190920161049A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000823190920161055010628390057\r\n0000000835190920161100I022975512456ABDNEGO SADRAQUE MESACRE                                11144477735\r\n0000000843190920161100022975512456\r\n0000000853190920161109022975512456\r\n0000000865190920161132A096909513010MARIA CAMILA SOARES                                     11144477735\r\n0000000875190920161133A019523072229KATIA SOBRAL                                            11144477735\r\n0000000885190920161133A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000895190920161133A022975512456ABDNEGO SADRAQUE MESACRE                                11144477735\r\n0000000903190920161139022975512456\r\n0000000915190920161152A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000925190920161152E019523072229KATIA SOBRAL                                            11144477735\r\n0000000935190920161152E022975512456ABDNEGO SADRAQUE MESACRE                                11144477735\r\n0000000945190920161152I065244170147FERNANDA RUARA                                          11144477735\r\n0000000955190920161152A096909513010MARIA CAMILA SOARES                                     11144477735\r\n0000000965190920161225A012243121729FABIANA BORGES                                          11144477735\r\n000000097619092016130506\r\n0000000983190920161305012243121729\r\n000000099419092016131019092016131011144477735\r\n000000100419092016132719092016132711144477735\r\n000000101419092016132719092016132711144477735\r\n000000102419092016132719092016132711144477735\r\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Empregador",
+					"request": {
+						"url": "https://inner-rep-api.herokuapp.com/restrict/empregador/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5MDMxNTAzfQ.dcxMMnbbcAoTtQyTdqmy700I6pJndK4BVpTLX7PdFy8",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"empregadorIdent\": \"99999999999\",\n  \"empregadorCei\": \"11111111\",\n  \"empregadorLocal\": \"local 11111055555555555555555555555555555555555555555555555555555555555555555555555555\",\n  \"empregadorRazao\": \"Razao Socal Eme Re Teste !!!!!!!!!!!!!!!@@@@@@@@@$$$$$$$$$$$¨¨¨¨¨¨¨¨\",\n  \"empregadorTipoIdent\": \"2\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Localhot",
+			"description": "",
+			"item": [
+				{
+					"name": "Autenticacao",
+					"request": {
+						"url": "http://alfa_gemini:80/auth",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numeroSerie\" : \"1111251212121212\",\n  \"chaveComunicacao\":\"**AUTENTICCAO**\"\n}"
+						},
+						"description": "Solicita ao servidor o token de autenticação"
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar/Solicitar Rep",
+					"request": {
+						"url": "http://alfa_gemini:80/rep/",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDk5Mzc5fQ.YoOCUZqjwuDh5wSk1hQ67PzNmwyYhC7df0VE-me7t3s",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"numeroSerie\": \"1111251212121212\",\n    \"chaveComunicacao\":\"**AUTENTICACAO**\"\n  }"
+						},
+						"description": "Cadastra um novo Rep no sistema"
+					},
+					"response": []
+				},
+				{
+					"name": "Fila Tarefas",
+					"request": {
+						"url": "http://alfa_gemini:80/restrict/status/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTUxMTc0fQ.FElAuBEnr1M00DRYN_BssRQeerpI3VcfQbCOlotE_ts",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n   \"ultimoNsr\":101,\n   \"config\":0\n }\n"
+						},
+						"description": "Mostra as tarefas na fila para o Inner Rep realizar"
+					},
+					"response": []
+				},
+				{
+					"name": "COLETA COUNT",
+					"request": {
+						"url": "http://alfa_gemini:80/restrict/coleta/total",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTU3ODQyfQ.fmd69ChFFTWo8sRMbcLmEdPJfrhP3UDWq3TzagVXOSk",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "text/plain",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "000000001619092016084002\r\n000000002619092016084502\r\n000000003619092016084702\r\n000000004619092016095502\r\n000000005419092016100019092016095811144477735\r\n0000000062190920161001   11144477735112345670010191            UNIVERSIDADE DEMONSTRAÇÃO                                                                                                                             RUA JOINVILLE                                                                                       \r\n0000000075190920161006I010072598147FERNANDA SOUSA MARTINE                                  11144477735\r\n0000000085190920161006I010256524502ROBERTO MATTOS                                          11144477735\r\n0000000095190920161006I010257528099MARCELO ARAÚJO                                          11144477735\r\n0000000105190920161006I010258024647TADEU CARVALHO                                          11144477735\r\n0000000115190920161006I010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000125190920161006I010744242603JOÃO DA SILVA                                           11144477735\r\n0000000135190920161006I010833437957AUGUSTO ALBUQUERQUE FIGUEIROA                           11144477735\r\n0000000145190920161006I010833563723MARCO ANTÔNIO DA SILVAS                                 11144477735\r\n0000000155190920161006I010861380085ADALBERTO SOARES FILHO                                  11144477735\r\n0000000165190920161006I010877996196RICARDO DA SILVA                                        11144477735\r\n0000000175190920161006I012050866463JOSÉ CARLOS MACORATTI                                   11144477735\r\n0000000185190920161006I012078962130FILHO DO REI                                            11144477735\r\n0000000195190920161006I012183223113JULIANA ALVARO FONSECA                                  11144477735\r\n0000000205190920161006I012203703654ADRIANA CONCEIÇÃO                                       11144477735\r\n0000000215190920161006I012243121729FABIANA BORGES                                          11144477735\r\n0000000225190920161006I012326053348NATHAN CESAR PRUDENTE                                   11144477735\r\n0000000235190920161006I012418812563VICTOR MATHEUS BEDUSCHI                                 11144477735\r\n0000000245190920161006I012972521724EMANUEL LAMIM                                           11144477735\r\n0000000255190920161006I013875968092BEATRIZ DA SILVA                                        11144477735\r\n0000000265190920161006I019523072229KATIA SOBRAL                                            11144477735\r\n0000000275190920161006I022222880229ISAURA MOURA                                            11144477735\r\n0000000285190920161006I023180609865PAMELA RUARO                                            11144477735\r\n0000000295190920161006I030226977856ROSELI SARNEY                                           11144477735\r\n0000000305190920161006I035203470110OTTO GONSALVEZ                                          11144477735\r\n0000000315190920161006I036223172279ADILSON OLIVEIRA                                        11144477735\r\n0000000325190920161006I038278686947RAID KOMANI                                             11144477735\r\n0000000335190920161006I055992038283ISRAEL SUBIRA                                           11144477735\r\n0000000345190920161006I060035088765GETULIO VARGAS                                          11144477735\r\n0000000355190920161006I073888441113JULIA PEREIRA SANTANA                                   11144477735\r\n0000000365190920161006I077297094538BERNARDO NORGENS                                        11144477735\r\n0000000375190920161006I096909513010MARIA CAMILA SOARES                                     11144477735\r\n0000000383190920161009012203703654\r\n0000000395190920161011E019523072229KATIA SOBRAL                                            11144477735\r\n0000000405190920161011I019523072229KATIA SOBRAL                                            11144477735\r\n0000000413190920161017012203703654\r\n0000000425190920161019E010256524502ROBERTO MATTOS                                          11144477735\r\n0000000435190920161019E010257528099MARCELO ARAÚJO                                          11144477735\r\n0000000445190920161019E010744242603JOÃO DA SILVA                                           11144477735\r\n0000000455190920161019E010833437957AUGUSTO ALBUQUERQUE FIGUEIROA                           11144477735\r\n0000000465190920161019E010833563723MARCO ANTÔNIO DA SILVAS                                 11144477735\r\n0000000475190920161019E010861380085ADALBERTO SOARES FILHO                                  11144477735\r\n0000000485190920161019E010877996196RICARDO DA SILVA                                        11144477735\r\n0000000495190920161019E012050866463JOSÉ CARLOS MACORATTI                                   11144477735\r\n0000000505190920161019E012183223113JULIANA ALVARO FONSECA                                  11144477735\r\n0000000515190920161019E012203703654ADRIANA CONCEIÇÃO                                       11144477735\r\n0000000525190920161019E012326053348NATHAN CESAR PRUDENTE                                   11144477735\r\n0000000535190920161019A019523072229KATIA SOBRAL                                            11144477735\r\n0000000545190920161019E060035088765GETULIO VARGAS                                          11144477735\r\n000000055419092016101919092016101911144477735\r\n0000000565190920161019I010256524502ROBERTO MATTOS                                          11144477735\r\n0000000575190920161019I010257528099MARCELO ARAÚJO                                          11144477735\r\n0000000585190920161019I010744242603JOÃO DA SILVA                                           11144477735\r\n0000000595190920161019I010833437957AUGUSTO ALBUQUERQUE FIGUEIROA                           11144477735\r\n0000000605190920161019I010833563723MARCO ANTÔNIO DA SILVAS                                 11144477735\r\n0000000615190920161019I010861380085ADALBERTO SOARES FILHO                                  11144477735\r\n0000000625190920161019I010877996196RICARDO DA SILVA                                        11144477735\r\n0000000635190920161019I012050866463JOSÉ CARLOS MACORATTI                                   11144477735\r\n0000000645190920161019I012183223113JULIANA ALVARO FONSECA                                  11144477735\r\n0000000655190920161019I012203703654ADRIANA CONCEIÇÃO                                       11144477735\r\n0000000665190920161019I012326053348NATHAN CESAR PRUDENTE                                   11144477735\r\n0000000675190920161019I060035088765GETULIO VARGAS                                          11144477735\r\n0000000683190920161020012203703654\r\n0000000695190920161022A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000703190920161022012203703654\r\n0000000713190920161022010628390057\r\n0000000725190920161023A010628390057ANA CLÁUDIA AMARAL                                      11111111111\r\n0000000733190920161027010628390057\r\n0000000743190920161027010628390057\r\n0000000753190920161030010628390057\r\n0000000765190920161032A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000773190920161033010628390057\r\n0000000785190920161036E010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000795190920161038I010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000803190920161047010628390057\r\n0000000815190920161049A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000823190920161055010628390057\r\n0000000835190920161100I022975512456ABDNEGO SADRAQUE MESACRE                                11144477735\r\n0000000843190920161100022975512456\r\n0000000853190920161109022975512456\r\n0000000865190920161132A096909513010MARIA CAMILA SOARES                                     11144477735\r\n0000000875190920161133A019523072229KATIA SOBRAL                                            11144477735\r\n0000000885190920161133A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000895190920161133A022975512456ABDNEGO SADRAQUE MESACRE                                11144477735\r\n0000000903190920161139022975512456\r\n0000000915190920161152A010628390057ANA CLÁUDIA AMARAL                                      11144477735\r\n0000000925190920161152E019523072229KATIA SOBRAL                                            11144477735\r\n0000000935190920161152E022975512456ABDNEGO SADRAQUE MESACRE                                11144477735\r\n0000000945190920161152I065244170147FERNANDA RUARA                                          11144477735\r\n0000000955190920161152A096909513010MARIA CAMILA SOARES                                     11144477735\r\n0000000965190920161225A012243121729FABIANA BORGES                                          11144477735\r\n000000097619092016130506\r\n0000000983190920161305012243121729\r\n000000099419092016131019092016131011144477735\r\n000000100419092016132719092016132711144477735\r\n000000101419092016132719092016132711144477735\r\n000000102419092016132719092016132711144477735\r\n"
+						},
+						"description": "Total de NSR coletados"
+					},
+					"response": []
+				},
+				{
+					"name": "COLETA Cancelar",
+					"request": {
+						"url": "http://alfa_gemini:80/restrict/coleta/cancelar",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTU3ODQyfQ.fmd69ChFFTWo8sRMbcLmEdPJfrhP3UDWq3TzagVXOSk",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nsrProcessado\":\"1000\"\n}"
+						},
+						"description": "Cancela uma coleta em andamento"
+					},
+					"response": []
+				},
+				{
+					"name": "Visualizar Lista Bio",
+					"request": {
+						"url": "http://alfa_gemini:80/restrict/empregado/listabio",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTU3ODQyfQ.fmd69ChFFTWo8sRMbcLmEdPJfrhP3UDWq3TzagVXOSk",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fpid\":[\n    \"11111111\",\"2222222222222\",\"44444444444444444\"\n    ]\n}"
+						},
+						"description": "Recebe a lista bio, exitente na memoria do servido"
+					},
+					"response": []
+				},
+				{
+					"name": "Solicitar Lista Bio",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/listabiometria",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTU3ODQyfQ.fmd69ChFFTWo8sRMbcLmEdPJfrhP3UDWq3TzagVXOSk",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"empregadoPis\":\"010892044896\"\n }\n"
+						},
+						"description": "Solicita a listra de usuários bio para o Inner Rep. Esta lista esta armazena em memoria no servidor"
+					},
+					"response": []
+				},
+				{
+					"name": "Bio Template",
+					"request": {
+						"url": "http://alfa_gemini:80/restrict/empregado/bio/47906",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDk4NTI0fQ.DbEBQ1DHvfRpuaRsSwXt3r6rqNkxCVX91LM_RTn3zI0",
+								"description": ""
+							},
+							{
+								"key": "//Content-Type",
+								"value": "application/json",
+								"description": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": ""
+							}
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar/Solicitar empregado",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/empregado/1",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTUxMTc0fQ.FElAuBEnr1M00DRYN_BssRQeerpI3VcfQbCOlotE_ts",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"fCB\":\"000000000157298\",\n  \"fCP\":\"0000000012572987\",\n  \"fCT\":\"000000000125729722\",\n  \"fNome\":\"EMPREGADO NOME\",\n  \"fNEx\":\"EMPREGADO\",\n  \"fPis\":\"000453840892\",\n  \"fSenha\":\"111112\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar/Solicitar empregador",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/empregador/2",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDY4NjIxfQ.JNE3B0eabnOeP4gRVbQ1sp_qkik7lWJTQUUGH28I4_U",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"eId\": \"99999999999\",\n  \"eCei\": \"11111111\",\n  \"eLoc\": \"local\",\n  \"eRS\": \"Razao Social\",\n  \"eTpId\": \"2\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Solicitar Coleta",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/coleta",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTU3ODQyfQ.fmd69ChFFTWo8sRMbcLmEdPJfrhP3UDWq3TzagVXOSk",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"cNsrI\": \"1301297\",\n  \"cNsrF\": \"1305297\",\n  \"cDtI\": \"0803217\",\n  \"cDtF\": \"08032017\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Solicitar Dados Bio",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/biometria/2",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDY4NjIxfQ.JNE3B0eabnOeP4gRVbQ1sp_qkik7lWJTQUUGH28I4_U",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"fPis\":\"010892044896\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Solicitar Lista Empregados",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/listaempregados",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDY4NjIxfQ.JNE3B0eabnOeP4gRVbQ1sp_qkik7lWJTQUUGH28I4_U",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"empregadoPis\":\"010892044896\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Solicitar Lista Empregados Dump",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/listaempregadosdumping/1",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDk4NTg1fQ.Dtg34us7p_0sWJOwL24Ma--7Wi2WVecKU-EjStsy6Q4",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"empregadoPis\":\"010892044896\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Solicitar Config Senha",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/configuracoes/senha/2",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDY4NjIxfQ.JNE3B0eabnOeP4gRVbQ1sp_qkik7lWJTQUUGH28I4_U",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"cfgSCfg\": \"111111\",\n  \"cfgSPend\": \"111111\",\n  \"cfgSBio\": \"111111\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Solicitar Info",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/info",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NDY4NjIxfQ.JNE3B0eabnOeP4gRVbQ1sp_qkik7lWJTQUUGH28I4_U",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"cfgSCfg\": \"11111\",\n  \"cfgSPend\": \"11111\",\n  \"cfgSBio\": \"11111\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar FW",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/atualizarfirmware",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTUxMTc0fQ.FElAuBEnr1M00DRYN_BssRQeerpI3VcfQbCOlotE_ts",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"cfgSCfg\": \"11111\",\n  \"cfgSPend\": \"11111\",\n  \"cfgSBio\": \"11111\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Paginas",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/atualizarpaginas",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTUxMTc0fQ.FElAuBEnr1M00DRYN_BssRQeerpI3VcfQbCOlotE_ts",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"cfgSCfg\": \"11111\",\n  \"cfgSPend\": \"11111\",\n  \"cfgSBio\": \"11111\"\n }\n"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar/Solicitar Relógio",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/relogio/1",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTY4MjYxfQ.Q8nIpEGOGslHPgh_KVIQF5QIHZdOYeqtj0I_o9TyjG8",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n  \"cfgRelDia\": 14,\n  \"cfgRelMes\": 3,\n  \"cfgRelAno\": 2017,\n  \"cfgRelHora\": 14,\n  \"cfgRelMin\": 20,\n  \"cfgRelSeg\": 0\n }\n"
+						},
+						"description": "Altera e solicita o relogio(horário) do Inner Rep"
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar/Solicitar Horário Verão",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/horarioverao/2",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTY4MjYxfQ.Q8nIpEGOGslHPgh_KVIQF5QIHZdOYeqtj0I_o9TyjG8",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n\t\"cfgHVerDiaI\": 10,\n\t\"cfgHVerMesI\": 11,\n\t\"cfgHVerAnoI\": 2016,\n\t\n\t\"cfgHVerDiaF\": 10,\n\t\"cfgHVerMesF\": 3,\n\t\"cfgHVerAnoF\": 2017\n }\n"
+						},
+						"description": "Configura a mudança de horário de verão do Inner Rep"
+					},
+					"response": []
+				},
+				{
+					"name": "Cadastrar/Solicitar Config Cartões",
+					"request": {
+						"url": "http://alfa_gemini:80/agendarTarefa/cartoes/2",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMTExMjUxMjEyMTIxMjEyIiwiZXhwIjoxNDg5NTY4MjYxfQ.Q8nIpEGOGslHPgh_KVIQF5QIHZdOYeqtj0I_o9TyjG8",
+								"description": ""
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n\t\"cfgCMascB\": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],\n\t\"cfgCMascP\": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],\n\t\n\t\"cfgCDigFixo\": 1,\n\t\n\t\"cfgCTpB\": 1,\n\t\"cfgCTpP\": 3\n }\n"
+						},
+						"description": "Configura a mudança de horário de verão do Inner Rep"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

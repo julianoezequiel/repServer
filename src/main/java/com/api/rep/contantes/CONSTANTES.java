@@ -22,6 +22,7 @@ public class CONSTANTES {
 
 	public static final String URL_IDENTFICACAO = "/restrict/identificacao";
 	public static final String URL_ATUALIZACAO_FW = "/restrict/atualizarfw";
+	public static final String URL_ATUALIZACAO_PAGINAS = "/restrict/atualizarpaginas";
 
 	public static final String URL_AUTH = "/auth";
 	public static final String URL_STATUS = "/restrict/status";

@@ -27,11 +27,15 @@ public class ConfiguracoesCartoes {
 	@OneToMany(mappedBy = "configuracoesCartoesId")
 	private Collection<Tarefa> tarefaCollection;
 
-	private String mascaraBarras;
-	private String mascaraProx;
+	@JsonIgnore
+	@OneToMany(mappedBy = "configuracoesCartoesId")
+	private Collection<Rep> repCollection;
+
+	private Integer[] mascaraBarras;
+	private Integer[] mascaraProx;
 	private Integer digitosFixo;
-	private String tipoBarras;
-	private String tipoProx;
+	private Integer tipoBarras;
+	private Integer tipoProx;
 
 	public synchronized Integer getId() {
 		return id;
@@ -49,22 +53,6 @@ public class ConfiguracoesCartoes {
 		this.tarefaCollection = tarefaCollection;
 	}
 
-	public synchronized String getMascaraBarras() {
-		return mascaraBarras;
-	}
-
-	public synchronized void setMascaraBarras(String mascaraBarras) {
-		this.mascaraBarras = mascaraBarras;
-	}
-
-	public synchronized String getMascaraProx() {
-		return mascaraProx;
-	}
-
-	public synchronized void setMascaraProx(String mascaraProx) {
-		this.mascaraProx = mascaraProx;
-	}
-
 	public synchronized Integer getDigitosFixo() {
 		return digitosFixo;
 	}
@@ -73,27 +61,51 @@ public class ConfiguracoesCartoes {
 		this.digitosFixo = digitosFixo;
 	}
 
-	public synchronized String getTipoBarras() {
+	public synchronized Integer getTipoBarras() {
 		return tipoBarras;
 	}
 
-	public synchronized void setTipoBarras(String tipoBarras) {
+	public synchronized void setTipoBarras(Integer tipoBarras) {
 		this.tipoBarras = tipoBarras;
 	}
 
-	public synchronized String getTipoProx() {
+	public synchronized Integer getTipoProx() {
 		return tipoProx;
 	}
 
-	public synchronized void setTipoProx(String tipoProx) {
+	public synchronized void setTipoProx(Integer tipoProx) {
 		this.tipoProx = tipoProx;
+	}
+
+	public synchronized Collection<Rep> getRepCollection() {
+		return repCollection;
+	}
+
+	public synchronized void setRepCollection(Collection<Rep> repCollection) {
+		this.repCollection = repCollection;
+	}
+
+	public synchronized Integer[] getMascaraBarras() {
+		return mascaraBarras;
+	}
+
+	public synchronized void setMascaraBarras(Integer[] mascaraBarras) {
+		this.mascaraBarras = mascaraBarras;
+	}
+
+	public synchronized Integer[] getMascaraProx() {
+		return mascaraProx;
+	}
+
+	public synchronized void setMascaraProx(Integer[] mascaraProx) {
+		this.mascaraProx = mascaraProx;
 	}
 
 	public ConfiguracoesCartoesCmd toConfiguracoesCartoesCmd() {
 
 		ConfiguracoesCartoesCmd cmd = new ConfiguracoesCartoesCmd();
 
-		cmd.setCfgCDigFixo(this.digitosFixo.toString());
+		cmd.setCfgCDigFixo(this.digitosFixo);
 		cmd.setCfgCMascB(this.mascaraBarras);
 		cmd.setCfgCMascP(this.mascaraProx);
 		cmd.setCfgCTpB(this.tipoBarras);

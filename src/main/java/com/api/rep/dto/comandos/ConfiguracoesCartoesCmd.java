@@ -6,49 +6,49 @@ public class ConfiguracoesCartoesCmd implements Cmd {
 
 	private static final long serialVersionUID = 797764337210228386L;
 
-	private String cfgCMascB;
-	private String cfgCMascP;
-	private String cfgCDigFixo;
-	private String cfgCTpB;
-	private String cfgCTpP;
+	private Integer[] cfgCMascB;
+	private Integer[] cfgCMascP;
+	private Integer cfgCDigFixo;
+	private Integer cfgCTpB;
+	private Integer cfgCTpP;
 
-	public synchronized String getCfgCMascB() {
+	public synchronized Integer[] getCfgCMascB() {
 		return cfgCMascB;
 	}
 
-	public synchronized void setCfgCMascB(String cfgCMascB) {
+	public synchronized void setCfgCMascB(Integer[] cfgCMascB) {
 		this.cfgCMascB = cfgCMascB;
 	}
 
-	public synchronized String getCfgCMascP() {
+	public synchronized Integer[] getCfgCMascP() {
 		return cfgCMascP;
 	}
 
-	public synchronized void setCfgCMascP(String cfgCMascP) {
+	public synchronized void setCfgCMascP(Integer[] cfgCMascP) {
 		this.cfgCMascP = cfgCMascP;
 	}
 
-	public synchronized String getCfgCDigFixo() {
+	public synchronized Integer getCfgCDigFixo() {
 		return cfgCDigFixo;
 	}
 
-	public synchronized void setCfgCDigFixo(String cfgCDigFixo) {
+	public synchronized void setCfgCDigFixo(Integer cfgCDigFixo) {
 		this.cfgCDigFixo = cfgCDigFixo;
 	}
 
-	public synchronized String getCfgCTpB() {
+	public synchronized Integer getCfgCTpB() {
 		return cfgCTpB;
 	}
 
-	public synchronized void setCfgCTpB(String cfgCTpB) {
+	public synchronized void setCfgCTpB(Integer cfgCTpB) {
 		this.cfgCTpB = cfgCTpB;
 	}
 
-	public synchronized String getCfgCTpP() {
+	public synchronized Integer getCfgCTpP() {
 		return cfgCTpP;
 	}
 
-	public synchronized void setCfgCTpP(String cfgCTpP) {
+	public synchronized void setCfgCTpP(Integer cfgCTpP) {
 		this.cfgCTpP = cfgCTpP;
 	}
 

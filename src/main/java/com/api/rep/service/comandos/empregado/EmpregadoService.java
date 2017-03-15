@@ -32,6 +32,7 @@ import com.api.rep.service.tarefa.CmdHandler;
 public class EmpregadoService extends ApiService {
 
 	public static HashMap<String, byte[]> dumpingMap = new HashMap<>();
+	
 	@Autowired
 	private EmpregadoRepository empregadoRespository;
 

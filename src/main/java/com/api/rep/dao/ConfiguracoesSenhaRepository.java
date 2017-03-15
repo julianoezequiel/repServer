@@ -9,5 +9,5 @@ import com.api.rep.entity.Rep;
 @Repository
 public interface ConfiguracoesSenhaRepository extends JpaRepository<ConfiguracoesSenha, Integer> {
 
-
+	
 }

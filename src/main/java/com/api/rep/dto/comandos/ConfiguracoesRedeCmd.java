@@ -6,61 +6,51 @@ public class ConfiguracoesRedeCmd implements Cmd {
 
 	private static final long serialVersionUID = 1L;
 
-	private String cfgRIpRep;
-	private String cfgRDhcp;
-	private String cfgRPortRep;
-	private String cfgRNumMac;
-	private String cfgRNRede;
+	private Integer[] cfgRIpRep;
+	private Integer cfgRDhcp;
+	private Integer cfgRPortRep;
+	private Integer[] cfgRNumMac;
 	private String cfgRNRep;
-	private String cfgRRepIn;
-	private String cfgRIpServ;
-	private String cfgRPortServ;
-	private String cfgRMasc;
-	private String cfgRGat;
-	private String cfgRIntCom;
-	private String cfgRHabDns;
+	private Integer cfgRRepIn;
+	private Integer[] cfgRIpServ;
+	private Integer cfgRPortServ;
+	private Integer[] cfgRMasc;
+	private Integer[] cfgRGat;
+	private Integer cfgRIntCom;
+	private Integer cfgRHabDns;
 	private String cfgRNHost;
-	private String cfgRIpDns;
-	private String cfgRChaveCom;
+	private Integer[] cfgRIpDns;
 
-	public synchronized String getCfgRIpRep() {
+	public synchronized Integer[] getCfgRIpRep() {
 		return cfgRIpRep;
 	}
 
-	public synchronized void setCfgRIpRep(String cfgRIpRep) {
+	public synchronized void setCfgRIpRep(Integer[] cfgRIpRep) {
 		this.cfgRIpRep = cfgRIpRep;
 	}
 
-	public synchronized String getCfgRDhcp() {
+	public synchronized Integer getCfgRDhcp() {
 		return cfgRDhcp;
 	}
 
-	public synchronized void setCfgRDhcp(String cfgRDhcp) {
+	public synchronized void setCfgRDhcp(Integer cfgRDhcp) {
 		this.cfgRDhcp = cfgRDhcp;
 	}
 
-	public synchronized String getCfgRPortRep() {
+	public synchronized Integer getCfgRPortRep() {
 		return cfgRPortRep;
 	}
 
-	public synchronized void setCfgRPortRep(String cfgRPortRep) {
+	public synchronized void setCfgRPortRep(Integer cfgRPortRep) {
 		this.cfgRPortRep = cfgRPortRep;
 	}
 
-	public synchronized String getCfgRNumMac() {
+	public synchronized Integer[] getCfgRNumMac() {
 		return cfgRNumMac;
 	}
 
-	public synchronized void setCfgRNumMac(String cfgRNumMac) {
+	public synchronized void setCfgRNumMac(Integer[] cfgRNumMac) {
 		this.cfgRNumMac = cfgRNumMac;
-	}
-
-	public synchronized String getCfgRNRede() {
-		return cfgRNRede;
-	}
-
-	public synchronized void setCfgRNRede(String cfgRNRede) {
-		this.cfgRNRede = cfgRNRede;
 	}
 
 	public synchronized String getCfgRNRep() {
@@ -71,59 +61,59 @@ public class ConfiguracoesRedeCmd implements Cmd {
 		this.cfgRNRep = cfgRNRep;
 	}
 
-	public synchronized String getCfgRRepIn() {
+	public synchronized Integer getCfgRRepIn() {
 		return cfgRRepIn;
 	}
 
-	public synchronized void setCfgRRepIn(String cfgRRepIn) {
+	public synchronized void setCfgRRepIn(Integer cfgRRepIn) {
 		this.cfgRRepIn = cfgRRepIn;
 	}
 
-	public synchronized String getCfgRIpServ() {
+	public synchronized Integer[] getCfgRIpServ() {
 		return cfgRIpServ;
 	}
 
-	public synchronized void setCfgRIpServ(String cfgRIpServ) {
+	public synchronized void setCfgRIpServ(Integer[] cfgRIpServ) {
 		this.cfgRIpServ = cfgRIpServ;
 	}
 
-	public synchronized String getCfgRPortServ() {
+	public synchronized Integer getCfgRPortServ() {
 		return cfgRPortServ;
 	}
 
-	public synchronized void setCfgRPortServ(String cfgRPortServ) {
+	public synchronized void setCfgRPortServ(Integer cfgRPortServ) {
 		this.cfgRPortServ = cfgRPortServ;
 	}
 
-	public synchronized String getCfgRMasc() {
+	public synchronized Integer[] getCfgRMasc() {
 		return cfgRMasc;
 	}
 
-	public synchronized void setCfgRMasc(String cfgRMasc) {
+	public synchronized void setCfgRMasc(Integer[] cfgRMasc) {
 		this.cfgRMasc = cfgRMasc;
 	}
 
-	public synchronized String getCfgRGat() {
+	public synchronized Integer[] getCfgRGat() {
 		return cfgRGat;
 	}
 
-	public synchronized void setCfgRGat(String cfgRGat) {
+	public synchronized void setCfgRGat(Integer[] cfgRGat) {
 		this.cfgRGat = cfgRGat;
 	}
 
-	public synchronized String getCfgRIntCom() {
+	public synchronized Integer getCfgRIntCom() {
 		return cfgRIntCom;
 	}
 
-	public synchronized void setCfgRIntCom(String cfgRIntCom) {
+	public synchronized void setCfgRIntCom(Integer cfgRIntCom) {
 		this.cfgRIntCom = cfgRIntCom;
 	}
 
-	public synchronized String getCfgRHabDns() {
+	public synchronized Integer getCfgRHabDns() {
 		return cfgRHabDns;
 	}
 
-	public synchronized void setCfgRHabDns(String cfgRHabDns) {
+	public synchronized void setCfgRHabDns(Integer cfgRHabDns) {
 		this.cfgRHabDns = cfgRHabDns;
 	}
 
@@ -135,20 +125,12 @@ public class ConfiguracoesRedeCmd implements Cmd {
 		this.cfgRNHost = cfgRNHost;
 	}
 
-	public synchronized String getCfgRIpDns() {
+	public synchronized Integer[] getCfgRIpDns() {
 		return cfgRIpDns;
 	}
 
-	public synchronized void setCfgRIpDns(String cfgRIpDns) {
+	public synchronized void setCfgRIpDns(Integer[] cfgRIpDns) {
 		this.cfgRIpDns = cfgRIpDns;
-	}
-
-	public synchronized String getCfgRChaveCom() {
-		return cfgRChaveCom;
-	}
-
-	public synchronized void setCfgRChaveCom(String cfgRChaveCom) {
-		this.cfgRChaveCom = cfgRChaveCom;
 	}
 
 	public static synchronized long getSerialversionuid() {
@@ -157,22 +139,20 @@ public class ConfiguracoesRedeCmd implements Cmd {
 
 	public ConfiguracoesRede toConfiguracoesRede() {
 		ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
-		configuracoesRede.setChaveCom(this.cfgRChaveCom);
 		configuracoesRede.setGateway(this.cfgRGat);
-		configuracoesRede.setHabilitaDhcp(Boolean.parseBoolean(this.cfgRDhcp));
-		configuracoesRede.setHabilitaDns(Boolean.parseBoolean(this.cfgRHabDns));
+		configuracoesRede.setHabilitaDhcp(this.cfgRDhcp);
+		configuracoesRede.setHabilitaDns(this.cfgRHabDns);
 		configuracoesRede.setIntervaloCom(this.cfgRIntCom);
 		configuracoesRede.setIpDns(this.cfgRIpDns);
 		configuracoesRede.setIpRep(this.cfgRIpRep);
 		configuracoesRede.setIpServidor(this.cfgRIpServ);
 		configuracoesRede.setMascaraRede(this.cfgRMasc);
 		configuracoesRede.setNomeHost(this.cfgRNHost);
-		configuracoesRede.setNomeRede(this.cfgRNRede);
 		configuracoesRede.setNomeRep(this.cfgRNRep);
 		configuracoesRede.setNumeroMac(this.cfgRNumMac);
 		configuracoesRede.setPortaRep(this.cfgRPortRep);
 		configuracoesRede.setPortaServidor(this.cfgRPortServ);
-		configuracoesRede.setRepInicia(Boolean.parseBoolean(this.cfgRRepIn));
+		configuracoesRede.setRepInicia(this.cfgRRepIn);
 
 		return configuracoesRede;
 	}

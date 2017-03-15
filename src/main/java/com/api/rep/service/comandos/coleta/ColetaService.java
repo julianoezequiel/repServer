@@ -34,7 +34,7 @@ public class ColetaService extends ApiService {
 	public void coletaNsr(String registros, Rep rep) {
 
 		this.setRep(rep);
-
+		Nsr nsr = null;
 		String[] registro = registros.split("\n");
 		for (int i = 0; i < registro.length; i++) {
 
@@ -45,7 +45,7 @@ public class ColetaService extends ApiService {
 			if (!numNsr.equals(NUM_CABECALHO) && !numNsr.equals(NUM_TRAILER)) {
 				try {
 
-					Nsr nsr = this.nsrRepository.buscarPorNumNsr(numNsr);
+					nsr = this.nsrRepository.buscarPorNumNsr(numNsr);
 
 					if (nsr == null) {
 						if (coletaAuto) {
@@ -63,6 +63,10 @@ public class ColetaService extends ApiService {
 				}
 
 			}
+		}
+		if (nsr != null && nsr.getNumeroNsr() != null) {
+			rep.setUltimoNsr(nsr.getNumeroNsr());
+			this.getRepService().salvar(rep);
 		}
 	}
 

@@ -27,22 +27,24 @@ public class ConfiguracoesRede {
 	@OneToMany(mappedBy = "configuracoesRedeId")
 	private Collection<Tarefa> tarefaCollection;
 
-	private String ipRep;
-	private String portaRep;
-	private String numeroMac;
-	private String nomeRede;
+	@JsonIgnore
+	@OneToMany(mappedBy = "configuracoesRedeId")
+	private Collection<Rep> repCollection;
+
+	private Integer[] ipRep;
+	private Integer portaRep;
+	private Integer[] numeroMac;
 	private String nomeRep;
-	private Boolean repInicia;
-	private String ipServidor;
-	private String portaServidor;
-	private String mascaraRede;
-	private String gateway;
-	private String intervaloCom;
-	private Boolean habilitaDns;
+	private Integer repInicia;
+	private Integer[] ipServidor;
+	private Integer portaServidor;
+	private Integer[] mascaraRede;
+	private Integer[] gateway;
+	private Integer intervaloCom;
+	private Integer habilitaDns;
 	private String nomeHost;
-	private String ipDns;
-	private String chaveCom;
-	private Boolean habilitaDhcp;
+	private Integer[] ipDns;
+	private Integer habilitaDhcp;
 
 	public synchronized Integer getId() {
 		return id;
@@ -60,38 +62,39 @@ public class ConfiguracoesRede {
 		this.tarefaCollection = tarefaCollection;
 	}
 
-	public synchronized String getIpRep() {
+	public synchronized Collection<Rep> getRepCollection() {
+		return repCollection;
+	}
+
+	public synchronized void setRepCollection(Collection<Rep> repCollection) {
+		this.repCollection = repCollection;
+	}
+
+	public synchronized Integer[] getIpRep() {
 		return ipRep;
 	}
 
-	public synchronized void setIpRep(String ipRep) {
+	public synchronized void setIpRep(Integer[] ipRep) {
 		this.ipRep = ipRep;
 	}
 
-	public synchronized String getPortaRep() {
+	public synchronized Integer getPortaRep() {
 		return portaRep;
 	}
 
-	public synchronized void setPortaRep(String portaRep) {
+	public synchronized void setPortaRep(Integer portaRep) {
 		this.portaRep = portaRep;
 	}
 
-	public synchronized String getNumeroMac() {
+	public synchronized Integer[] getNumeroMac() {
 		return numeroMac;
 	}
 
-	public synchronized void setNumeroMac(String numeroMac) {
+	public synchronized void setNumeroMac(Integer[] numeroMac) {
 		this.numeroMac = numeroMac;
 	}
 
-	public synchronized String getNomeRede() {
-		return nomeRede;
-	}
-
-	public synchronized void setNomeRede(String nomeRede) {
-		this.nomeRede = nomeRede;
-	}
-
+	
 	public synchronized String getNomeRep() {
 		return nomeRep;
 	}
@@ -100,59 +103,59 @@ public class ConfiguracoesRede {
 		this.nomeRep = nomeRep;
 	}
 
-	public synchronized Boolean getRepInicia() {
+	public synchronized Integer getRepInicia() {
 		return repInicia;
 	}
 
-	public synchronized void setRepInicia(Boolean repInicia) {
+	public synchronized void setRepInicia(Integer repInicia) {
 		this.repInicia = repInicia;
 	}
 
-	public synchronized String getIpServidor() {
+	public synchronized Integer[] getIpServidor() {
 		return ipServidor;
 	}
 
-	public synchronized void setIpServidor(String ipServidor) {
+	public synchronized void setIpServidor(Integer[] ipServidor) {
 		this.ipServidor = ipServidor;
 	}
 
-	public synchronized String getPortaServidor() {
+	public synchronized Integer getPortaServidor() {
 		return portaServidor;
 	}
 
-	public synchronized void setPortaServidor(String portaServidor) {
+	public synchronized void setPortaServidor(Integer portaServidor) {
 		this.portaServidor = portaServidor;
 	}
 
-	public synchronized String getMascaraRede() {
+	public synchronized Integer[] getMascaraRede() {
 		return mascaraRede;
 	}
 
-	public synchronized void setMascaraRede(String mascaraRede) {
+	public synchronized void setMascaraRede(Integer[] mascaraRede) {
 		this.mascaraRede = mascaraRede;
 	}
 
-	public synchronized String getGateway() {
+	public synchronized Integer[] getGateway() {
 		return gateway;
 	}
 
-	public synchronized void setGateway(String gateway) {
+	public synchronized void setGateway(Integer[] gateway) {
 		this.gateway = gateway;
 	}
 
-	public synchronized String getIntervaloCom() {
+	public synchronized Integer getIntervaloCom() {
 		return intervaloCom;
 	}
 
-	public synchronized void setIntervaloCom(String intervaloCom) {
+	public synchronized void setIntervaloCom(Integer intervaloCom) {
 		this.intervaloCom = intervaloCom;
 	}
 
-	public synchronized Boolean getHabilitaDns() {
+	public synchronized Integer getHabilitaDns() {
 		return habilitaDns;
 	}
 
-	public synchronized void setHabilitaDns(Boolean habilitaDns) {
+	public synchronized void setHabilitaDns(Integer habilitaDns) {
 		this.habilitaDns = habilitaDns;
 	}
 
@@ -164,49 +167,39 @@ public class ConfiguracoesRede {
 		this.nomeHost = nomeHost;
 	}
 
-	public synchronized String getIpDns() {
+	public synchronized Integer[] getIpDns() {
 		return ipDns;
 	}
 
-	public synchronized void setIpDns(String ipDns) {
+	public synchronized void setIpDns(Integer[] ipDns) {
 		this.ipDns = ipDns;
 	}
 
-	public synchronized String getChaveCom() {
-		return chaveCom;
-	}
-
-	public synchronized void setChaveCom(String chaveCom) {
-		this.chaveCom = chaveCom;
-	}
-
-	public synchronized Boolean getHabilitaDhcp() {
+	public synchronized Integer getHabilitaDhcp() {
 		return habilitaDhcp;
 	}
 
-	public synchronized void setHabilitaDhcp(Boolean habilitaDhcp) {
+	public synchronized void setHabilitaDhcp(Integer habilitaDhcp) {
 		this.habilitaDhcp = habilitaDhcp;
 	}
 
 	public ConfiguracoesRedeCmd toConfiguracoesRedeCmd() {
 		ConfiguracoesRedeCmd configuracoesRedeCmd = new ConfiguracoesRedeCmd();
 
-		configuracoesRedeCmd.setCfgRChaveCom(this.chaveCom);
-		configuracoesRedeCmd.setCfgRDhcp(this.habilitaDhcp.toString());
+		configuracoesRedeCmd.setCfgRDhcp(this.habilitaDhcp);
 		configuracoesRedeCmd.setCfgRGat(this.gateway);
-		configuracoesRedeCmd.setCfgRHabDns(this.habilitaDhcp.toString());
+		configuracoesRedeCmd.setCfgRHabDns(this.habilitaDhcp);
 		configuracoesRedeCmd.setCfgRIntCom(this.intervaloCom);
 		configuracoesRedeCmd.setCfgRIpDns(this.ipDns);
 		configuracoesRedeCmd.setCfgRIpRep(this.ipRep);
 		configuracoesRedeCmd.setCfgRIpServ(this.ipServidor);
 		configuracoesRedeCmd.setCfgRMasc(this.mascaraRede);
 		configuracoesRedeCmd.setCfgRNHost(this.nomeHost);
-		configuracoesRedeCmd.setCfgRNRede(this.nomeRede);
 		configuracoesRedeCmd.setCfgRNRep(this.nomeRep);
 		configuracoesRedeCmd.setCfgRNumMac(this.numeroMac);
 		configuracoesRedeCmd.setCfgRPortRep(this.portaRep);
 		configuracoesRedeCmd.setCfgRPortServ(this.portaServidor);
-		configuracoesRedeCmd.setCfgRRepIn(this.repInicia.toString());
+		configuracoesRedeCmd.setCfgRRepIn(this.repInicia);
 
 		return configuracoesRedeCmd;
 	}

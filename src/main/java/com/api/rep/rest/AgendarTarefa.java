@@ -1,6 +1,5 @@
 package com.api.rep.rest;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,20 +13,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dao.ColetaRepository;
+import com.api.rep.dao.ConfiguracoesCartoesRepository;
+import com.api.rep.dao.ConfiguracoesRedeRepository;
 import com.api.rep.dao.ConfiguracoesSenhaRepository;
 import com.api.rep.dao.EmpregadoRepository;
 import com.api.rep.dao.EmpregadorRepository;
-import com.api.rep.dao.InfoRepository;
+import com.api.rep.dao.HorarioVeraoRepository;
+import com.api.rep.dao.RelogioRepository;
 import com.api.rep.dao.RepRepository;
 import com.api.rep.dao.TarefaRepository;
 import com.api.rep.dto.comandos.ColetaCmd;
 import com.api.rep.dto.comandos.ConfiguracaoSenhaCmd;
+import com.api.rep.dto.comandos.ConfiguracoesCartoesCmd;
+import com.api.rep.dto.comandos.ConfiguracoesRedeCmd;
 import com.api.rep.dto.comandos.EmpregadoCmd;
 import com.api.rep.dto.comandos.EmpregadorCmd;
+import com.api.rep.dto.comandos.HorarioVeraoCmd;
+import com.api.rep.dto.comandos.RelogioCmd;
 import com.api.rep.entity.Coleta;
+import com.api.rep.entity.ConfiguracoesCartoes;
+import com.api.rep.entity.ConfiguracoesRede;
 import com.api.rep.entity.ConfiguracoesSenha;
 import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Empregador;
+import com.api.rep.entity.HorarioVerao;
+import com.api.rep.entity.Relogio;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ServiceException;
@@ -56,7 +66,16 @@ public class AgendarTarefa extends ApiRestController {
 	private ConfiguracoesSenhaRepository configuracoesSenhaRepository;
 
 	@Autowired
-	private InfoRepository infoRepository;
+	private RelogioRepository relogioRepository;
+
+	@Autowired
+	private HorarioVeraoRepository horarioVeraoRepository;
+
+	@Autowired
+	private ConfiguracoesCartoesRepository configuracoesCartoesRepository;
+
+	@Autowired
+	private ConfiguracoesRedeRepository configuracoesRedeRepository;
 
 	@RequestMapping(value = "coleta", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
 	public Tarefa coletaCmd(@RequestBody ColetaCmd coletaCmd) throws ServiceException {
@@ -81,13 +100,12 @@ public class AgendarTarefa extends ApiRestController {
 		Tarefa tarefa = Tarefa.padraoTeste();
 
 		Optional<Empregado> empregado = this.empregadoRepository.buscarPorPis(empregadoCmd.getfPis());
+		Empregado empregado2 = empregadoCmd.toEmpregado();
 		if (empregado.isPresent()) {
-			tarefa.setEmpregadoId(empregado.get());
-		} else {
-			Empregado empregado2 = empregadoCmd.toEmpregado();
-			empregado2 = this.empregadoRepository.save(empregado2);
-			tarefa.setEmpregadoId(empregado2);
+			empregado2.setId(empregado.get().getId());
 		}
+		empregado2 = this.empregadoRepository.save(empregado2);
+		tarefa.setEmpregadoId(empregado2);
 
 		tarefa.setRepId(rep);
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
@@ -104,12 +122,12 @@ public class AgendarTarefa extends ApiRestController {
 		Tarefa tarefa = Tarefa.padraoTeste();
 
 		Empregador empregador = empregadorCmd.toEmpregador();
-
 		empregador.setId(rep.getEmpregadorId() != null ? rep.getEmpregadorId().getId() : null);
-
 		empregador = this.empregadorRepository.save(empregador);
+
 		rep.setEmpregadorId(empregador);
 		this.repRepository.save(rep);
+
 		tarefa.setEmpregadorId(empregador);
 		tarefa.setRepId(rep);
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
@@ -175,22 +193,152 @@ public class AgendarTarefa extends ApiRestController {
 
 	}
 
+	@RequestMapping(value = "atualizarfirmware", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa atualizarFw() throws ServiceException {
+
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Tarefa tarefa = Tarefa.padraoTeste();
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal());
+		tarefa.setRepId(rep);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "atualizarpaginas", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa atualizarPaginas() throws ServiceException {
+
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Tarefa tarefa = Tarefa.padraoTeste();
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal());
+		tarefa.setRepId(rep);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "identificadores", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa identificadores() throws ServiceException {
+
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Tarefa tarefa = Tarefa.padraoTeste();
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.IDENTFICACAO.ordinal());
+		tarefa.setRepId(rep);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
 	@RequestMapping(value = "configuracoes/senha/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
 	public Tarefa configSenha(@RequestBody ConfiguracaoSenhaCmd configuracaoSenhaCmd, @PathVariable Integer operacao)
 			throws ServiceException {
 
 		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
 
-		List<ConfiguracoesSenha> configuracoesSenhaList = this.configuracoesSenhaRepository.findAll();
 		ConfiguracoesSenha configuracoesSenha = configuracaoSenhaCmd.toConfigurcacoesSenha();
-		if (!configuracoesSenhaList.isEmpty()) {
-			configuracoesSenha.setId(configuracoesSenhaList.iterator().next().getId());
-		}
+		configuracoesSenha
+				.setId(rep.getConfigurcacoesSenhaId() != null ? rep.getConfigurcacoesSenhaId().getId() : null);
 		this.configuracoesSenhaRepository.save(configuracoesSenha);
-		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
+
+		rep.setConfigurcacoesSenhaId(configuracoesSenha);
+		rep = this.repRepository.save(rep);
+
+		tarefa.setRepId(rep);
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_SENHA.ordinal());
 		tarefa.setConfigurcacoesSenhaId(configuracoesSenha);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "relogio/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa relogio(@RequestBody RelogioCmd relogioCmd, @PathVariable Integer operacao) throws ServiceException {
+
+		Tarefa tarefa = Tarefa.padraoTeste();
+
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+
+		Relogio relogio = relogioCmd.toRelogio();
+		relogio.setId(rep.getRelogioId() != null ? rep.getRelogioId().getId() : null);
+		this.relogioRepository.save(relogio);
+
+		rep.setRelogioId(relogio);
+		rep = this.repRepository.save(rep);
+
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_RELOGIO.ordinal());
+		tarefa.setRelogioId(relogio);
+
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "horarioverao/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa horarioverao(@RequestBody HorarioVeraoCmd horarioVeraoCmd, @PathVariable Integer operacao)
+			throws ServiceException {
+
+		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+
+		HorarioVerao horarioVerao = horarioVeraoCmd.toHorarioVerao();
+		horarioVerao.setId(rep.getHorarioVeraoId() != null ? rep.getHorarioVeraoId().getId() : null);
+		this.horarioVeraoRepository.save(horarioVerao);
+
+		rep.setHorarioVeraoId(horarioVerao);
+		rep = this.repRepository.save(rep);
+
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_HORARIO_VERAO.ordinal());
+		tarefa.setHorarioVeraoId(horarioVerao);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "cartoes/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa cartoes(@RequestBody ConfiguracoesCartoesCmd configuracoesCartoesCmd, @PathVariable Integer operacao)
+			throws ServiceException {
+
+		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+
+		ConfiguracoesCartoes configuracoesCartoes = configuracoesCartoesCmd.toConfiguracoesCartoes();
+		configuracoesCartoes
+				.setId(rep.getConfiguracoesCartoesId() != null ? rep.getConfiguracoesCartoesId().getId() : null);
+
+		this.configuracoesCartoesRepository.save(configuracoesCartoes);
+
+		rep.setConfiguracoesCartoesId(configuracoesCartoes);
+		rep = this.repRepository.save(rep);
+
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_CARTOES.ordinal());
+		tarefa.setConfiguracoesCartoesId(configuracoesCartoes);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "rede/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa rede(@RequestBody ConfiguracoesRedeCmd configuracoesRedeCmd, @PathVariable Integer operacao)
+			throws ServiceException {
+
+		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+
+		ConfiguracoesRede configuracoesRede = configuracoesRedeCmd.toConfiguracoesRede();
+		configuracoesRede.setId(rep.getConfiguracoesRedeId() != null ? rep.getConfiguracoesRedeId().getId() : null);
+
+		this.configuracoesRedeRepository.save(configuracoesRede);
+
+		rep.setConfiguracoesRedeId(configuracoesRede);
+		rep = this.repRepository.save(rep);
+
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_REDE.ordinal());
+		tarefa.setConfiguracoesRedeId(configuracoesRede);
 		return this.tarefaRepository.save(tarefa);
 
 	}

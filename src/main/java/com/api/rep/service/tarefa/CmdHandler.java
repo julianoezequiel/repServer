@@ -236,6 +236,20 @@ public class CmdHandler {
 				return null;
 			}
 
+		},
+		ATUALIZACAO_PAGINAS() {// 16
+			@Override
+			public String getUrl() {
+				return CONSTANTES.URL_ATUALIZACAO_PAGINAS;
+			}
+
+			@Override
+			public RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado,
+					ApiService apiService) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
 		};
 
 		public static TIPO_CMD get(Integer tipo) {

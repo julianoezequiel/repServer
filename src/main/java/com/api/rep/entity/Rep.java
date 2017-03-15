@@ -79,6 +79,24 @@ public class Rep implements Serializable {
 	@ManyToOne
 	private ConfiguracoesSenha configurcacoesSenhaId;
 
+	@JoinColumn(name = "configuracoes_cartoes_id", referencedColumnName = "id")
+	@ManyToOne
+	private ConfiguracoesCartoes configuracoesCartoesId;
+
+	@JoinColumn(name = "configuracoes_rede_id", referencedColumnName = "id")
+	@ManyToOne
+	private ConfiguracoesRede configuracoesRedeId;
+
+	@JoinColumn(name = "relogio_id", referencedColumnName = "id")
+	@ManyToOne
+	private Relogio relogioId;
+
+	@JoinColumn(name = "horario_verao_id", referencedColumnName = "id")
+	@ManyToOne
+	private HorarioVerao horarioVeraoId;
+
+	private Integer ultimoNsr;
+
 	public Rep() {
 	}
 
@@ -137,6 +155,14 @@ public class Rep implements Serializable {
 		return serialVersionUID;
 	}
 
+	public synchronized HorarioVerao getHorarioVeraoId() {
+		return horarioVeraoId;
+	}
+
+	public synchronized void setHorarioVeraoId(HorarioVerao horarioVeraoId) {
+		this.horarioVeraoId = horarioVeraoId;
+	}
+
 	@Override
 	public int hashCode() {
 		int hash = 0;
@@ -186,6 +212,38 @@ public class Rep implements Serializable {
 
 	public synchronized void setEmpregadorId(Empregador empregadorId) {
 		this.empregadorId = empregadorId;
+	}
+
+	public synchronized ConfiguracoesCartoes getConfiguracoesCartoesId() {
+		return configuracoesCartoesId;
+	}
+
+	public synchronized void setConfiguracoesCartoesId(ConfiguracoesCartoes configuracoesCartoesId) {
+		this.configuracoesCartoesId = configuracoesCartoesId;
+	}
+
+	public synchronized ConfiguracoesRede getConfiguracoesRedeId() {
+		return configuracoesRedeId;
+	}
+
+	public synchronized void setConfiguracoesRedeId(ConfiguracoesRede configuracoesRedeId) {
+		this.configuracoesRedeId = configuracoesRedeId;
+	}
+
+	public synchronized Integer getUltimoNsr() {
+		return ultimoNsr;
+	}
+
+	public synchronized void setUltimoNsr(Integer ultimoNsr) {
+		this.ultimoNsr = ultimoNsr;
+	}
+
+	public synchronized Relogio getRelogioId() {
+		return relogioId;
+	}
+
+	public synchronized void setRelogioId(Relogio relogioId) {
+		this.relogioId = relogioId;
 	}
 
 }

@@ -9,7 +9,6 @@ import com.api.rep.dto.comunicacao.TokenDTO;
 import com.api.rep.entity.Rep;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.rep.RepService;
 import com.api.rep.utils.JwtUtil;
 
 @Service

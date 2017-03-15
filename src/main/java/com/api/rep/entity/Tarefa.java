@@ -93,6 +93,14 @@ public class Tarefa implements Serializable {
 	@ManyToOne
 	private ConfiguracoesCartoes configuracoesCartoesId;
 
+	@JoinColumn(name = "relogio_id", referencedColumnName = "id")
+	@ManyToOne
+	private Relogio relogioId;
+
+	@JoinColumn(name = "horario_verao_id", referencedColumnName = "id")
+	@ManyToOne
+	private HorarioVerao horarioVeraoId;
+
 	public Tarefa() {
 	}
 
@@ -200,6 +208,22 @@ public class Tarefa implements Serializable {
 		return serialVersionUID;
 	}
 
+	public synchronized Relogio getRelogioId() {
+		return relogioId;
+	}
+
+	public synchronized void setRelogioId(Relogio relogioId) {
+		this.relogioId = relogioId;
+	}
+
+	public synchronized HorarioVerao getHorarioVeraoId() {
+		return horarioVeraoId;
+	}
+
+	public synchronized void setHorarioVeraoId(HorarioVerao horarioVeraoId) {
+		this.horarioVeraoId = horarioVeraoId;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -261,9 +285,13 @@ public class Tarefa implements Serializable {
 		} else if (this.empregadorId != null) {
 			return this.empregadorId.toEmpregadorDTO();
 		} else if (this.configuracoesCartoesId != null) {
-			return null;
+			return this.configuracoesCartoesId.toConfiguracoesCartoesCmd();
 		} else if (this.configurcacoesSenhaId != null) {
 			return this.configurcacoesSenhaId.toConfiguracaoCmd();
+		} else if (this.relogioId != null) {
+			return this.relogioId.toRelogioCmd();
+		} else if (this.horarioVeraoId != null) {
+			return this.horarioVeraoId.toHorarioVeraoCmd();
 		} else {
 			return null;
 		}
@@ -277,6 +305,8 @@ public class Tarefa implements Serializable {
 		tarefa.setRepId(null);
 		tarefa.setConfiguracoesCartoesId(null);
 		tarefa.setConfigurcacoesSenhaId(null);
+		tarefa.setRelogioId(null);
+		tarefa.setHorarioVeraoId(null);
 		return tarefa;
 
 	}

@@ -18,7 +18,7 @@ import com.api.rep.service.auth.AuthService;
 
 @RestController
 @RequestMapping(value = CONSTANTES.URL_AUTH)
-public class AuthRestController extends ApiRestController{
+public class AuthRestController extends ApiRestController {
 
 	@Autowired
 	private AuthService authService;
@@ -35,6 +35,5 @@ public class AuthRestController extends ApiRestController{
 	public ResponseEntity<TokenDTO> autenticar(@RequestBody RepDTO repDTO) throws ServiceException {
 		return new ResponseEntity<TokenDTO>(this.authService.autenticar(repDTO), HttpStatus.CREATED);
 	}
-
 
 }
