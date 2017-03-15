@@ -30,7 +30,7 @@ public class AtualizarFirmwareService extends ApiService {
 
 			try {
 				InputStream inputStream;
-				inputStream = new FileInputStream("c:\\InnerRepPlusV3_25_exemplo.IR1");
+				inputStream = new FileInputStream("c:\\InnerRepPlusV3.IR1");
 
 				isr = new InputStreamResource(inputStream);
 				map.put("fw", isr);
