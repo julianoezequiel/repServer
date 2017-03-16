@@ -11,7 +11,7 @@
     $stateProvider
       .state('rep', {
         url: '/rep/:id',
-        templateUrl: 'app/components/rep.html',
+        templateUrl: 'app/components/rep/rep.html',
         controller: 'RepController',
         controllerAs: 'vm'
       });
