@@ -65,6 +65,10 @@ public class Rep implements Serializable {
 	@OneToMany(mappedBy = "repId", cascade = CascadeType.ALL)
 	private Collection<Tarefa> tarefaCollection;
 
+	@JsonIgnore
+	@OneToMany(mappedBy = "repId", cascade = CascadeType.ALL)
+	private Collection<Empregado> empregadoCollection;
+
 	@JoinColumn(name = "empregado_id", referencedColumnName = "id")
 	@ManyToOne
 	@JsonIgnore
@@ -98,6 +102,10 @@ public class Rep implements Serializable {
 	@JoinColumn(name = "indentificadores_id", referencedColumnName = "id")
 	@ManyToOne
 	private Identificadores identificadoresId;
+
+	@JoinColumn(name = "info_id", referencedColumnName = "id")
+	@ManyToOne
+	private Info infoId;
 
 	private Integer ultimoNsr;
 
@@ -249,5 +257,31 @@ public class Rep implements Serializable {
 	public synchronized void setRelogioId(Relogio relogioId) {
 		this.relogioId = relogioId;
 	}
+
+	public synchronized Identificadores getIdentificadoresId() {
+		return identificadoresId;
+	}
+
+	public synchronized void setIdentificadoresId(Identificadores identificadoresId) {
+		this.identificadoresId = identificadoresId;
+	}
+
+	public synchronized Info getInfoId() {
+		return infoId;
+	}
+
+	public synchronized void setInfoId(Info infoId) {
+		this.infoId = infoId;
+	}
+
+	public synchronized Collection<Empregado> getEmpregadoCollection() {
+		return empregadoCollection;
+	}
+
+	public synchronized void setEmpregadoCollection(Collection<Empregado> empregadoCollection) {
+		this.empregadoCollection = empregadoCollection;
+	}
+	
+	
 
 }

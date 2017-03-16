@@ -1,5 +1,7 @@
 package com.api.rep.dto.comandos;
 
+import com.api.rep.entity.Identificadores;
+
 public class IdentificadoresCmd implements Cmd {
 
 	private static final long serialVersionUID = 1L;
@@ -97,6 +99,22 @@ public class IdentificadoresCmd implements Cmd {
 
 	public static synchronized long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Identificadores toIdentificadores() {
+		Identificadores identificadores = new Identificadores();
+		identificadores.setChavePublica(this.idChPub);
+		identificadores.setIdApr(this.idApl);
+		identificadores.setIdMrp(this.idMrp);
+		identificadores.setVersaoApl(this.idVerApl);
+		identificadores.setVersaoBio(this.idVerBio);
+		identificadores.setVersaoBoot(this.idVerBoot);
+		identificadores.setVersaoImp(this.idVerImp);
+		identificadores.setVersaoMrp(this.idVerMrp);
+		identificadores.setVersaoProx(this.idVerProx);
+		identificadores.setVersaoTamper(this.idVerTp);
+
+		return identificadores;
 	}
 
 }

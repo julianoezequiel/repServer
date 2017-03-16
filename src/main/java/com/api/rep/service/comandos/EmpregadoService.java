@@ -26,12 +26,15 @@ import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 @Service
 public class EmpregadoService extends ApiService {
 
 	public static HashMap<String, byte[]> dumpingMap = new HashMap<>();
-	
+
+	private Rep rep;
+
 	@Autowired
 	private EmpregadoRepository empregadoRespository;
 
@@ -49,26 +52,26 @@ public class EmpregadoService extends ApiService {
 		return "Empregado excluido com sucesso";
 	}
 
-	public Empregado salvar(Empregado empregado, Rep rep) throws ServiceException {
+	public Empregado salvar(Empregado empregado, Rep repAutenticado) throws ServiceException {
 
-		// TODO: Somente inserir uma nova Tarefa se o empregado for diferente
+		this.rep = this.getRepPorNumeroSerie(repAutenticado);
 
 		if (empregado.getEmpregadoPis() != null) {
 
 			// se ja existir atualiza o registro
-			Optional<Empregado> e = this.empregadoRespository.buscarPorPis(empregado.getEmpregadoPis());
+			Optional<Empregado> e = this.empregadoRespository.buscarPorPis(empregado.getEmpregadoPis(), this.rep);
 
 			if (e.isPresent()) {
 				empregado.setId(e.get().getId());
 			}
 
 			// buscao o Rep atual
-			rep = this.getRepPorNumeroSerie(rep);
+			repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
 
 			// cria a Tarefa
 			Tarefa tarefa = new Tarefa();
 			tarefa.setCpf("04752873982");
-			tarefa.setRepId(rep);
+			tarefa.setRepId(repAutenticado);
 			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
 			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
 
@@ -87,9 +90,9 @@ public class EmpregadoService extends ApiService {
 	}
 
 	@Override
-	public void receber(Cmd cmd, Rep rep) throws ServiceException {
+	public void receber(Cmd cmd, Rep repAutenticado) throws ServiceException {
 
-		// TODO : Tratar os dados do comando de forma específica
+		this.rep = this.getRepPorNumeroSerie(repAutenticado);
 
 		if (cmd instanceof EmpregadoCmd) {
 			EmpregadoCmd empregadorDTO = (EmpregadoCmd) cmd;
@@ -103,8 +106,8 @@ public class EmpregadoService extends ApiService {
 			LOGGER.info("Número barras : " + empregadorDTO.getfCB());
 			LOGGER.info("Possui Bio : " + empregadorDTO.getfPB());
 
-			Optional<Empregado> empregado = this.getEmpregadoRespository()
-					.buscarPorPis(empregadorDTO.getfPis());
+			Optional<Empregado> empregado = this.getEmpregadoRespository().buscarPorPis(empregadorDTO.getfPis(),
+					this.rep);
 			if (empregado.isPresent()) {
 				Empregado empregado2 = empregadorDTO.toEmpregado();
 				empregado2.setId(empregado.get().getId());
@@ -114,15 +117,28 @@ public class EmpregadoService extends ApiService {
 
 	}
 
-	public void receberLista(List<EmpregadoCmd> empregadoDTOList, Rep repAutenticado) {
+	private int count = 0;
 
-		LOGGER.info("Lista Recebida : " + empregadoDTOList.toString());
+	public void receberLista(List<EmpregadoCmd> empregadoDTOList, Rep repAutenticado) throws ServiceException {
+
+		this.rep = this.getRepPorNumeroSerie(repAutenticado);
+
+		LOGGER.info("Lista Recebida Total de funcionários : " + (count += empregadoDTOList.size()));
 
 		empregadoDTOList.stream().forEach(e -> {
-			Optional<Empregado> empregadoOptional = this.empregadoRespository.buscarPorPis(e.getfPis());
+			try {
+				LOGGER.info("Empregado : " + this.getMapper().writeValueAsString(e));
+			} catch (JsonProcessingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			Optional<Empregado> empregadoOptional = this.empregadoRespository.buscarPorPis(e.getfPis(), this.rep);
+
 			Empregado empregado = e.toEmpregado();
 			if (empregadoOptional.isPresent()) {
 				empregado.setId(empregadoOptional.get().getId());
+			} else {
+				empregado.setRepId(this.rep);
 			}
 			this.empregadoRespository.save(empregado);
 		});

@@ -1,13 +1,17 @@
 package com.api.rep.entity;
 
+import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
 import com.api.rep.dto.comandos.InfoCmd;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Info {
@@ -32,7 +36,12 @@ public class Info {
 	private Integer capacidadeBio;
 	private String statusImpressora;
 	private String ultimoNsr;
+	
+	@JsonIgnore
+	@OneToMany(mappedBy = "infoId")
+	private Collection<Rep> repCollection;
 
+	
 	public Integer getId() {
 		return id;
 	}

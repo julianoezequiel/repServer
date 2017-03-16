@@ -31,6 +31,7 @@ public class ConfigurcacoesRestController extends ApiRestController {
 	public ResponseEntity<?> receberConfigSenhas(@RequestBody ConfiguracaoSenhaCmd configuracaoSenhaCmd)
 			throws ServiceException, JsonProcessingException {
 		LOGGER.info("Configurações de Rede : " + this.getMapper().writeValueAsString(configuracaoSenhaCmd));
+		this.configuracaoService.salvar(configuracaoSenhaCmd, this.getRepAutenticado());
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 
@@ -38,6 +39,7 @@ public class ConfigurcacoesRestController extends ApiRestController {
 	public ResponseEntity<?> receberConfigCartoes(@RequestBody ConfiguracoesCartoesCmd configuracoesCartoesCmd)
 			throws ServiceException, JsonProcessingException {
 		LOGGER.info("Configurações de cartões : " + this.getMapper().writeValueAsString(configuracoesCartoesCmd));
+		this.configuracaoService.salvar(configuracoesCartoesCmd, this.getRepAutenticado());
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 
@@ -45,6 +47,7 @@ public class ConfigurcacoesRestController extends ApiRestController {
 	public ResponseEntity<?> receberConfigRede(@RequestBody ConfiguracoesRedeCmd configuracoesRedeCmd)
 			throws ServiceException, JsonProcessingException {
 		LOGGER.info("Configurações de Rede : " + this.getMapper().writeValueAsString(configuracoesRedeCmd));
+		this.configuracaoService.salvar(configuracoesRedeCmd, this.getRepAutenticado());
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 
@@ -52,6 +55,7 @@ public class ConfigurcacoesRestController extends ApiRestController {
 	public ResponseEntity<?> receberConfigRelogio(@RequestBody RelogioCmd relogioCmd)
 			throws ServiceException, JsonProcessingException {
 		LOGGER.info("Relógio : " + this.getMapper().writeValueAsString(relogioCmd));
+		this.configuracaoService.salvar(relogioCmd, this.getRepAutenticado());
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 
@@ -59,6 +63,7 @@ public class ConfigurcacoesRestController extends ApiRestController {
 	public ResponseEntity<?> receberConfigHorarioVerao(@RequestBody HorarioVeraoCmd horarioVeraoCmd)
 			throws ServiceException, JsonProcessingException {
 		LOGGER.info("Horário verão : " + this.getMapper().writeValueAsString(horarioVeraoCmd));
+		this.configuracaoService.salvar(horarioVeraoCmd, this.getRepAutenticado());
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 

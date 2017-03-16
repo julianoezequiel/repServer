@@ -99,7 +99,7 @@ public class AgendarTarefa extends ApiRestController {
 		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
 		Tarefa tarefa = Tarefa.padraoTeste();
 
-		Optional<Empregado> empregado = this.empregadoRepository.buscarPorPis(empregadoCmd.getfPis());
+		Optional<Empregado> empregado = this.empregadoRepository.buscarPorPis(empregadoCmd.getfPis(), rep);
 		Empregado empregado2 = empregadoCmd.toEmpregado();
 		if (empregado.isPresent()) {
 			empregado2.setId(empregado.get().getId());
@@ -167,9 +167,15 @@ public class AgendarTarefa extends ApiRestController {
 
 	@RequestMapping(value = "listaempregados", method = RequestMethod.GET)
 	public Tarefa listaempreagados() throws ServiceException {
+
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+
+		long exluidos = this.empregadoRepository.removeByrepId(rep);
+		LOGGER.info("Lista de empregados excluida da base , total de excluidos " + exluidos);
+
 		Tarefa tarefa = Tarefa.padraoTeste();
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.LISTA_EMPREGADO.ordinal());
-		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
+		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 	}
 

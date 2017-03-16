@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
@@ -34,6 +36,11 @@ public class Empregado implements Serializable {
 	@JsonIgnore
 	@OneToMany(mappedBy = "empregadoId")
 	private Collection<Rep> repCollection;
+
+	@JsonIgnore
+	@JoinColumn(name = "rep_id", referencedColumnName = "id")
+	@ManyToOne
+	private Rep repId;
 
 	private String empregadoNome;
 	private String empregadoPis;
@@ -140,6 +147,20 @@ public class Empregado implements Serializable {
 	public void setEmpregadoSenha(String empregadoSenha) {
 		this.empregadoSenha = empregadoSenha;
 	}
+	
+	
+
+	public synchronized Rep getRepId() {
+		return repId;
+	}
+
+	public synchronized void setRepId(Rep repId) {
+		this.repId = repId;
+	}
+
+	public static synchronized long getSerialversionuid() {
+		return serialVersionUID;
+	}
 
 	public Cmd toEmpregadoDTO() {
 		EmpregadoCmd dto = new EmpregadoCmd();
@@ -153,5 +174,6 @@ public class Empregado implements Serializable {
 		dto.setfSenha(empregadoSenha);
 		return dto;
 	}
+	
 
 }

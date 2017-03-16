@@ -183,7 +183,7 @@ public class ColetaNsrHandler {
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefa.setRepId(apiService.getRep());
 
-		Optional<Empregado> empregado = apiService.getEmpregadoRespository().buscarPorPis(pis);
+		Optional<Empregado> empregado = apiService.getEmpregadoRespository().buscarPorPis(pis, apiService.getRep());
 
 		// se for uma inclusao solicita o novo empregado
 		if (ColetaNsrHandler.nsr.getTipoOperacao().equals("I")) {
