@@ -1,4 +1,4 @@
-package com.api.rep.service.comandos.empregador;
+package com.api.rep.service.comandos;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -18,7 +18,6 @@ import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.tarefa.CmdHandler;
 
 @Service
 public class EmpregadorService extends ApiService {

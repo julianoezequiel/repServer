@@ -1,4 +1,4 @@
-package com.api.rep.service.comandos.biometria;
+package com.api.rep.service.comandos;
 
 import java.io.BufferedReader;
 import java.io.File;

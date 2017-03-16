@@ -54,7 +54,7 @@ public class AtualizarFirmwareService extends ApiService {
 
 			try {
 				InputStream inputStream;
-				inputStream = new FileInputStream("c:\\PaginasRep.RB1");
+				inputStream = new FileInputStream("C:\\InnerRep\\versao\\PaginasRep.RB1");
 
 				isr = new InputStreamResource(inputStream);
 				map.put("paginas", isr);

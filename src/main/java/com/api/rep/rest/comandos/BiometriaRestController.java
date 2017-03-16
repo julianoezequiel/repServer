@@ -19,7 +19,7 @@ import com.api.rep.dto.comandos.ListaBio;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.comandos.biometria.BiometriaService;
+import com.api.rep.service.comandos.BiometriaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 @RestController

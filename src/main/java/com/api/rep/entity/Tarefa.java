@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comandos.Cmd;
 import com.api.rep.dto.comunicacao.ComandoDeEnvio;
-import com.api.rep.service.tarefa.CmdHandler;
+import com.api.rep.service.comandos.CmdHandler;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**

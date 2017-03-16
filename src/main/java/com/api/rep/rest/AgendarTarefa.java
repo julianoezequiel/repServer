@@ -41,7 +41,7 @@ import com.api.rep.entity.Relogio;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.tarefa.CmdHandler;
+import com.api.rep.service.comandos.CmdHandler;
 
 @RestController
 @RequestMapping(value = "agendarTarefa")

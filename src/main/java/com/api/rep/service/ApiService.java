@@ -11,7 +11,6 @@ import com.api.rep.dao.TarefaRepository;
 import com.api.rep.dto.comandos.Cmd;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.entity.Rep;
-import com.api.rep.service.comandos.TratarResposta;
 import com.api.rep.service.rep.RepService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

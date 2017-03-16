@@ -17,7 +17,7 @@ import com.api.rep.dto.comandos.EmpregadorCmd;
 import com.api.rep.entity.Empregador;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.comandos.empregador.EmpregadorService;
+import com.api.rep.service.comandos.EmpregadorService;
 
 @RestController
 @RequestMapping(value = CONSTANTES.URL_EMPREGADOR)

@@ -1,4 +1,4 @@
-package com.api.rep.service.comandos;
+package com.api.rep.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

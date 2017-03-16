@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comandos.Cmd;
 import com.api.rep.entity.Tarefa;
-import com.api.rep.service.tarefa.CmdHandler;
+import com.api.rep.service.comandos.CmdHandler;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**

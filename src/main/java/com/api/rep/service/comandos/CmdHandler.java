@@ -1,4 +1,4 @@
-package com.api.rep.service.tarefa;
+package com.api.rep.service.comandos;
 
 import org.springframework.stereotype.Component;
 
@@ -6,7 +6,7 @@ import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.entity.Rep;
 import com.api.rep.service.ApiService;
-import com.api.rep.service.comandos.TratarResposta;
+import com.api.rep.service.TratarResposta;
 
 @Component
 public class CmdHandler {

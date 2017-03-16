@@ -1,4 +1,4 @@
-package com.api.rep.service.comandos.coleta;
+package com.api.rep.service.comandos;
 
 import java.util.Collection;
 
@@ -14,6 +14,7 @@ import com.api.rep.dto.comunicacao.StatusColetaDTO;
 import com.api.rep.entity.Nsr;
 import com.api.rep.entity.Rep;
 import com.api.rep.service.ApiService;
+import com.api.rep.service.ColetaNsrHandler;
 import com.api.rep.service.ServiceException;
 
 @Service

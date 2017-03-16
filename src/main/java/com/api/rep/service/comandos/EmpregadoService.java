@@ -1,4 +1,4 @@
-package com.api.rep.service.comandos.empregado;
+package com.api.rep.service.comandos;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +26,6 @@ import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.tarefa.CmdHandler;
 
 @Service
 public class EmpregadoService extends ApiService {

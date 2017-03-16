@@ -22,7 +22,7 @@ import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.entity.Empregado;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.comandos.empregado.EmpregadoService;
+import com.api.rep.service.comandos.EmpregadoService;
 
 /**
  * Requisições Rest empregado.O Rep utiliza esta requisições para enviar a Lista

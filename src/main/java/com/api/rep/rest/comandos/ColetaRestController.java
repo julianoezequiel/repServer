@@ -18,7 +18,7 @@ import com.api.rep.dto.comunicacao.StatusColetaDTO;
 import com.api.rep.entity.Nsr;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.comandos.coleta.ColetaService;
+import com.api.rep.service.comandos.ColetaService;
 
 @RestController
 @RequestMapping(value = CONSTANTES.URL_COLETA)

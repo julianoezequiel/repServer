@@ -1,11 +1,16 @@
 package com.api.rep.entity;
 
+import java.util.Collection;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Identificadores {
@@ -27,6 +32,10 @@ public class Identificadores {
 	private String versaoProx;
 	private String versaoImp;
 	private String chavePublica;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "identificadoresId")
+	private Collection<Rep> repCollection;
 
 	public synchronized Integer getId() {
 		return id;
@@ -114,6 +123,15 @@ public class Identificadores {
 
 	public synchronized void setChavePublica(String chavePublica) {
 		this.chavePublica = chavePublica;
+	}
+
+	@JsonIgnore
+	public synchronized Collection<Rep> getRepCollection() {
+		return repCollection;
+	}
+
+	public synchronized void setRepCollection(Collection<Rep> repCollection) {
+		this.repCollection = repCollection;
 	}
 
 }

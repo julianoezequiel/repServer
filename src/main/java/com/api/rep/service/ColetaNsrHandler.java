@@ -1,4 +1,4 @@
-package com.api.rep.service.comandos.coleta;
+package com.api.rep.service;
 
 import java.util.Optional;
 
@@ -8,8 +8,7 @@ import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Nsr;
 import com.api.rep.entity.Tarefa;
-import com.api.rep.service.ApiService;
-import com.api.rep.service.tarefa.CmdHandler;
+import com.api.rep.service.comandos.CmdHandler;
 import com.api.rep.utils.Utils;
 
 public class ColetaNsrHandler {

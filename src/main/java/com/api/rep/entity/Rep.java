@@ -95,6 +95,10 @@ public class Rep implements Serializable {
 	@ManyToOne
 	private HorarioVerao horarioVeraoId;
 
+	@JoinColumn(name = "indentificadores_id", referencedColumnName = "id")
+	@ManyToOne
+	private Identificadores identificadoresId;
+
 	private Integer ultimoNsr;
 
 	public Rep() {

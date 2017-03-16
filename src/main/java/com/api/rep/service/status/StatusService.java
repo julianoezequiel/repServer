@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.contantes.CONSTANTES.TIPO_OPERACAO;
-import com.api.rep.contantes.DEF;
 import com.api.rep.dao.ColetaRepository;
-import com.api.rep.dao.ConfiguracaoRepository;
+import com.api.rep.dao.ConfiguracoesRedeRepository;
 import com.api.rep.dao.NsrRepository;
 import com.api.rep.dto.comunicacao.ComandoDeEnvio;
 import com.api.rep.dto.comunicacao.RespostaRepDTO;
@@ -27,9 +26,8 @@ import com.api.rep.entity.Nsr;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
-import com.api.rep.service.ComandosTeste;
 import com.api.rep.service.ServiceException;
-import com.api.rep.service.tarefa.CmdHandler;
+import com.api.rep.service.comandos.CmdHandler;
 import com.api.rep.service.tarefa.TarefaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -45,7 +43,7 @@ public class StatusService extends ApiService {
 	private ColetaRepository coletaRepository;
 
 	@Autowired
-	private ConfiguracaoRepository configuracaoRepository;
+	private ConfiguracoesRedeRepository configuracoesRedeRepository;
 
 	@Autowired
 	private TarefaService tarefaService;
@@ -69,17 +67,6 @@ public class StatusService extends ApiService {
 	public ComandoDeEnvio validarStatus(StatusDTO status, Rep rep) throws ServiceException, JsonProcessingException {
 
 		rep = validarDadosEntrada(status, rep);
-
-		// utilizar para teste, retornar um comando fixo da classe
-		// "ComandosTeste"
-		if (DEF.TAREFA_CMD_FIXO == Boolean.TRUE) {
-			// para o envio manual de uma pendencia do tipo Empregado
-			return ComandosTeste.enviarEmpregado();
-
-			// para o envio manual de uma pendencia do tipo Empregador
-			// return ComandosTeste.enviarEmpregador();
-
-		}
 
 		// se o agendamento auto das configurcaoes estiver habilitada
 		if (coletaConfig) {
@@ -176,7 +163,7 @@ public class StatusService extends ApiService {
 			if (tarefa.getColetaId() == null) {
 				tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
 				tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_SENHA.ordinal());
-				tarefa.setConfiguracoesRedeId(this.configuracaoRepository.save(configuracoesRede));
+				tarefa.setConfiguracoesRedeId(this.configuracoesRedeRepository.save(configuracoesRede));
 				tarefa.setRepId(rep);
 				this.getTarefaRepository().save(tarefa);
 			}
