@@ -42,6 +42,7 @@ import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.comandos.CmdHandler;
+import com.api.rep.service.comandos.EmpregadoService;
 
 @RestController
 @RequestMapping(value = "agendarTarefa")
@@ -172,7 +173,7 @@ public class AgendarTarefa extends ApiRestController {
 
 		long exluidos = this.empregadoRepository.removeByrepId(rep);
 		LOGGER.info("Lista de empregados excluida da base , total de excluidos " + exluidos);
-
+		
 		Tarefa tarefa = Tarefa.padraoTeste();
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.LISTA_EMPREGADO.ordinal());
 		tarefa.setRepId(rep);

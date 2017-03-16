@@ -22,7 +22,7 @@
 		function NavbarController(moment, $rootScope) {
 			var vm = this;
 			vm.irParaRep = function() {
-				$rootScope.$state.go('rep');
+				$rootScope.$state.go('repListar');
 			}
 			vm.irParaHome = function() {
 				$rootScope.$state.go('home');

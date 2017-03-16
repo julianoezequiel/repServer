@@ -117,13 +117,11 @@ public class EmpregadoService extends ApiService {
 
 	}
 
-	private int count = 0;
-
 	public void receberLista(List<EmpregadoCmd> empregadoDTOList, Rep repAutenticado) throws ServiceException {
 
 		this.rep = this.getRepPorNumeroSerie(repAutenticado);
 
-		LOGGER.info("Lista Recebida Total de funcionários : " + (count += empregadoDTOList.size()));
+		LOGGER.info("Lista Recebida");
 
 		empregadoDTOList.stream().forEach(e -> {
 			try {

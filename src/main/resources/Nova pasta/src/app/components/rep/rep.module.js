@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('rep', []).config(routerConfig).controller('RepController',
-			repController).factory('RepService', RepService);
+			repController);
 
 	/** @ngInject */
 	function routerConfig($stateProvider, $urlRouterProvider) {
@@ -26,12 +26,18 @@
 		$urlRouterProvider.otherwise('/');
 	}
 
-	function repController() {
-		 var vm = this;
-		 
-		 vm.listaRep = RepService.rep.get();
+	function repController(RepService) {
+		var vm = this;
+
+		vm.listaRep = RepService.rep.query();
 
 	}
+})();
+
+(function() {
+	'use strict';
+
+	angular.module('rep').factory('RepService', RepService);
 
 	function RepService($resource) {
 		var _rep = $resource('rep', {
@@ -47,5 +53,4 @@
 		}
 
 	}
-
 })();
