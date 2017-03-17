@@ -106,6 +106,10 @@ public class Rep implements Serializable {
 	@JoinColumn(name = "info_id", referencedColumnName = "id")
 	@ManyToOne
 	private Info infoId;
+	
+	@JoinColumn(name = "ajustes_bio_id", referencedColumnName = "id")
+	@ManyToOne
+	private AjustesBio ajustesBioId;
 
 	private Integer ultimoNsr;
 

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.api.rep.dao.UsuarioBioRepository;
+import com.api.rep.dto.comandos.AjustesBioCmd;
 import com.api.rep.dto.comandos.ListaBio;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
@@ -136,6 +137,16 @@ public class BiometriaService extends ApiService {
 			}
 		}
 		return map;
+	}
+
+	public AjustesBioCmd enviarAjustes(AjustesBioCmd ajustesBioCmd, Rep repAutenticado) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void receberAjustes(AjustesBioCmd ajustesBioCmd, Rep repAutenticado) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

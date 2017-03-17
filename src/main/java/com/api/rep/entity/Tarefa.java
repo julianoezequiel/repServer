@@ -101,6 +101,10 @@ public class Tarefa implements Serializable {
 	@ManyToOne
 	private HorarioVerao horarioVeraoId;
 
+	@JoinColumn(name = "ajustes_bio_id", referencedColumnName = "id")
+	@ManyToOne
+	private AjustesBio ajustesBioId;
+
 	public Tarefa() {
 	}
 

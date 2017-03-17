@@ -1,7 +1,6 @@
 (function () {
-  'use strict';
-
-  angular
+ 
+ angular
     .module('webapp', [
       'ngAnimate',
       'ngCookies',

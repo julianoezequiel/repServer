@@ -11,7 +11,9 @@ public class CONSTANTES {
 	public static final String URL_LISTA_EMPREGADO = "/restrict/empregado/lista";
 	public static final String URL_LISTA_EMPREGADO_DUMPING = "/restrict/empregado/lista";
 	public static final String URL_COLETA = "/restrict/coleta";
+	public static final String URL_COLETA_DUMPING = "/restrict/coleta/dumping";
 	public static final String URL_BIOMETRIA = "/restrict/empregado/bio";
+	public static final String URL_BIOMETRIA_AJUSTES = "/restrict/empregado/ajustes";
 	public static final String URL_LISTA_BIOMETRIA = "/restrict/empregado/listabio";
 	public static final String URL_CONFIG_SENHA = "/restrict/config/senha";
 	public static final String URL_CONFIG_CARTOES = "/restrict/config/cartoes";

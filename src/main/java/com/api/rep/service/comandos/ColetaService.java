@@ -1,12 +1,16 @@
 package com.api.rep.service.comandos;
 
+import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.api.rep.dao.NsrRepository;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
@@ -22,6 +26,8 @@ public class ColetaService extends ApiService {
 
 	private static final String NUM_TRAILER = "999999999";
 	private static final String NUM_CABECALHO = "000000000";
+
+	public static HashMap<String, byte[]> dumpingColetaMap = new HashMap<>();
 
 	@Autowired
 	private NsrRepository nsrRepository;
@@ -131,6 +137,17 @@ public class ColetaService extends ApiService {
 	public Boolean cancelar(Rep repAutenticado) {
 		cancelarColeta = true;
 		return cancelarColeta;
+	}
+
+	public void receberDumping(MultipartFile arquivoColeta, Rep repAutenticado, Integer nsu) {
+		try {
+			ColetaService.dumpingColetaMap.put(repAutenticado.getNumeroSerie(),
+					IOUtils.toByteArray(arquivoColeta.getInputStream()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }

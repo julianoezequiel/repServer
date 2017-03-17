@@ -53,8 +53,8 @@ public class RepApiApplication {
 	@Bean
 	MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
-		factory.setMaxFileSize("1280KB");
-		factory.setMaxRequestSize("1280KB");
+		factory.setMaxFileSize("10MB");
+		factory.setMaxRequestSize("10MB");
 		factory.setLocation(System.getProperty("java.io.tmpdir"));
 		return factory.createMultipartConfig();
 	}

@@ -217,12 +217,17 @@ public class StatusService extends ApiService {
 		if (respostaRep.getNSU() != null && !respostaRep.getStatus().isEmpty()) {
 			// busca o NSU
 			Rep rep = this.getRepService().buscarPorNumeroSerie(repAutenticado.getNumeroSerie());
+
 			if (rep != null) {
 				// Teste basico, verifica se existe um status ok na resposta do
 				// rep
+				Tarefa tarefa = this.getTarefaRepository().findOne(respostaRep.getNSU());
+				
 				if (respostaRep.getStatus().stream()
-						.anyMatch(r -> r != CONSTANTES.STATUS_COM_REP.HTTPC_RESULT_FALHA.ordinal())) {
-					Tarefa tarefa = this.getTarefaRepository().findOne(respostaRep.getNSU());
+						.anyMatch(r -> r != CONSTANTES.STATUS_COM_REP.HTTPC_RESULT_FALHA.ordinal())
+						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal())
+						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal())) {
+					
 					// se foi uma resposta de sucesso, excluir a Tarefa
 					if (tarefa != null) {
 
@@ -235,6 +240,7 @@ public class StatusService extends ApiService {
 						LOGGER.info("Tarefa NSU : " + tarefa.getNsu() + " removida");
 					}
 				}
+
 			} else {
 				respostaSevidorDTO.setHttpStatus(HttpStatus.NOT_MODIFIED);
 			}

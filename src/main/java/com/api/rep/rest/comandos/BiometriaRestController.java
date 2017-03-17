@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.api.rep.contantes.CONSTANTES;
+import com.api.rep.dto.comandos.AjustesBioCmd;
 import com.api.rep.dto.comandos.ListaBio;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.rest.ApiRestController;
@@ -84,6 +85,20 @@ public class BiometriaRestController extends ApiRestController {
 	@RequestMapping(value = CONSTANTES.URL_LISTA_BIOMETRIA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<?> receberListaBio() throws ServiceException, JsonProcessingException {
 		return new ResponseEntity<>(BiometriaService.LISTA_BIO, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value = CONSTANTES.URL_BIOMETRIA_AJUSTES, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<?> enviarAjustes(@RequestBody AjustesBioCmd ajustesBioCmd)
+			throws ServiceException, JsonProcessingException {
+		return new ResponseEntity<AjustesBioCmd>(this.biometriaService.enviarAjustes(ajustesBioCmd, this.getRepAutenticado()),HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = CONSTANTES.URL_BIOMETRIA_AJUSTES, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<?> RECEBERAjustes(@RequestBody AjustesBioCmd ajustesBioCmd)
+			throws ServiceException, JsonProcessingException {
+		this.biometriaService.receberAjustes(ajustesBioCmd, this.getRepAutenticado());
+		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 
 }

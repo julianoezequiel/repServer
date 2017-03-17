@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
@@ -76,6 +79,23 @@ public class ColetaRestController extends ApiRestController {
 			"text/plain; charset=ISO-8859-1" }, method = RequestMethod.POST)
 	public ResponseEntity<?> receber(@RequestBody String registros) throws ServiceException {
 		this.coletaService.receber(registros, this.getRepAutenticado());
+		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
+	}
+
+	/**
+	 * Recebe do Rep o dumping dos registros de NSR
+	 * 
+	 * @param nsu
+	 * @param arquivoListaEmpregados
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = CONSTANTES.URL_COLETA_DUMPING
+			+ "/{nsu}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<?> receberDumping(@PathVariable("nsu") Integer nsu,
+			@RequestParam("File") MultipartFile arquivoColeta) throws ServiceException {
+		LOGGER.info("Recebendo dumping");
+		this.coletaService.receberDumping(arquivoColeta, this.getRepAutenticado(), nsu);
 		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 
