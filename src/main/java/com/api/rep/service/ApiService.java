@@ -53,8 +53,11 @@ public class ApiService {
 	}
 
 	public Rep getRepPorNumeroSerie(Rep rep) throws ServiceException {
+
+		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
+
 		if (rep != null) {
-			return this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
+			return rep;
 		} else {
 			throw new ServiceException(HttpStatus.NO_CONTENT, "Rep não cadastrado");
 		}

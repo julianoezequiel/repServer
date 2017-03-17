@@ -9,7 +9,7 @@
       <a class="mdl-navigation__link" data-ng-click="$state.go('rep')" href="">Rep</a>
       <a class="mdl-navigation__link" href="">Empregador</a>
       <a class="mdl-navigation__link" href="">Empregados</a>
-      <a class="mdl-navigation__link" href="">Configurações</a>
+      <a class="mdl-navigation__link" href="">ConfiguraÃ§Ãµes</a>
     </nav>
   </div> -->
 
@@ -26,23 +26,25 @@
         <table class="mdl-data-table mdl-js-data-table  mdl-shadow--2dp" >
           <thead>
             <tr>
-              <th class="mdl-data-table__cell--non-numeric">N�MERO DE S�RIE</th>
-              <th>IP</th>
-              <th>STATUS</th>
+              <th class="mdl-data-table__cell--non-numeric">NÚMERO DE SÉRIE</th>
+              <th class="mdl-data-table__cell--non-numeric">ÚLTIMO IP</th>
+              <th class="mdl-data-table__cell--non-numeric">CHAVE COMUNICAÇÃO</th>
+              <th class="mdl-data-table__cell--non-numeric">STATUS</th>
             </tr>
           </thead>
           <tbody>
-            <tr data-ng-repeat="rep in vm.listaRep">
-              <td class="mdl-data-table__cell--non-numeric">{{rep.numSerie}}</td>
-              <td>{{rep.ip}}</td>
-              <td>{{rep.status}}</td>
+            <tr data-ng-cloak data-ng-repeat="rep in vm.listaRep track by rep.id">
+              <td class="mdl-data-table__cell--non-numeric">{{rep.numeroSerie}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{rep.ultimoIp}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{rep.chaveComunicacao}}</td>
+              <td class="mdl-data-table__cell--non-numeric">{{rep.status}}</td>
             </tr>
           </tbody>
         </table>
         </div>
         <div class="mdl-card__actions mdl-card--border">
           <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
-            Atualizar agora
+            Atualizar
           </a>
         </div>
         <!--<div class="mdl-card__menu">

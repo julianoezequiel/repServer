@@ -12,29 +12,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.api.rep.dto.RepMonitor;
 import com.api.rep.dto.comunicacao.RepDTO;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.rep.RepService;
 
 @RestController
-@RequestMapping(value = "rep")
 public class RepRestController {
 
 	@Autowired
 	private RepService repService;
 
-	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	@RequestMapping(value = "rep", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<Collection<RepDTO>> buscarTodos() {
 		return new ResponseEntity<Collection<RepDTO>>(this.repService.buscarTodos(), HttpStatus.OK);
 	}
-	
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<RepDTO> salvar(@RequestBody RepDTO repDTO) throws ServiceException{
+
+	@RequestMapping(value = "rep", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<RepDTO> salvar(@RequestBody RepDTO repDTO) throws ServiceException {
 		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);
 	}
-	
-	@RequestMapping(value="{id}",consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
-	public ResponseEntity<String> excluir(@PathVariable Integer id) throws ServiceException{
-		return new ResponseEntity<String>(this.repService.excluir(id),HttpStatus.OK);
+
+	@RequestMapping(value = "{rep/id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
+	public ResponseEntity<String> excluir(@PathVariable Integer id) throws ServiceException {
+		return new ResponseEntity<String>(this.repService.excluir(id), HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "rep/monitoramento", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<Collection<RepMonitor>> buscarRepMonitoramento() {
+		return new ResponseEntity<Collection<RepMonitor>>(this.repService.buscarRepMonitoramento(), HttpStatus.OK);
 	}
 }

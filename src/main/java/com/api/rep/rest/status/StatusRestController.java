@@ -2,6 +2,8 @@ package com.api.rep.rest.status;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,6 +39,9 @@ public class StatusRestController extends ApiRestController {
 
 	@Autowired
 	private StatusService statusService;
+	
+	@Autowired
+	private HttpServletRequest request;
 
 	/**
 	 * O Rep envia periodicamente o comando de status, atravez do método POST.
@@ -54,7 +59,7 @@ public class StatusRestController extends ApiRestController {
 	public ResponseEntity<ComandoDeEnvio> status(@RequestBody StatusDTO status)
 			throws ServiceException, JsonProcessingException {
 		ApiRestController.LOGGER.info("Status Recebido : " + this.getMapper().writeValueAsString(status));
-		return new ResponseEntity<ComandoDeEnvio>(this.statusService.validarStatus(status, this.getRepAutenticado()),
+		return new ResponseEntity<ComandoDeEnvio>(this.statusService.validarStatus(request,status, this.getRepAutenticado()),
 				HttpStatus.OK);
 	}
 

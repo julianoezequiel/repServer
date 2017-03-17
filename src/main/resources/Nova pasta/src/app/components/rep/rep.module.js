@@ -47,11 +47,15 @@
 				'method' : 'PUT'
 			}
 		});
+		
+		var _repStatus = $resource('rep/monitoramento', {
+			id : '@id'
+		});
 
 		return {
-			rep : _rep
+			rep : _rep,
+			repStatus : _repStatus
 		}
 
 	}
 })();
-

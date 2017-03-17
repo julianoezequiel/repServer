@@ -1,20 +1,29 @@
 (function() {
-  'use strict';
+	'use strict';
 
-  angular
-    .module('webapp')
-    .controller('MainController', MainController);
+	angular.module('webapp').controller('MainController', MainController);
 
-  /** @ngInject */
-  function MainController() {
-    
-    var vm = this;
+	/** @ngInject */
+	function MainController(RepService, $timeout) {
+		var vm = this;
+		vm.listaRep = [];
 
-    vm.listaRep = [{
-      ip:'10.133.13.33',
-      numSerie:'000000923338888',
-      status:'ON-LINE'
-    }];
-    
-  }
+		var listarRep = function() {
+			
+			RepService.repStatus.query(function(response) {
+
+				vm.listaRep = response;
+
+				$timeout(function() {
+					listarRep();
+				}, 1000);
+			}, function() {
+				$timeout(function() {
+					listarRep();
+				}, 1000);
+			});
+		}
+
+		listarRep();
+	}
 })();

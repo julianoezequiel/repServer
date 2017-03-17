@@ -1,8 +1,12 @@
 package com.api.rep.service.status;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +32,7 @@ import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.comandos.CmdHandler;
+import com.api.rep.service.rep.RepService;
 import com.api.rep.service.tarefa.TarefaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -44,6 +49,9 @@ public class StatusService extends ApiService {
 
 	@Autowired
 	private ConfiguracoesRedeRepository configuracoesRedeRepository;
+
+	@Autowired
+	private RepService repService;
 
 	@Autowired
 	private TarefaService tarefaService;
@@ -64,9 +72,12 @@ public class StatusService extends ApiService {
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
-	public ComandoDeEnvio validarStatus(StatusDTO status, Rep rep) throws ServiceException, JsonProcessingException {
+	public ComandoDeEnvio validarStatus(HttpServletRequest request, StatusDTO status, Rep rep)
+			throws ServiceException, JsonProcessingException {
 
 		rep = validarDadosEntrada(status, rep);
+
+		atualizarStatus(rep, request);
 
 		// se o agendamento auto das configurcaoes estiver habilitada
 		if (coletaConfig) {
@@ -136,10 +147,7 @@ public class StatusService extends ApiService {
 		}
 
 		// busca na base a referencia do rep
-		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
-		if (rep == null) {
-			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");
-		}
+		rep = this.getRepPorNumeroSerie(rep);
 
 		return rep;
 
@@ -222,12 +230,12 @@ public class StatusService extends ApiService {
 				// Teste basico, verifica se existe um status ok na resposta do
 				// rep
 				Tarefa tarefa = this.getTarefaRepository().findOne(respostaRep.getNSU());
-				
+
 				if (respostaRep.getStatus().stream()
 						.anyMatch(r -> r != CONSTANTES.STATUS_COM_REP.HTTPC_RESULT_FALHA.ordinal())
 						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal())
 						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal())) {
-					
+
 					// se foi uma resposta de sucesso, excluir a Tarefa
 					if (tarefa != null) {
 
@@ -246,6 +254,12 @@ public class StatusService extends ApiService {
 			}
 		}
 		return respostaSevidorDTO;
+	}
+
+	private void atualizarStatus(Rep rep, HttpServletRequest request) {
+		rep.setUltimoIp(request.getRemoteAddr());
+		rep.setUltimaConexao(new Date());
+		this.repService.salvar(rep);
 	}
 
 }

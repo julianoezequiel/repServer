@@ -7,6 +7,7 @@ package com.api.rep.entity;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -20,11 +21,14 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.api.rep.dto.RepMonitor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -106,12 +110,19 @@ public class Rep implements Serializable {
 	@JoinColumn(name = "info_id", referencedColumnName = "id")
 	@ManyToOne
 	private Info infoId;
-	
+
 	@JoinColumn(name = "ajustes_bio_id", referencedColumnName = "id")
 	@ManyToOne
 	private AjustesBio ajustesBioId;
 
 	private Integer ultimoNsr;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date ultimaConexao;
+
+	private String ultimoIp;
+
+	private String status = "OFF-LINE";
 
 	public Rep() {
 	}
@@ -285,7 +296,48 @@ public class Rep implements Serializable {
 	public synchronized void setEmpregadoCollection(Collection<Empregado> empregadoCollection) {
 		this.empregadoCollection = empregadoCollection;
 	}
+
+	public synchronized AjustesBio getAjustesBioId() {
+		return ajustesBioId;
+	}
+
+	public synchronized void setAjustesBioId(AjustesBio ajustesBioId) {
+		this.ajustesBioId = ajustesBioId;
+	}
+
+	public synchronized Date getUltimaConexao() {
+		return ultimaConexao;
+	}
+
+	public synchronized void setUltimaConexao(Date ultimaConexao) {
+		this.ultimaConexao = ultimaConexao;
+	}
+
+	public synchronized String getUltimoIp() {
+		return ultimoIp;
+	}
+
+	public synchronized void setUltimoIp(String ultimoIp) {
+		this.ultimoIp = ultimoIp;
+	}
+
 	
-	
+	public synchronized String getStatus() {
+		return status;
+	}
+
+	public synchronized void setStatus(String status) {
+		this.status = status;
+	}
+
+	public RepMonitor toRepStatus() {
+		RepMonitor repMonitor = new RepMonitor();
+		repMonitor.setId(id);
+		repMonitor.setChaveComunicacao(chaveComunicacao);
+		repMonitor.setNumeroSerie(numeroSerie);
+		repMonitor.setStatus(status);
+		repMonitor.setUltimoIp(ultimoIp);
+		return repMonitor;
+	}
 
 }
