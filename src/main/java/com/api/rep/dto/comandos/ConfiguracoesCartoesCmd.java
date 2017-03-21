@@ -11,6 +11,7 @@ public class ConfiguracoesCartoesCmd implements Cmd {
 	private Integer cfgCDigFixo;
 	private Integer cfgCTpB;
 	private Integer cfgCTpP;
+	private Integer[] cfgCTlm;
 
 	public synchronized Integer[] getCfgCMascB() {
 		return cfgCMascB;
@@ -56,6 +57,14 @@ public class ConfiguracoesCartoesCmd implements Cmd {
 		return serialVersionUID;
 	}
 
+	public synchronized Integer[] getCfgCTlm() {
+		return cfgCTlm;
+	}
+
+	public synchronized void setCfgCTlm(Integer[] cfgCTlm) {
+		this.cfgCTlm = cfgCTlm;
+	}
+
 	public ConfiguracoesCartoes toConfiguracoesCartoes() {
 
 		ConfiguracoesCartoes cartoes = new ConfiguracoesCartoes();
@@ -65,6 +74,7 @@ public class ConfiguracoesCartoesCmd implements Cmd {
 		cartoes.setMascaraProx(this.cfgCMascP);
 		cartoes.setTipoBarras(this.cfgCTpB);
 		cartoes.setTipoProx(this.cfgCTpP);
+		cartoes.setBufferTlm(this.cfgCTlm);
 
 		return cartoes;
 	}

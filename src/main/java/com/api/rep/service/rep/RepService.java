@@ -59,13 +59,13 @@ public class RepService {
 		if (this.buscarPorNumeroSerie(repDTO.getNumeroSerie()) != null) {
 			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série já cadastrado");
 		}
-		
+
 		Rep rep = repDTO.getRep();
 		ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
 		this.configuracoesRedeRepository.save(configuracoesRede);
 		rep.setConfiguracoesRedeId(configuracoesRede);
 		rep = this.repRepository.save(rep);
-		//agenda o recebimento das configurações de Rede
+		// agenda o recebimento das configurações de Rede
 		Tarefa tarefa = Tarefa.padraoTeste();
 		tarefa.setRepId(rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_REDE.ordinal());
@@ -95,6 +95,10 @@ public class RepService {
 			list.add(r.toRepStatus());
 		});
 		return list;
+	}
+
+	public RepDTO buscar(Integer id) {
+		return new RepDTO(this.repRepository.findOne(id));
 	}
 
 }

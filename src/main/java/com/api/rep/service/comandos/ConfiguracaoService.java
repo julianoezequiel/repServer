@@ -3,19 +3,25 @@ package com.api.rep.service.comandos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.api.rep.dao.AjusteBioRepository;
 import com.api.rep.dao.ConfiguracoesCartoesRepository;
 import com.api.rep.dao.ConfiguracoesRedeRepository;
 import com.api.rep.dao.ConfiguracoesSenhaRepository;
+import com.api.rep.dao.ConfiguracoesWebServerRepository;
 import com.api.rep.dao.HorarioVeraoRepository;
 import com.api.rep.dao.RelogioRepository;
+import com.api.rep.dto.comandos.AjustesBioCmd;
 import com.api.rep.dto.comandos.ConfiguracaoSenhaCmd;
 import com.api.rep.dto.comandos.ConfiguracoesCartoesCmd;
 import com.api.rep.dto.comandos.ConfiguracoesRedeCmd;
+import com.api.rep.dto.comandos.ConfiguracacoesWebServerCmd;
 import com.api.rep.dto.comandos.HorarioVeraoCmd;
 import com.api.rep.dto.comandos.RelogioCmd;
+import com.api.rep.entity.AjustesBio;
 import com.api.rep.entity.ConfiguracoesCartoes;
 import com.api.rep.entity.ConfiguracoesRede;
 import com.api.rep.entity.ConfiguracoesSenha;
+import com.api.rep.entity.ConfigurcacoesWebServer;
 import com.api.rep.entity.HorarioVerao;
 import com.api.rep.entity.Relogio;
 import com.api.rep.entity.Rep;
@@ -39,6 +45,12 @@ public class ConfiguracaoService extends ApiService {
 
 	@Autowired
 	private HorarioVeraoRepository horarioVeraoRepository;
+
+	@Autowired
+	private AjusteBioRepository ajusteBioRepository;
+
+	@Autowired
+	private ConfiguracoesWebServerRepository configuracoesWebServerRepository;
 
 	public void salvar(ConfiguracaoSenhaCmd configuracaoSenhaCmd, Rep repAutenticado) throws ServiceException {
 		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
@@ -80,6 +92,24 @@ public class ConfiguracaoService extends ApiService {
 		horarioVerao
 				.setId(repAutenticado.getHorarioVeraoId() != null ? repAutenticado.getHorarioVeraoId().getId() : null);
 		this.horarioVeraoRepository.save(horarioVerao);
+	}
+
+	public void salvar(AjustesBioCmd ajustesBioCmd, Rep repAutenticado) throws ServiceException {
+		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		AjustesBio ajustesBio = ajustesBioCmd.toAjustesBio();
+		ajustesBio.setId(repAutenticado.getAjustesBioId() != null ? repAutenticado.getAjustesBioId().getId() : null);
+		this.ajusteBioRepository.save(ajustesBio);
+
+	}
+
+	public void salvar(ConfiguracacoesWebServerCmd configuracacoesWebServerCmd, Rep repAutenticado)
+			throws ServiceException {
+		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		ConfigurcacoesWebServer configurcacoesWebServer = configuracacoesWebServerCmd.toConfigurcacoesWebServer();
+		configurcacoesWebServer.setId(repAutenticado.getConfigurcacoesWebServerId() != null
+				? repAutenticado.getConfigurcacoesWebServerId().getId() : null);
+		this.configuracoesWebServerRepository.save(configurcacoesWebServer);
+
 	}
 
 }

@@ -234,23 +234,27 @@ public class StatusService extends ApiService {
 				if (respostaRep.getStatus().stream()
 						.anyMatch(r -> r != CONSTANTES.STATUS_COM_REP.HTTPC_RESULT_FALHA.ordinal())
 						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal())
-						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal())) {
+						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal())
+						|| (tarefa.getTentativas() != null && tarefa.getTentativas() > 3)) {
 
 					// se foi uma resposta de sucesso, excluir a Tarefa
 					if (tarefa != null) {
-
 						// Remove os vinculos
 						tarefa = Tarefa.clear(tarefa);
-
 						this.getTarefaRepository().save(tarefa);
 						this.getTarefaRepository().delete(tarefa);
 						respostaSevidorDTO.setHttpStatus(HttpStatus.OK);
 						LOGGER.info("Tarefa NSU : " + tarefa.getNsu() + " removida");
 					}
+				} else {
+//					Integer[] s = (Integer[]) respostaRep.getStatus().toArray();
+//					tarefa.setStatus(s);
+					tarefa.setTentativas(tarefa.getTentativas() == null ? 0 :tarefa.getTentativas() + 1);
+					this.getTarefaRepository().save(tarefa);
 				}
 
 			} else {
-				respostaSevidorDTO.setHttpStatus(HttpStatus.NOT_MODIFIED);
+				respostaSevidorDTO.setHttpStatus(HttpStatus.UNAUTHORIZED);
 			}
 		}
 		return respostaSevidorDTO;

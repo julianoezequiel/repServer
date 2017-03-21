@@ -86,19 +86,5 @@ public class BiometriaRestController extends ApiRestController {
 	public ResponseEntity<?> receberListaBio() throws ServiceException, JsonProcessingException {
 		return new ResponseEntity<>(BiometriaService.LISTA_BIO, HttpStatus.OK);
 	}
-	
-	
-	@RequestMapping(value = CONSTANTES.URL_BIOMETRIA_AJUSTES, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<?> enviarAjustes(@RequestBody AjustesBioCmd ajustesBioCmd)
-			throws ServiceException, JsonProcessingException {
-		return new ResponseEntity<AjustesBioCmd>(this.biometriaService.enviarAjustes(ajustesBioCmd, this.getRepAutenticado()),HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = CONSTANTES.URL_BIOMETRIA_AJUSTES, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<?> RECEBERAjustes(@RequestBody AjustesBioCmd ajustesBioCmd)
-			throws ServiceException, JsonProcessingException {
-		this.biometriaService.receberAjustes(ajustesBioCmd, this.getRepAutenticado());
-		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
-	}
 
 }

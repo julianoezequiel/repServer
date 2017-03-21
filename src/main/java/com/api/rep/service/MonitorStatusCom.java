@@ -28,7 +28,7 @@ public class MonitorStatusCom {
 	}
 
 	private void atualizarStatus(Rep rep) {
-
+		try{
 		if (rep.getUltimaConexao() != null && rep.getConfiguracoesRedeId() != null) {
 			Calendar c = Calendar.getInstance();
 			c.setTime(rep.getUltimaConexao());
@@ -41,6 +41,9 @@ public class MonitorStatusCom {
 			}
 		}
 		this.repService.salvar(rep);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 }

@@ -4,26 +4,22 @@
 	angular.module('webapp').controller('MainController', MainController);
 
 	/** @ngInject */
-	function MainController(RepService, $timeout) {
+	function MainController(RepService, $timeout, $rootScope) {
 		var vm = this;
 		vm.listaRep = [];
 
-		var listarRep = function() {
-			
+		(function listarRep() {
 			RepService.repStatus.query(function(response) {
-
 				vm.listaRep = response;
-
-				$timeout(function() {
-					listarRep();
-				}, 1000);
+				$rootScope.monitorar = $timeout(listarRep, 1000);
 			}, function() {
-				$timeout(function() {
-					listarRep();
-				}, 1000);
+				$rootScope.monitorar = $timeout(listarRep, 1000);
 			});
-		}
+		})();
 
-		listarRep();
+		$rootScope.$on('$destroy', function() {
+			$timeout.cancel($rootScope.monitorar);
+		});
 	}
+
 })();

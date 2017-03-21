@@ -115,6 +115,10 @@ public class Rep implements Serializable {
 	@ManyToOne
 	private AjustesBio ajustesBioId;
 
+	@JoinColumn(name = "configurcacoes_webServer_id", referencedColumnName = "id")
+	@ManyToOne
+	private ConfigurcacoesWebServer configurcacoesWebServerId;
+
 	private Integer ultimoNsr;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -321,13 +325,20 @@ public class Rep implements Serializable {
 		this.ultimoIp = ultimoIp;
 	}
 
-	
 	public synchronized String getStatus() {
 		return status;
 	}
 
 	public synchronized void setStatus(String status) {
 		this.status = status;
+	}
+
+	public synchronized ConfigurcacoesWebServer getConfigurcacoesWebServerId() {
+		return configurcacoesWebServerId;
+	}
+
+	public synchronized void setConfigurcacoesWebServerId(ConfigurcacoesWebServer configurcacoesWebServerId) {
+		this.configurcacoesWebServerId = configurcacoesWebServerId;
 	}
 
 	public RepMonitor toRepStatus() {

@@ -8,19 +8,23 @@
 		<div class="mdl-card__supporting-text">
 			<form action="#">
 				<div class="mdl-textfield mdl-js-textfield">
-					<input class="mdl-textfield__input" type="text" id="username" /> <label
-						class="mdl-textfield__label" for="username">Número de
+					<input class="mdl-textfield__input" type="text" id="numeroSerie"
+						data-ng-model="vm.rep.numeroSerie" /> <label
+						class="mdl-textfield__label">Número de
 						Série</label>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield">
-					<input class="mdl-textfield__input" type="password" id="userpass" />
-					<label class="mdl-textfield__label" for="userpass">Chave de Comunicação</label>
+					<input class="mdl-textfield__input" type="text" id="chaveCom"
+						data-ng-model="vm.rep.chaveComunicacao" /> <label
+						class="mdl-textfield__label">Chave de
+						Comunicação</label>
 				</div>
 			</form>
 		</div>
 		<div class="mdl-card__actions mdl-card--border">
 			<button
-				class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Salvar</button>
+				class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect"
+				data-ng-click="vm.salvar(vm.rep)">Salvar</button>
 		</div>
 	</div>
 </div>

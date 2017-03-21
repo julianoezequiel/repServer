@@ -139,14 +139,5 @@ public class BiometriaService extends ApiService {
 		return map;
 	}
 
-	public AjustesBioCmd enviarAjustes(AjustesBioCmd ajustesBioCmd, Rep repAutenticado) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void receberAjustes(AjustesBioCmd ajustesBioCmd, Rep repAutenticado) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

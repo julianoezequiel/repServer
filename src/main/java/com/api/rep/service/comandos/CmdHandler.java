@@ -125,7 +125,38 @@ public class CmdHandler {
 			}
 
 		},
-		CONFIG_SENHA() {// 8
+		VERIFICA_LISTA_BIO() {// 8
+
+			@Override
+			public String getUrl() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado,
+					ApiService apiService) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		},
+		CONFIG_BIO() {// 9
+
+			@Override
+			public String getUrl() {
+				return CONSTANTES.URL_BIOMETRIA_AJUSTES;
+			}
+
+			@Override
+			public RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado,
+					ApiService apiService) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		},
+		CONFIG_SENHA() {// 10
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_CONFIG_SENHA;
@@ -139,7 +170,7 @@ public class CmdHandler {
 			}
 
 		},
-		CONFIG_REDE() {// 9
+		CONFIG_REDE() {// 11
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_CONFIG_REDE;
@@ -153,7 +184,7 @@ public class CmdHandler {
 			}
 
 		},
-		CONFIG_CARTOES() {// 10
+		CONFIG_CARTOES() {// 12
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_CONFIG_CARTOES;
@@ -167,7 +198,7 @@ public class CmdHandler {
 			}
 
 		},
-		CONFIG_HORARIO_VERAO() {// 11
+		CONFIG_HORARIO_VERAO() {// 13
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_CONFIG_HORARIO_VERAO;
@@ -181,7 +212,7 @@ public class CmdHandler {
 			}
 
 		},
-		CONFIG_RELOGIO() {// 12
+		CONFIG_RELOGIO() {// 14
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_RELOGIO;
@@ -195,7 +226,23 @@ public class CmdHandler {
 			}
 
 		},
-		INFO() {// 13
+		CONFIG_WEB_SERVER() {// 15
+
+			@Override
+			public String getUrl() {
+				// TODO Auto-generated method stub
+				return CONSTANTES.URL_CONFIG_WEB_SERVER;
+			}
+
+			@Override
+			public RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado,
+					ApiService apiService) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		},
+		INFO() {// 16
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_INFO;
@@ -209,7 +256,7 @@ public class CmdHandler {
 			}
 
 		},
-		IDENTFICACAO() {// 14
+		IDENTFICACAO() {// 17
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_IDENTFICACAO;
@@ -223,7 +270,7 @@ public class CmdHandler {
 			}
 
 		},
-		ATUALIZACAO_FW() {// 15
+		ATUALIZACAO_FW() {// 18
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_ATUALIZACAO_FW;
@@ -237,7 +284,7 @@ public class CmdHandler {
 			}
 
 		},
-		ATUALIZACAO_PAGINAS() {// 16
+		ATUALIZACAO_PAGINAS() {// 19
 			@Override
 			public String getUrl() {
 				return CONSTANTES.URL_ATUALIZACAO_PAGINAS;

@@ -12,28 +12,34 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
+import com.api.rep.dao.AjusteBioRepository;
 import com.api.rep.dao.ColetaRepository;
 import com.api.rep.dao.ConfiguracoesCartoesRepository;
 import com.api.rep.dao.ConfiguracoesRedeRepository;
 import com.api.rep.dao.ConfiguracoesSenhaRepository;
+import com.api.rep.dao.ConfiguracoesWebServerRepository;
 import com.api.rep.dao.EmpregadoRepository;
 import com.api.rep.dao.EmpregadorRepository;
 import com.api.rep.dao.HorarioVeraoRepository;
 import com.api.rep.dao.RelogioRepository;
 import com.api.rep.dao.RepRepository;
 import com.api.rep.dao.TarefaRepository;
+import com.api.rep.dto.comandos.AjustesBioCmd;
 import com.api.rep.dto.comandos.ColetaCmd;
 import com.api.rep.dto.comandos.ConfiguracaoSenhaCmd;
 import com.api.rep.dto.comandos.ConfiguracoesCartoesCmd;
 import com.api.rep.dto.comandos.ConfiguracoesRedeCmd;
+import com.api.rep.dto.comandos.ConfiguracacoesWebServerCmd;
 import com.api.rep.dto.comandos.EmpregadoCmd;
 import com.api.rep.dto.comandos.EmpregadorCmd;
 import com.api.rep.dto.comandos.HorarioVeraoCmd;
 import com.api.rep.dto.comandos.RelogioCmd;
+import com.api.rep.entity.AjustesBio;
 import com.api.rep.entity.Coleta;
 import com.api.rep.entity.ConfiguracoesCartoes;
 import com.api.rep.entity.ConfiguracoesRede;
 import com.api.rep.entity.ConfiguracoesSenha;
+import com.api.rep.entity.ConfigurcacoesWebServer;
 import com.api.rep.entity.Empregado;
 import com.api.rep.entity.Empregador;
 import com.api.rep.entity.HorarioVerao;
@@ -42,7 +48,6 @@ import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.comandos.CmdHandler;
-import com.api.rep.service.comandos.EmpregadoService;
 
 @RestController
 @RequestMapping(value = "agendarTarefa")
@@ -77,6 +82,12 @@ public class AgendarTarefa extends ApiRestController {
 
 	@Autowired
 	private ConfiguracoesRedeRepository configuracoesRedeRepository;
+
+	@Autowired
+	private AjusteBioRepository ajusteBioRepository;
+
+	@Autowired
+	private ConfiguracoesWebServerRepository configuracoesWebServerRepository;
 
 	@RequestMapping(value = "coleta", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
 	public Tarefa coletaCmd(@RequestBody ColetaCmd coletaCmd) throws ServiceException {
@@ -121,11 +132,9 @@ public class AgendarTarefa extends ApiRestController {
 
 		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
 		Tarefa tarefa = Tarefa.padraoTeste();
-
 		Empregador empregador = empregadorCmd.toEmpregador();
 		empregador.setId(rep.getEmpregadorId() != null ? rep.getEmpregadorId().getId() : null);
 		empregador = this.empregadorRepository.save(empregador);
-
 		rep.setEmpregadorId(empregador);
 		this.repRepository.save(rep);
 
@@ -173,7 +182,7 @@ public class AgendarTarefa extends ApiRestController {
 
 		long exluidos = this.empregadoRepository.removeByrepId(rep);
 		LOGGER.info("Lista de empregados excluida da base , total de excluidos " + exluidos);
-		
+
 		Tarefa tarefa = Tarefa.padraoTeste();
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.LISTA_EMPREGADO.ordinal());
 		tarefa.setRepId(rep);
@@ -349,4 +358,65 @@ public class AgendarTarefa extends ApiRestController {
 		return this.tarefaRepository.save(tarefa);
 
 	}
+
+	@RequestMapping(value = "ajustebio/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa ajusteBio(@RequestBody AjustesBioCmd ajustesBioCmd, @PathVariable Integer operacao)
+			throws ServiceException {
+
+		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+
+		AjustesBio ajustesBio = ajustesBioCmd.toAjustesBio();
+		ajustesBio.setId(rep.getAjustesBioId() != null ? rep.getAjustesBioId().getId() : null);
+		;
+
+		this.ajusteBioRepository.save(ajustesBio);
+
+		rep.setAjustesBioId(ajustesBio);
+		rep = this.repRepository.save(rep);
+
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_BIO.ordinal());
+		tarefa.setAjustesBioId(ajustesBio);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "verificacao", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa verificacao() throws ServiceException {
+
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Tarefa tarefa = Tarefa.padraoTeste();
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.VERIFICA_LISTA_BIO.ordinal());
+		tarefa.setRepId(rep);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
+	@RequestMapping(value = "configwebserve/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa configWebServer(@RequestBody ConfiguracacoesWebServerCmd configuracacoesWebServerCmd,
+			@PathVariable Integer operacao) throws ServiceException {
+
+		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+
+		ConfigurcacoesWebServer configurcacoesWebServer = configuracacoesWebServerCmd.toConfigurcacoesWebServer();
+		configurcacoesWebServer
+				.setId(rep.getConfigurcacoesWebServerId() != null ? rep.getConfigurcacoesWebServerId().getId() : null);
+
+		this.configuracoesWebServerRepository.save(configurcacoesWebServer);
+
+		rep.setConfigurcacoesWebServerId(configurcacoesWebServer);
+		rep = this.repRepository.save(rep);
+
+		tarefa.setRepId(rep);
+		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_WEB_SERVER.ordinal());
+		tarefa.setConfigurcacoesWebServerId(configurcacoesWebServer);
+		return this.tarefaRepository.save(tarefa);
+
+	}
+
 }

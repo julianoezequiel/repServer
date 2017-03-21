@@ -19,9 +19,10 @@
 		return directive;
 
 		/** @ngInject */
-		function NavbarController(moment, $rootScope) {
+		function NavbarController(moment, $rootScope,$timeout) {
 			var vm = this;
 			vm.irParaRep = function() {
+				$timeout.cancel();
 				$rootScope.$state.go('repListar');
 			}
 			vm.irParaHome = function() {

@@ -28,6 +28,11 @@ public class RepRestController {
 		return new ResponseEntity<Collection<RepDTO>>(this.repService.buscarTodos(), HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "rep/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<RepDTO> buscar(@PathVariable("id") Integer id) {
+		return new ResponseEntity<RepDTO>(this.repService.buscar(id), HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "rep", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
 	public ResponseEntity<RepDTO> salvar(@RequestBody RepDTO repDTO) throws ServiceException {
 		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);

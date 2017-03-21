@@ -19,6 +19,7 @@ public class CONSTANTES {
 	public static final String URL_CONFIG_CARTOES = "/restrict/config/cartoes";
 	public static final String URL_CONFIG_REDE = "/restrict/config/rede";
 	public static final String URL_CONFIG_HORARIO_VERAO = "/restrict/config/horarioverao";
+	public static final String URL_CONFIG_WEB_SERVER = "/restrict/config/webserver";
 	public static final String URL_INFO = "/restrict/info";
 	public static final String URL_RELOGIO = "/restrict/relogio";
 

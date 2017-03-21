@@ -55,6 +55,10 @@ public class Tarefa implements Serializable {
 	@Column(name = "tipo_tarefa")
 	private Integer tipoTarefa;
 
+	private Integer[] status;
+
+	private Integer tentativas = 0;
+
 	/*
 	 * @GeneratedValue
 	 * 
@@ -104,6 +108,10 @@ public class Tarefa implements Serializable {
 	@JoinColumn(name = "ajustes_bio_id", referencedColumnName = "id")
 	@ManyToOne
 	private AjustesBio ajustesBioId;
+
+	@JoinColumn(name = "configurcacoes_webServer_id", referencedColumnName = "id")
+	@ManyToOne
+	private ConfigurcacoesWebServer configurcacoesWebServerId;
 
 	public Tarefa() {
 	}
@@ -228,6 +236,38 @@ public class Tarefa implements Serializable {
 		this.horarioVeraoId = horarioVeraoId;
 	}
 
+	public synchronized AjustesBio getAjustesBioId() {
+		return ajustesBioId;
+	}
+
+	public synchronized void setAjustesBioId(AjustesBio ajustesBioId) {
+		this.ajustesBioId = ajustesBioId;
+	}
+
+	public synchronized ConfigurcacoesWebServer getConfigurcacoesWebServerId() {
+		return configurcacoesWebServerId;
+	}
+
+	public synchronized void setConfigurcacoesWebServerId(ConfigurcacoesWebServer configurcacoesWebServerId) {
+		this.configurcacoesWebServerId = configurcacoesWebServerId;
+	}
+
+	public synchronized Integer getTentativas() {
+		return tentativas;
+	}
+
+	public synchronized void setTentativas(Integer tentativas) {
+		this.tentativas = tentativas;
+	}
+
+	public synchronized Integer[] getStatus() {
+		return status;
+	}
+
+	public synchronized void setStatus(Integer[] status) {
+		this.status = status;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -274,7 +314,7 @@ public class Tarefa implements Serializable {
 	}
 
 	/**
-	 * Converte a Tarefa para o tipo de dado especifico
+	 * Converte a Tarefa para o tipo de dado específico
 	 * 
 	 * @return DadosComando
 	 */
@@ -296,6 +336,10 @@ public class Tarefa implements Serializable {
 			return this.relogioId.toRelogioCmd();
 		} else if (this.horarioVeraoId != null) {
 			return this.horarioVeraoId.toHorarioVeraoCmd();
+		} else if (this.ajustesBioId != null) {
+			return this.ajustesBioId.toAjustesBioCmd();
+		} else if (this.configurcacoesWebServerId != null) {
+			return this.configurcacoesWebServerId.toConfigurcacoesWebServer();
 		} else {
 			return null;
 		}
@@ -311,6 +355,8 @@ public class Tarefa implements Serializable {
 		tarefa.setConfigurcacoesSenhaId(null);
 		tarefa.setRelogioId(null);
 		tarefa.setHorarioVeraoId(null);
+		tarefa.setAjustesBioId(null);
+		tarefa.setConfigurcacoesWebServerId(null);
 		return tarefa;
 
 	}

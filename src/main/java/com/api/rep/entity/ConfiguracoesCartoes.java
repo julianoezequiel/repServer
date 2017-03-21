@@ -36,6 +36,7 @@ public class ConfiguracoesCartoes {
 	private Integer digitosFixo;
 	private Integer tipoBarras;
 	private Integer tipoProx;
+	private Integer[] bufferTlm;
 
 	public synchronized Integer getId() {
 		return id;
@@ -101,6 +102,14 @@ public class ConfiguracoesCartoes {
 		this.mascaraProx = mascaraProx;
 	}
 
+	public synchronized Integer[] getBufferTlm() {
+		return bufferTlm;
+	}
+
+	public synchronized void setBufferTlm(Integer[] bufferTlm) {
+		this.bufferTlm = bufferTlm;
+	}
+
 	public ConfiguracoesCartoesCmd toConfiguracoesCartoesCmd() {
 
 		ConfiguracoesCartoesCmd cmd = new ConfiguracoesCartoesCmd();
@@ -110,6 +119,7 @@ public class ConfiguracoesCartoes {
 		cmd.setCfgCMascP(this.mascaraProx);
 		cmd.setCfgCTpB(this.tipoBarras);
 		cmd.setCfgCTpP(this.tipoProx);
+		cmd.setCfgCTlm(this.bufferTlm);
 
 		return cmd;
 	}
