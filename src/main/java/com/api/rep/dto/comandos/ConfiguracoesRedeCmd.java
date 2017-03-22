@@ -17,7 +17,7 @@ public class ConfiguracoesRedeCmd implements Cmd {
 	private Integer[] cfgRMasc;
 	private Integer[] cfgRGat;
 	private Integer cfgRIntCom;
-	private Integer cfgRHabDns;
+	private Integer cfgRTpDns;
 	private String cfgRNHost;
 	private Integer[] cfgRIpDns;
 
@@ -109,14 +109,6 @@ public class ConfiguracoesRedeCmd implements Cmd {
 		this.cfgRIntCom = cfgRIntCom;
 	}
 
-	public synchronized Integer getCfgRHabDns() {
-		return cfgRHabDns;
-	}
-
-	public synchronized void setCfgRHabDns(Integer cfgRHabDns) {
-		this.cfgRHabDns = cfgRHabDns;
-	}
-
 	public synchronized String getCfgRNHost() {
 		return cfgRNHost;
 	}
@@ -137,11 +129,21 @@ public class ConfiguracoesRedeCmd implements Cmd {
 		return serialVersionUID;
 	}
 
+	
+
+	public synchronized Integer getCfgRTpDns() {
+		return cfgRTpDns;
+	}
+
+	public synchronized void setCfgRTpDns(Integer cfgRTpDns) {
+		this.cfgRTpDns = cfgRTpDns;
+	}
+
 	public ConfiguracoesRede toConfiguracoesRede() {
 		ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
 		configuracoesRede.setGateway(this.cfgRGat);
 		configuracoesRede.setHabilitaDhcp(this.cfgRDhcp);
-		configuracoesRede.setHabilitaDns(this.cfgRHabDns);
+		configuracoesRede.setTipoDns(this.cfgRTpDns);
 		configuracoesRede.setIntervaloCom(this.cfgRIntCom);
 		configuracoesRede.setIpDns(this.cfgRIpDns);
 		configuracoesRede.setIpRep(this.cfgRIpRep);

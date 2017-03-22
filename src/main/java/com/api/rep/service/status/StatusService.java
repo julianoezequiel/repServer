@@ -79,11 +79,11 @@ public class StatusService extends ApiService {
 
 		atualizarStatus(rep, request);
 
-		// se o agendamento auto das configurcaoes estiver habilitada
+		// agendamento auto das configuracoes estiver habilitada
 		if (coletaConfig) {
 			agendarReceberConfiguracao(rep, status);
 		}
-		// se o agendamento auto da coleta estiver habilitada
+		// agendamento auto da coleta estiver habilitada
 		if (coletaAuto) {
 			agendarReceberColeta(rep, status);
 		}
@@ -128,11 +128,13 @@ public class StatusService extends ApiService {
 		if (dto != null) {
 			LOGGER.info("Tarefa NSU : {} - Tipo Tarefa : {} - Operação : {}", new Object[] { dto.getNsu(),
 					CmdHandler.TIPO_CMD.get(dto.gettCmd()), CONSTANTES.TIPO_OPERACAO.get(dto.gettOp()) });
+			LOGGER.info("------------------------");
 			return dto;
 		} else {
 			dto = new ComandoDeEnvio();
 			dto.settOp(CONSTANTES.TIPO_OPERACAO.NENHUMA.ordinal());
 			LOGGER.info("Sem pendencia");
+			LOGGER.info("------------------------");
 			return dto;
 		}
 	}
@@ -180,42 +182,38 @@ public class StatusService extends ApiService {
 
 	private void agendarReceberColeta(Rep rep, StatusDTO status) {
 
-		// ultimo Nsr
-		Nsr ultimoNsr = this.nsrRepository.findLast(); //
+		if (rep.getInfoId() != null && rep.getInfoId().getUltimoNsr() != null) {
+			// ultimo Nsr
+			Nsr ultimoNsr = this.nsrRepository.findLast(); //
 
-		// se a lista esta vazia adiciona ou o ultimo nsr da base < que o
-		// ultimo nsr do rep? a lista de Tarefa
-
-		if (ultimoNsr == null) {
-			ultimoNsr = new Nsr();
-			ultimoNsr.setNumeroNsr(1);
-			ultimoNsr.setNumeroNsr(ultimoNsr.getNumeroNsr() < inicio ? inicio : ultimoNsr.getNumeroNsr());
-		} else {
-			ultimoNsr.setNumeroNsr(ultimoNsr.getNumeroNsr() < inicio ? inicio : ultimoNsr.getNumeroNsr());
-		}
-
-		if (ultimoNsr.getNumeroNsr() < status.getUltimoNsr()) {
-
-			List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
-
-			Tarefa tarefa = tarefaList.stream()
-					.filter(p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA.ordinal())
-							&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
-					.findFirst().orElse(new Tarefa());
-			// se ja existe uma Tarefa do tipo coleta, atualiza o range
-			// de coleta
-			if (tarefa.getColetaId() != null) {
-				tarefa.getColetaId().setColetaNsrInicio(ultimoNsr.getNumeroNsr());
-				tarefa.getColetaId().setColetaNsrFim(status.getUltimoNsr());
-			} else {
-				tarefa.setRepId(rep);
-				tarefa.setColetaId(
-						this.coletaRepository.save(new Coleta(ultimoNsr.getNumeroNsr(), status.getUltimoNsr())));
-				tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA.ordinal());
-				tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
+			if (ultimoNsr == null) {
+				ultimoNsr = new Nsr();
+				ultimoNsr.setNumeroNsr(rep.getUltimoNsr() > 200 ? (rep.getUltimoNsr() - 200) : 0);
 			}
 
-			this.getTarefaRepository().save(tarefa);
+			if (ultimoNsr.getNumeroNsr() < status.getUltimoNsr()) {
+
+				List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
+
+				Tarefa tarefa = tarefaList.stream().filter(
+						p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA.ordinal())
+								&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
+						.findFirst().orElse(new Tarefa());
+				// se ja existe uma Tarefa do tipo coleta, atualiza o range
+				// de coleta
+				if (tarefa.getColetaId() != null) {
+					tarefa.getColetaId().setColetaNsrInicio(ultimoNsr.getNumeroNsr());
+					tarefa.getColetaId().setColetaNsrFim(status.getUltimoNsr());
+				} else {
+					tarefa.setRepId(rep);
+					tarefa.setColetaId(
+							this.coletaRepository.save(new Coleta(ultimoNsr.getNumeroNsr(), status.getUltimoNsr())));
+					tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA.ordinal());
+					tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
+				}
+
+				this.getTarefaRepository().save(tarefa);
+			}
 		}
 	}
 
@@ -247,9 +245,10 @@ public class StatusService extends ApiService {
 						LOGGER.info("Tarefa NSU : " + tarefa.getNsu() + " removida");
 					}
 				} else {
-//					Integer[] s = (Integer[]) respostaRep.getStatus().toArray();
-//					tarefa.setStatus(s);
-					tarefa.setTentativas(tarefa.getTentativas() == null ? 0 :tarefa.getTentativas() + 1);
+					// Integer[] s = (Integer[])
+					// respostaRep.getStatus().toArray();
+					// tarefa.setStatus(s);
+					tarefa.setTentativas(tarefa.getTentativas() == null ? 0 : tarefa.getTentativas() + 1);
 					this.getTarefaRepository().save(tarefa);
 				}
 

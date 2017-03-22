@@ -41,7 +41,7 @@ public class ConfiguracoesRede {
 	private Integer[] mascaraRede;
 	private Integer[] gateway;
 	private Integer intervaloCom;
-	private Integer habilitaDns;
+	private Integer tipoDns;
 	private String nomeHost;
 	private Integer[] ipDns;
 	private Integer habilitaDhcp;
@@ -94,7 +94,6 @@ public class ConfiguracoesRede {
 		this.numeroMac = numeroMac;
 	}
 
-	
 	public synchronized String getNomeRep() {
 		return nomeRep;
 	}
@@ -151,12 +150,12 @@ public class ConfiguracoesRede {
 		this.intervaloCom = intervaloCom;
 	}
 
-	public synchronized Integer getHabilitaDns() {
-		return habilitaDns;
+	public synchronized Integer getTipoDns() {
+		return tipoDns;
 	}
 
-	public synchronized void setHabilitaDns(Integer habilitaDns) {
-		this.habilitaDns = habilitaDns;
+	public synchronized void setTipoDns(Integer tipoDns) {
+		this.tipoDns = tipoDns;
 	}
 
 	public synchronized String getNomeHost() {
@@ -188,7 +187,7 @@ public class ConfiguracoesRede {
 
 		configuracoesRedeCmd.setCfgRDhcp(this.habilitaDhcp);
 		configuracoesRedeCmd.setCfgRGat(this.gateway);
-		configuracoesRedeCmd.setCfgRHabDns(this.habilitaDhcp);
+		configuracoesRedeCmd.setCfgRTpDns(this.habilitaDhcp);
 		configuracoesRedeCmd.setCfgRIntCom(this.intervaloCom);
 		configuracoesRedeCmd.setCfgRIpDns(this.ipDns);
 		configuracoesRedeCmd.setCfgRIpRep(this.ipRep);

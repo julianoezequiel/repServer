@@ -119,7 +119,7 @@ public class Rep implements Serializable {
 	@ManyToOne
 	private ConfigurcacoesWebServer configurcacoesWebServerId;
 
-	private Integer ultimoNsr;
+	private Integer ultimoNsr = 0;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date ultimaConexao;

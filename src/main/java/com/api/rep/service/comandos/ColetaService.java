@@ -34,8 +34,8 @@ public class ColetaService extends ApiService {
 
 	private Boolean cancelarColeta = false;
 
-	@Value("${coleta.auto}")
-	Boolean coletaAuto;
+	@Value("${coleta.alteracoes}")
+	Boolean coletarAlteracoes;
 
 	// recebe o NSR
 	public void coletaNsr(String registros, Rep rep) {
@@ -55,7 +55,7 @@ public class ColetaService extends ApiService {
 					nsr = this.nsrRepository.buscarPorNumNsr(numNsr);
 
 					if (nsr == null) {
-						if (coletaAuto) {
+						if (coletarAlteracoes) {
 							nsr = ColetaNsrHandler.NSR_HANDLER.get(nsrRegistro).convert(nsrRegistro, this);
 							nsr.setRepId(rep);
 							this.nsrRepository.saveAndFlush(nsr);

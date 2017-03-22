@@ -26,7 +26,7 @@ public class Info {
 	private String nomeProduto;
 	private String modeloProduto;
 	private String numeroRep;
-	private String statusBloqueio;
+	private Integer statusBloqueio;
 	private String versaoApl;
 	private String versaoMrp;
 	private Integer numeroUsuario;
@@ -36,12 +36,11 @@ public class Info {
 	private Integer capacidadeBio;
 	private String statusImpressora;
 	private String ultimoNsr;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "infoId")
 	private Collection<Rep> repCollection;
 
-	
 	public Integer getId() {
 		return id;
 	}
@@ -72,14 +71,6 @@ public class Info {
 
 	public synchronized void setNumeroRep(String numeroRep) {
 		this.numeroRep = numeroRep;
-	}
-
-	public synchronized String getStatusBloqueio() {
-		return statusBloqueio;
-	}
-
-	public synchronized void setStatusBloqueio(String statusBloqueio) {
-		this.statusBloqueio = statusBloqueio;
 	}
 
 	public synchronized String getVersaoApl() {
@@ -154,6 +145,22 @@ public class Info {
 		this.ultimoNsr = ultimoNsr;
 	}
 
+	public synchronized Integer getStatusBloqueio() {
+		return statusBloqueio;
+	}
+
+	public synchronized void setStatusBloqueio(Integer statusBloqueio) {
+		this.statusBloqueio = statusBloqueio;
+	}
+
+	public synchronized Collection<Rep> getRepCollection() {
+		return repCollection;
+	}
+
+	public synchronized void setRepCollection(Collection<Rep> repCollection) {
+		this.repCollection = repCollection;
+	}
+
 	public InfoCmd toInfoCmd() {
 		InfoCmd infoCmd = new InfoCmd();
 
@@ -173,12 +180,5 @@ public class Info {
 
 		return infoCmd;
 	}
-
-	/*
-	 * INFO_NOME_PRODUTO, INFO_MODELO_PRODUTO, INFO_NUM_REP,
-	 * INFO_STATUS_BLOQUEIO, INFO_VERSAO_APL, INFO_VERSAO_MRP,
-	 * INFO_NUM_USUARIO", INFO_NUM_BIO, INFO_NSR, INFO_TIPO_BIO,
-	 * INFO_MODELO_BIO, INFO_CAPACIDADE_BIO, INFO_STATUS_IMP,
-	 */
 
 }

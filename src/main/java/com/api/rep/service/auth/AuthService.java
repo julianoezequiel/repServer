@@ -28,6 +28,7 @@ public class AuthService extends ApiService {
 	 */
 	public TokenDTO autenticar(RepDTO repDTO) throws ServiceException {
 
+		LOGGER.info("Rep número de Série : " + repDTO.getNumeroSerie());
 		// Campo obrigatório
 		if (repDTO == null || repDTO.getNumeroSerie() == null) {
 			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");

@@ -6,20 +6,30 @@
 	/** @ngInject */
 	function MainController(RepService, $timeout, $rootScope) {
 		var vm = this;
+		vm.ismonitorando = true;
 		vm.listaRep = [];
 
-		(function listarRep() {
+		function monitorar() {
 			RepService.repStatus.query(function(response) {
 				vm.listaRep = response;
-				$rootScope.monitorar = $timeout(listarRep, 1000);
+				$rootScope.monitorar = $timeout(monitorar, 1000);
 			}, function() {
-				$rootScope.monitorar = $timeout(listarRep, 1000);
+				$rootScope.monitorar = $timeout(monitorar, 1000);
 			});
-		})();
+		}
 
-		$rootScope.$on('$destroy', function() {
-			$timeout.cancel($rootScope.monitorar);
-		});
+		vm.initStopMon = function(){
+			if(vm.ismonitorando){
+				$rootScope.cancelarMonitoramento();
+				vm.ismonitorando = false;
+			}else{
+				monitorar();
+				vm.ismonitorando = true;
+			}
+		}
+
+		monitorar();
+
 	}
 
 })();

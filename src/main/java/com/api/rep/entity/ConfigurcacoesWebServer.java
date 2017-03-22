@@ -25,6 +25,7 @@ public class ConfigurcacoesWebServer {
 
 	private Integer tipoConfig;
 	private Integer[] ipSeguro;
+	private Integer habilitaPorta80;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "configurcacoesWebServerId")
@@ -74,10 +75,19 @@ public class ConfigurcacoesWebServer {
 		this.ipSeguro = ipSeguro;
 	}
 
+	public synchronized Integer getHabilitaPorta80() {
+		return habilitaPorta80;
+	}
+
+	public synchronized void setHabilitaPorta80(Integer habilitaPorta80) {
+		this.habilitaPorta80 = habilitaPorta80;
+	}
+
 	public ConfiguracacoesWebServerCmd toConfigurcacoesWebServer() {
 		ConfiguracacoesWebServerCmd cmd = new ConfiguracacoesWebServerCmd();
 		cmd.setCfgWIPS(ipSeguro);
 		cmd.setCfgWTpCfg(tipoConfig);
+		cmd.setCfgWP80(habilitaPorta80);
 		return cmd;
 	}
 

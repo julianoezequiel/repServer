@@ -1,5 +1,6 @@
 package com.api.rep.rest;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -221,6 +222,20 @@ public class AgendarTarefa extends ApiRestController {
 
 	}
 
+	@RequestMapping(value = "atualizarfirmwaretodos", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public void atualizarFwTodos() throws ServiceException {
+
+		List<Rep> repList = this.repRepository.findAll();
+		repList.stream().forEach(r -> {
+			Tarefa tarefa = Tarefa.padraoTeste();
+			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal());
+			tarefa.setRepId(r);
+			this.tarefaRepository.save(tarefa);
+		});
+
+	}
+
 	@RequestMapping(value = "atualizarpaginas", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public Tarefa atualizarPaginas() throws ServiceException {
 
@@ -231,6 +246,18 @@ public class AgendarTarefa extends ApiRestController {
 		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 
+	}
+
+	@RequestMapping(value = "atualizarpaginastodos", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public void atualizarPaginasTodos() throws ServiceException {
+		List<Rep> repList = this.repRepository.findAll();
+		repList.stream().forEach(r -> {
+			Tarefa tarefa = Tarefa.padraoTeste();
+			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal());
+			tarefa.setRepId(r);
+			this.tarefaRepository.save(tarefa);
+		});
 	}
 
 	@RequestMapping(value = "identificadores", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)

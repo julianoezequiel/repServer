@@ -27,7 +27,7 @@ public class DebugFilter extends GenericFilterBean {
 		LOGGER.info("Origem requisição IP : " + req.getRemoteAddr());
 		LOGGER.info("Método  : " + req.getMethod());
 		LOGGER.info("URL  : " + req.getRequestURL());
-		LOGGER.info("------------------------");
+//		LOGGER.info("------------------------");
 		filterChain.doFilter(request, response);
 	}
 

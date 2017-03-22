@@ -9,7 +9,7 @@ public class InfoCmd implements Cmd {
 	private String infNProd;
 	private String infMProd;
 	private String infNumRep;
-	private String infStatRep;
+	private Integer infStatRep;
 	private String infVerApl;
 	private String infVerMrp;
 	private String infNumFunc;
@@ -120,11 +120,11 @@ public class InfoCmd implements Cmd {
 		return serialVersionUID;
 	}
 
-	public String getInfStatRep() {
+	public synchronized Integer getInfStatRep() {
 		return infStatRep;
 	}
 
-	public void setInfStatRep(String infStatRep) {
+	public synchronized void setInfStatRep(Integer infStatRep) {
 		this.infStatRep = infStatRep;
 	}
 

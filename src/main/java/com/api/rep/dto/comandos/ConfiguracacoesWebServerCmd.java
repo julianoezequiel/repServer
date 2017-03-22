@@ -8,6 +8,8 @@ public class ConfiguracacoesWebServerCmd implements Cmd {
 
 	private Integer cfgWTpCfg;
 	private Integer[] cfgWIPS;
+	private Integer cfgWP80;
+	
 
 	public synchronized Integer getCfgWTpCfg() {
 		return cfgWTpCfg;
@@ -29,10 +31,21 @@ public class ConfiguracacoesWebServerCmd implements Cmd {
 		return serialVersionUID;
 	}
 
+	
+	
+	public synchronized Integer getCfgWP80() {
+		return cfgWP80;
+	}
+
+	public synchronized void setCfgWP80(Integer cfgWP80) {
+		this.cfgWP80 = cfgWP80;
+	}
+
 	public ConfigurcacoesWebServer toConfigurcacoesWebServer() {
 		ConfigurcacoesWebServer configurcacoesWebServer = new ConfigurcacoesWebServer();
 		configurcacoesWebServer.setIpSeguro(cfgWIPS);
 		configurcacoesWebServer.setTipoConfig(cfgWTpCfg);
+		configurcacoesWebServer.setHabilitaPorta80(cfgWP80);
 		return configurcacoesWebServer;
 	}
 

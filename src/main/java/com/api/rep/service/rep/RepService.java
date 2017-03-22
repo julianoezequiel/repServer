@@ -1,5 +1,7 @@
 package com.api.rep.service.rep;
 
+import static org.assertj.core.api.Assertions.in;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,11 +12,13 @@ import org.springframework.stereotype.Service;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dao.ConfiguracoesRedeRepository;
+import com.api.rep.dao.InfoRepository;
 import com.api.rep.dao.RepRepository;
 import com.api.rep.dao.TarefaRepository;
 import com.api.rep.dto.RepMonitor;
 import com.api.rep.dto.comunicacao.RepDTO;
 import com.api.rep.entity.ConfiguracoesRede;
+import com.api.rep.entity.Info;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ServiceException;
@@ -31,6 +35,9 @@ public class RepService {
 
 	@Autowired
 	private TarefaRepository tarefaRepository;
+
+	@Autowired
+	private InfoRepository infoRepository;
 
 	// busca todos os rep existentes na base
 	public Collection<RepDTO> buscarTodos() {
@@ -56,21 +63,35 @@ public class RepService {
 		if (repDTO.getNumeroSerie() == null) {
 			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série obrigatório");
 		}
-		if (this.buscarPorNumeroSerie(repDTO.getNumeroSerie()) != null) {
+
+		Rep repTeste = this.buscarPorNumeroSerie(repDTO.getNumeroSerie());
+		if (repTeste != null && repTeste.getId() != repDTO.getId()) {
 			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série já cadastrado");
 		}
 
-		Rep rep = repDTO.getRep();
 		ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
-		this.configuracoesRedeRepository.save(configuracoesRede);
+		configuracoesRede = this.configuracoesRedeRepository.save(configuracoesRede);
+
+		Info info = new Info();
+		info = this.infoRepository.save(info);
+
+		Rep rep = repDTO.getRep();
 		rep.setConfiguracoesRedeId(configuracoesRede);
+		rep.setInfoId(info);
 		rep = this.repRepository.save(rep);
+
 		// agenda o recebimento das configurações de Rede
-		Tarefa tarefa = Tarefa.padraoTeste();
-		tarefa.setRepId(rep);
-		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_REDE.ordinal());
-		tarefa.setConfiguracoesRedeId(configuracoesRede);
-		this.tarefaRepository.save(tarefa);
+		Tarefa tarefaConfigRede = Tarefa.padraoTeste();
+		tarefaConfigRede.setRepId(rep);
+		tarefaConfigRede.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_REDE.ordinal());
+		tarefaConfigRede.setConfiguracoesRedeId(configuracoesRede);
+		this.tarefaRepository.save(tarefaConfigRede);
+
+		// agenda o recebimento das info
+		Tarefa tarefaInfo = Tarefa.padraoTeste();
+		tarefaInfo.setRepId(rep);
+		tarefaInfo.setTipoTarefa(CmdHandler.TIPO_CMD.INFO.ordinal());
+		this.tarefaRepository.save(tarefaInfo);
 
 		return new RepDTO(rep);
 	}

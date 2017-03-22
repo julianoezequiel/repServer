@@ -27,18 +27,35 @@ public class RepRestController {
 	public ResponseEntity<Collection<RepDTO>> buscarTodos() {
 		return new ResponseEntity<Collection<RepDTO>>(this.repService.buscarTodos(), HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "rep/cadastro", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<Collection<RepDTO>> buscarTodosCad() {
+		return new ResponseEntity<Collection<RepDTO>>(this.repService.buscarTodos(), HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "rep/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<RepDTO> buscar(@PathVariable("id") Integer id) {
 		return new ResponseEntity<RepDTO>(this.repService.buscar(id), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "rep", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<RepDTO> salvar(@RequestBody RepDTO repDTO) throws ServiceException {
+	@RequestMapping(value = "rep/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
+	public ResponseEntity<RepDTO> salvar(@PathVariable("id") Integer id, @RequestBody RepDTO repDTO)
+			throws ServiceException {
 		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "{rep/id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
+	@RequestMapping(value = "rep/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<RepDTO> salvarRep(@PathVariable("id") Integer id, @RequestBody RepDTO repDTO)
+			throws ServiceException {
+		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "rep/cadastro", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<RepDTO> salvarRepCad(@RequestBody RepDTO repDTO) throws ServiceException {
+		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "rep/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
 	public ResponseEntity<String> excluir(@PathVariable Integer id) throws ServiceException {
 		return new ResponseEntity<String>(this.repService.excluir(id), HttpStatus.OK);
 	}

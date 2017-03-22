@@ -23,7 +23,11 @@ public class InfoService extends ApiService {
 		Info info = infoCmd.toInfo();
 		info.setId(repAutenticado.getInfoId() != null ? repAutenticado.getInfoId().getId() : null);
 
-		this.infoRepository.save(info);
+		info = this.infoRepository.save(info);
+		repAutenticado.setInfoId(info);
+		repAutenticado.setUltimoNsr(new Integer(info.getUltimoNsr()));
+
+		this.getRepService().salvar(repAutenticado);
 
 	}
 }

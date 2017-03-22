@@ -1,24 +1,10 @@
 package com.api.rep.dto.comandos;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-
 import com.api.rep.entity.ConfiguracoesSenha;
 
 public class ConfiguracaoSenhaCmd implements Cmd {
 
 	private static final long serialVersionUID = 1L;
-	
-	
-	@Id
-	@Basic(optional = false)
-	@NotNull
-	@Column(name = "id")
-	@GeneratedValue
-	private Integer id;
 	
 	private String cfgSCfg;
 	private String cfgSPend;
