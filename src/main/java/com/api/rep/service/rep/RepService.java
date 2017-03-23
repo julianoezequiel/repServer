@@ -1,7 +1,5 @@
 package com.api.rep.service.rep;
 
-import static org.assertj.core.api.Assertions.in;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dao.ConfiguracoesRedeRepository;
 import com.api.rep.dao.InfoRepository;
 import com.api.rep.dao.RepRepository;
