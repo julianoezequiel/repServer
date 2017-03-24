@@ -59,7 +59,7 @@ public class ApiService {
 		if (rep != null) {
 			return rep;
 		} else {
-			throw new ServiceException(HttpStatus.NO_CONTENT, "Rep não cadastrado");
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");
 		}
 	}
 

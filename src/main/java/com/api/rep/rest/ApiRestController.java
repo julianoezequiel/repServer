@@ -10,14 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.entity.Rep;
 import com.api.rep.service.ServiceException;
+import com.api.rep.service.rep.RepService;
 import com.api.rep.utils.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 public class ApiRestController {
-	
+
 	public final static Logger LOGGER = LoggerFactory.getLogger(ApiRestController.class.getName());
-	
+
+	@Autowired
+	private RepService repService;
+
 	@Autowired
 	private JwtUtil jwtutil;
 
@@ -62,6 +66,14 @@ public class ApiRestController {
 		if (rep == null) {
 			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Token inválido");
 		}
-		return  rep;
+		return rep;
+	}
+
+	public Rep getRep(String numSerie) throws ServiceException {
+		Rep rep = this.repService.buscarPorNumeroSerie(numSerie);
+		if (rep == null) {
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não encontrado");
+		}
+		return rep;
 	}
 }

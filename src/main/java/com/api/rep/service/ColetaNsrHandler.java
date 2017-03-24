@@ -155,7 +155,7 @@ public class ColetaNsrHandler {
 		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefa.setRepId(apiService.getRep());
 
-		// apiService.getTarefaRepository().save(tarefa);
+		apiService.getTarefaRepository().save(tarefa);
 
 		return ColetaNsrHandler.nsr;
 
@@ -177,16 +177,15 @@ public class ColetaNsrHandler {
 		ColetaNsrHandler.nsr.setDadosEmpregado(registro.substring(87, 91));
 		ColetaNsrHandler.nsr.setCpfResponsavel(registro.substring(91, 102));
 
-		Tarefa tarefa = new Tarefa();
-		tarefa.setCpf(CONSTANTES.CPF_TESTE);
-		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-		tarefa.setRepId(apiService.getRep());
-
 		Optional<Empregado> empregado = apiService.getEmpregadoRespository().buscarPorPis(pis, apiService.getRep());
 
 		// se for uma inclusao solicita o novo empregado
-		if (ColetaNsrHandler.nsr.getTipoOperacao().equals("I")) {
+		if (ColetaNsrHandler.nsr.getTipoOperacao().equalsIgnoreCase("I")) {
+			Tarefa tarefa = new Tarefa();
+			tarefa.setCpf(CONSTANTES.CPF_TESTE);
+			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
+			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+			tarefa.setRepId(apiService.getRep());
 			if (empregado.isPresent()) {
 				tarefa.setEmpregadoId(empregado.get());
 			} else {
@@ -199,8 +198,16 @@ public class ColetaNsrHandler {
 			}
 			// se fir uma exclusão e existir o regitro, solicita a exclusao da
 			// base
-		} else if (empregado.isPresent() && ColetaNsrHandler.nsr.getTipoOperacao().equals("E")) {
-			apiService.getEmpregadoRespository().delete(empregado.get());
+		} else if (empregado.isPresent() && ColetaNsrHandler.nsr.getTipoOperacao().equalsIgnoreCase("E")) {
+			if (empregado.get().getTarefaCollection().isEmpty()) {
+				apiService.getEmpregadoRespository().delete(empregado.get());
+			} else {
+				empregado.get().getTarefaCollection().stream().forEach(t -> {
+					Tarefa.clear(t);
+					apiService.getTarefaRepository().delete(t);
+				});
+				apiService.getEmpregadoRespository().delete(empregado.get());
+			}
 		}
 
 		return ColetaNsrHandler.nsr;

@@ -33,9 +33,9 @@ public class Coleta {
 	@JsonIgnore
 	@OneToMany(mappedBy = "coletaId")
 	private Collection<Tarefa> tarefaCollection;
-
+	
 	public Coleta() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Coleta(Integer nsrInicio, Integer nsrFim) {
@@ -98,7 +98,6 @@ public class Coleta {
 		dto.setcNsrI(this.coletaNsrInicio);
 		dto.setcDtF(coletaDataFim);
 		dto.setcDtI(coletaDataInicio);
-		// dto.setTIPO_CMD(CONSTANTES.TIPO_CMD.NSR);
 		return dto;
 
 	}

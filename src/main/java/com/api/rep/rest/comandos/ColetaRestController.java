@@ -24,34 +24,33 @@ import com.api.rep.service.ServiceException;
 import com.api.rep.service.comandos.ColetaService;
 
 @RestController
-@RequestMapping(value = CONSTANTES.URL_COLETA)
 public class ColetaRestController extends ApiRestController {
 
 	@Autowired
 	private ColetaService coletaService;
 
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
+	@RequestMapping(value = CONSTANTES.URL_COLETA, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
 	public ResponseEntity<?> statusColeta(@RequestBody StatusColetaDTO statusColetaDTO) throws ServiceException {
 		return new ResponseEntity<RespostaSevidorDTO>(
 				this.coletaService.statusColeta(statusColetaDTO, this.getRepAutenticado()), HttpStatus.OK);
 	}
 
-	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	@RequestMapping(value = "coleta", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<Collection<Nsr>> bucarPorRep() throws ServiceException {
 		return new ResponseEntity<>(this.coletaService.buscarNsrPorRep(this.getRepAutenticado()), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "removertodos", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	@RequestMapping(value = "coleta/removertodos", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<?> excluirTodos() throws ServiceException {
 		HashMap<String, Long> total = new HashMap<>();
 		total.put("Registro excluido", this.coletaService.excluirTodos(this.getRepAutenticado()));
 		return new ResponseEntity<>(total, HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "total", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<?> total() throws ServiceException {
+	@RequestMapping(value = "coleta/total/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<?> total(@PathVariable("numSerie") String numSerie) throws ServiceException {
 		HashMap<String, Long> total = new HashMap<>();
-		total.put("Total", this.coletaService.total(this.getRepAutenticado()));
+		total.put("Total", this.coletaService.total(this.getRep(numSerie)));
 		return new ResponseEntity<HashMap<String, Long>>(total, HttpStatus.OK);
 	}
 
@@ -61,10 +60,10 @@ public class ColetaRestController extends ApiRestController {
 	 * @return
 	 * @throws ServiceException
 	 */
-	@RequestMapping(value = "cancelar", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<?> cancelar() throws ServiceException {
+	@RequestMapping(value = "coleta/cancelar/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<?> cancelar(@PathVariable("numSerie") String numSerie) throws ServiceException {
 		HashMap<String, Boolean> total = new HashMap<>();
-		total.put("ColetaCmd cancelada", this.coletaService.cancelar(this.getRepAutenticado()));
+		total.put("ColetaCmd cancelada", this.coletaService.cancelar(this.getRep(numSerie)));
 		return new ResponseEntity<HashMap<String, Boolean>>(total, HttpStatus.OK);
 	}
 
@@ -75,7 +74,7 @@ public class ColetaRestController extends ApiRestController {
 	 * @return
 	 * @throws ServiceException
 	 */
-	@RequestMapping(consumes = { MediaType.APPLICATION_OCTET_STREAM_VALUE,
+	@RequestMapping(value = CONSTANTES.URL_COLETA, consumes = { MediaType.APPLICATION_OCTET_STREAM_VALUE,
 			"text/plain; charset=ISO-8859-1" }, method = RequestMethod.POST)
 	public ResponseEntity<?> receber(@RequestBody String registros) throws ServiceException {
 		this.coletaService.receber(registros, this.getRepAutenticado());

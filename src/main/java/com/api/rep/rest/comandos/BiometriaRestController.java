@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.dto.comandos.AjustesBioCmd;
 import com.api.rep.dto.comandos.ListaBio;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.rest.ApiRestController;
@@ -82,9 +81,10 @@ public class BiometriaRestController extends ApiRestController {
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value = CONSTANTES.URL_LISTA_BIOMETRIA, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<?> receberListaBio() throws ServiceException, JsonProcessingException {
-		return new ResponseEntity<>(BiometriaService.LISTA_BIO, HttpStatus.OK);
+	@RequestMapping(value = "listabio/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<?> receberListaBio(@PathVariable("numSerie") String numSerie)
+			throws ServiceException, JsonProcessingException {
+		return new ResponseEntity<ListaBio>(this.biometriaService.getListaBio(this.getRep(numSerie)), HttpStatus.OK);
 	}
 
 }

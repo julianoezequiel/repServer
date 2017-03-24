@@ -1,7 +1,6 @@
 package com.api.rep.service.status;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +31,7 @@ import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.comandos.CmdHandler;
+import com.api.rep.service.comandos.ColetaService;
 import com.api.rep.service.rep.RepService;
 import com.api.rep.service.tarefa.TarefaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -56,6 +56,9 @@ public class StatusService extends ApiService {
 	@Autowired
 	private TarefaService tarefaService;
 
+	@Autowired
+	private ColetaService coletaService;
+
 	@Value("${nsr.inicial}")
 	Integer inicio;
 
@@ -72,8 +75,7 @@ public class StatusService extends ApiService {
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
-	public ComandoDeEnvio validarStatus(HttpServletRequest request, StatusDTO status, Rep rep)
-			throws ServiceException, JsonProcessingException {
+	public ComandoDeEnvio validarStatus(HttpServletRequest request, StatusDTO status, Rep rep) throws ServiceException {
 
 		rep = validarDadosEntrada(status, rep);
 
@@ -182,38 +184,38 @@ public class StatusService extends ApiService {
 
 	private void agendarReceberColeta(Rep rep, StatusDTO status) {
 
-		if (rep.getInfoId() != null && rep.getInfoId().getUltimoNsr() != null) {
-			// ultimo Nsr
-			Nsr ultimoNsr = this.nsrRepository.findLast(); //
+		// ultimo Nsr
+		Nsr ultimoNsrColetado = this.nsrRepository.buscarUltimoNsr(rep.getId()); //
 
-			if (ultimoNsr == null) {
-				ultimoNsr = new Nsr();
-				ultimoNsr.setNumeroNsr(rep.getUltimoNsr() > 200 ? (rep.getUltimoNsr() - 200) : 0);
+		if (ultimoNsrColetado == null) {
+			ultimoNsrColetado = new Nsr();
+			ultimoNsrColetado.setNumeroNsr(status.getUltimoNsr() > 500 ? status.getUltimoNsr() - 500 : 0);
+		} else if (ultimoNsrColetado.getNumeroNsr() + 500 < status.getUltimoNsr()) {
+			ultimoNsrColetado.setNumeroNsr(status.getUltimoNsr() - 500);
+		}
+
+		if (ultimoNsrColetado.getNumeroNsr() < status.getUltimoNsr()) {
+
+			List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
+
+			Tarefa tarefa = tarefaList.stream()
+					.filter(p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA.ordinal())
+							&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
+					.findFirst().orElse(new Tarefa());
+			// se ja existe uma Tarefa do tipo coleta, atualiza o range
+			// de coleta
+			if (tarefa.getColetaId() != null) {
+				tarefa.getColetaId().setColetaNsrInicio(ultimoNsrColetado.getNumeroNsr());
+				tarefa.getColetaId().setColetaNsrFim(status.getUltimoNsr());
+			} else {
+				tarefa.setRepId(rep);
+				tarefa.setColetaId(this.coletaRepository
+						.save(new Coleta(ultimoNsrColetado.getNumeroNsr(), status.getUltimoNsr())));
+				tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA.ordinal());
+				tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
 			}
 
-			if (ultimoNsr.getNumeroNsr() < status.getUltimoNsr()) {
-
-				List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
-
-				Tarefa tarefa = tarefaList.stream().filter(
-						p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA.ordinal())
-								&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
-						.findFirst().orElse(new Tarefa());
-				// se ja existe uma Tarefa do tipo coleta, atualiza o range
-				// de coleta
-				if (tarefa.getColetaId() != null) {
-					tarefa.getColetaId().setColetaNsrInicio(ultimoNsr.getNumeroNsr());
-					tarefa.getColetaId().setColetaNsrFim(status.getUltimoNsr());
-				} else {
-					tarefa.setRepId(rep);
-					tarefa.setColetaId(
-							this.coletaRepository.save(new Coleta(ultimoNsr.getNumeroNsr(), status.getUltimoNsr())));
-					tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA.ordinal());
-					tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
-				}
-
-				this.getTarefaRepository().save(tarefa);
-			}
+			this.getTarefaRepository().save(tarefa);
 		}
 	}
 
@@ -233,16 +235,23 @@ public class StatusService extends ApiService {
 						.anyMatch(r -> r != CONSTANTES.STATUS_COM_REP.HTTPC_RESULT_FALHA.ordinal())
 						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal())
 						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal())
+						|| tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA.ordinal())
 						|| (tarefa.getTentativas() != null && tarefa.getTentativas() > 3)) {
 
 					// se foi uma resposta de sucesso, excluir a Tarefa
 					if (tarefa != null) {
-						// Remove os vinculos
+						// salva o arquivo do dump da coleta
+						if (tarefa.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA_DUMPING.ordinal())) {
+							coletaService.salvarArquivoDumpEmDisco(tarefa.getNsu());
+						}
+
+						// Remove os vínculos
 						tarefa = Tarefa.clear(tarefa);
 						this.getTarefaRepository().save(tarefa);
 						this.getTarefaRepository().delete(tarefa);
 						respostaSevidorDTO.setHttpStatus(HttpStatus.OK);
 						LOGGER.info("Tarefa NSU : " + tarefa.getNsu() + " removida");
+
 					}
 				} else {
 					// Integer[] s = (Integer[])

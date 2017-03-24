@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dao.ConfiguracoesRedeRepository;
 import com.api.rep.dao.InfoRepository;
 import com.api.rep.dao.RepRepository;
@@ -78,14 +79,60 @@ public class RepService {
 		rep = this.repRepository.save(rep);
 
 		// agenda o recebimento das configurações de Rede
-		Tarefa tarefaConfigRede = Tarefa.padraoTeste();
+		Tarefa tarefaConfigRede = new Tarefa();
+		tarefaConfigRede.setCpf(CONSTANTES.CPF_TESTE);
+		tarefaConfigRede.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefaConfigRede.setRepId(rep);
 		tarefaConfigRede.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_REDE.ordinal());
 		tarefaConfigRede.setConfiguracoesRedeId(configuracoesRede);
 		this.tarefaRepository.save(tarefaConfigRede);
 
 		// agenda o recebimento das info
-		Tarefa tarefaInfo = Tarefa.padraoTeste();
+		Tarefa tarefaInfo = new Tarefa();
+		tarefaConfigRede.setCpf(CONSTANTES.CPF_TESTE);
+		tarefaConfigRede.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		tarefaInfo.setRepId(rep);
+		tarefaInfo.setTipoTarefa(CmdHandler.TIPO_CMD.INFO.ordinal());
+		this.tarefaRepository.save(tarefaInfo);
+
+		return new RepDTO(rep);
+	}
+
+	public RepDTO atualizar(RepDTO repDTO) throws ServiceException {
+
+		if (repDTO.getNumeroSerie() == null) {
+			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série obrigatório");
+		}
+
+		Rep rep = this.buscarPorNumeroSerie(repDTO.getNumeroSerie());
+		if (rep == null) {
+			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número não encontrado");
+		}
+		repDTO.setId(rep.getId());
+		ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
+		configuracoesRede = this.configuracoesRedeRepository.save(configuracoesRede);
+
+		Info info = new Info();
+		info = this.infoRepository.save(info);
+
+		rep = repDTO.getRep();
+		rep.setConfiguracoesRedeId(configuracoesRede);
+		rep.setInfoId(info);
+		rep = this.repRepository.save(rep);
+
+		// agenda o recebimento das configurações de Rede
+		Tarefa tarefaConfigRede = new Tarefa();
+		tarefaConfigRede.setCpf(CONSTANTES.CPF_TESTE);
+		tarefaConfigRede.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
+		tarefaConfigRede.setRepId(rep);
+		tarefaConfigRede.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_REDE.ordinal());
+		tarefaConfigRede.setConfiguracoesRedeId(configuracoesRede);
+		this.tarefaRepository.save(tarefaConfigRede);
+
+		// agenda o recebimento das info
+		Tarefa tarefaInfo = new Tarefa();
+		tarefaConfigRede.setCpf(CONSTANTES.CPF_TESTE);
+		tarefaConfigRede.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefaInfo.setRepId(rep);
 		tarefaInfo.setTipoTarefa(CmdHandler.TIPO_CMD.INFO.ordinal());
 		this.tarefaRepository.save(tarefaInfo);

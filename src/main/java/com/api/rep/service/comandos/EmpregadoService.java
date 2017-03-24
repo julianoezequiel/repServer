@@ -111,6 +111,7 @@ public class EmpregadoService extends ApiService {
 			if (empregado.isPresent()) {
 				Empregado empregado2 = empregadorDTO.toEmpregado();
 				empregado2.setId(empregado.get().getId());
+				empregado2.setRepId(this.rep);
 				this.getEmpregadoRespository().save(empregado2);
 			}
 		}
@@ -135,9 +136,8 @@ public class EmpregadoService extends ApiService {
 			Empregado empregado = e.toEmpregado();
 			if (empregadoOptional.isPresent()) {
 				empregado.setId(empregadoOptional.get().getId());
-			} else {
-				empregado.setRepId(this.rep);
 			}
+			empregado.setRepId(this.rep);
 			this.empregadoRespository.save(empregado);
 		});
 	}

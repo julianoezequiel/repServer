@@ -1,5 +1,10 @@
 package com.api.rep.service.comandos;
 
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -27,7 +32,7 @@ public class ColetaService extends ApiService {
 	private static final String NUM_TRAILER = "999999999";
 	private static final String NUM_CABECALHO = "000000000";
 
-	public static HashMap<String, byte[]> dumpingColetaMap = new HashMap<>();
+	public static HashMap<Integer, byte[]> dumpingColetaMap = new HashMap<>();
 
 	@Autowired
 	private NsrRepository nsrRepository;
@@ -141,13 +146,46 @@ public class ColetaService extends ApiService {
 
 	public void receberDumping(MultipartFile arquivoColeta, Rep repAutenticado, Integer nsu) {
 		try {
-			ColetaService.dumpingColetaMap.put(repAutenticado.getNumeroSerie(),
-					IOUtils.toByteArray(arquivoColeta.getInputStream()));
+			if (ColetaService.dumpingColetaMap.containsKey(nsu)) {
+				ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+				outputStream.write(ColetaService.dumpingColetaMap.get(nsu));
+				outputStream.write(IOUtils.toByteArray(arquivoColeta.getInputStream()));
+				ColetaService.dumpingColetaMap.remove(nsu);
+				ColetaService.dumpingColetaMap.put(nsu, outputStream.toByteArray());
+			} else {
+				ColetaService.dumpingColetaMap.put(nsu, IOUtils.toByteArray(arquivoColeta.getInputStream()));
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+	}
+
+	private String rootPath = System.getProperty("catalina.home");
+	private String path = rootPath + File.separator + "tmpFiles";
+
+	public void salvarArquivoDumpEmDisco(Integer nsu) {
+
+		if (ColetaService.dumpingColetaMap.containsKey(nsu)) {
+			File dir = new File(path);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
+
+			File file = new File(dir.getAbsolutePath() + File.separator + nsu);
+
+			BufferedOutputStream stream = null;
+			try {
+				stream = new BufferedOutputStream(new FileOutputStream(file));
+				stream.write(ColetaService.dumpingColetaMap.get(nsu));
+				stream.close();
+				LOGGER.info("Arquivo dump criado = " + file.getAbsolutePath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 }

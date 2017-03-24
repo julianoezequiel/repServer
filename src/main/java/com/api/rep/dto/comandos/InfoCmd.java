@@ -13,6 +13,7 @@ public class InfoCmd implements Cmd {
 	private String infVerApl;
 	private String infVerMrp;
 	private String infNumFunc;
+	private String infNumUsuBio;
 	private String infNumBio;
 	private String infNsr;
 	private String infTpBio;
@@ -128,6 +129,14 @@ public class InfoCmd implements Cmd {
 		this.infStatRep = infStatRep;
 	}
 
+	public synchronized String getInfNumUsuBio() {
+		return infNumUsuBio;
+	}
+
+	public synchronized void setInfNumUsuBio(String infNumUsuBio) {
+		this.infNumUsuBio = infNumUsuBio;
+	}
+
 	public Info toInfo() {
 
 		Info info = new Info();
@@ -145,7 +154,7 @@ public class InfoCmd implements Cmd {
 		info.setUltimoNsr(this.infNsr);
 		info.setVersaoApl(this.infVerApl);
 		info.setVersaoMrp(this.infVerMrp);
-
+		info.setNumeroBiometrias(Integer.parseInt(this.infNumBio));
 		return info;
 	}
 

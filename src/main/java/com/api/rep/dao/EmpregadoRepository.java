@@ -15,7 +15,7 @@ import com.api.rep.entity.Rep;
 @Repository
 public interface EmpregadoRepository extends JpaRepository<Empregado, Integer> {
 
-	@Query(value = "select e from Empregado e where e.empregadoPis = :pis and e.repId = :idRep")
+	@Query(value = "select e from Empregado e where e.empregadoPis = :pis and (e.repId is null or e.repId = :idRep)")
 	public Optional<Empregado> buscarPorPis(@Param("pis") String pis, @Param("idRep") Rep idRep);
 
 	@Transactional

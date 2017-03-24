@@ -97,6 +97,20 @@ public class CmdHandler {
 			}
 
 		},
+		COLETA_DUMPING() {// 5
+			@Override
+			public String getUrl() {
+				return CONSTANTES.URL_COLETA_DUMPING;
+			}
+
+			@Override
+			public RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado,
+					ApiService apiService) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+		},
 		BIOMETRIA() {// 6
 			@Override
 			public String getUrl() {
@@ -130,7 +144,7 @@ public class CmdHandler {
 			@Override
 			public String getUrl() {
 				// TODO Auto-generated method stub
-				return null;
+				return CONSTANTES.URL_VERIFICAR_BIO;
 			}
 
 			@Override

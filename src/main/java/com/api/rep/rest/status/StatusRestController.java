@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,20 +35,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
  *
  */
 @RestController
-@RequestMapping(value = CONSTANTES.URL_STATUS)
 public class StatusRestController extends ApiRestController {
 
 	@Autowired
 	private StatusService statusService;
-	
+
 	@Autowired
 	private HttpServletRequest request;
 
 	/**
 	 * O Rep envia periodicamente o comando de status, atravez do método POST.
 	 * Deve se retornar a última tarefa(Comando) ou nada para o Rep. Caso seja
-	 * retornada uma {@link ComandoDeEnvio}, o Rep irá executar o
-	 * {@link Cmd} informado na {@link ComandoDeEnvio}.
+	 * retornada uma {@link ComandoDeEnvio}, o Rep irá executar o {@link Cmd}
+	 * informado na {@link ComandoDeEnvio}.
 	 * 
 	 * 
 	 * @param status
@@ -55,12 +55,12 @@ public class StatusRestController extends ApiRestController {
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	@RequestMapping(value = CONSTANTES.URL_STATUS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
 	public ResponseEntity<ComandoDeEnvio> status(@RequestBody StatusDTO status)
 			throws ServiceException, JsonProcessingException {
 		ApiRestController.LOGGER.info("Status Recebido : " + this.getMapper().writeValueAsString(status));
-		return new ResponseEntity<ComandoDeEnvio>(this.statusService.validarStatus(request,status, this.getRepAutenticado()),
-				HttpStatus.OK);
+		return new ResponseEntity<ComandoDeEnvio>(
+				this.statusService.validarStatus(request, status, this.getRepAutenticado()), HttpStatus.OK);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class StatusRestController extends ApiRestController {
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
+	@RequestMapping(value = CONSTANTES.URL_STATUS, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
 	public ResponseEntity<?> respostaRep(@RequestBody RespostaRepDTO respostaRep)
 			throws ServiceException, JsonProcessingException {
 		if (respostaRep != null && respostaRep.getStatus() != null) {
@@ -85,16 +85,12 @@ public class StatusRestController extends ApiRestController {
 				this.statusService.validarRespostaRep(respostaRep, this.getRepAutenticado()), HttpStatus.OK);
 	}
 
-	// Método somente para testes
-	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<Collection<ComandoDeEnvio>> listar() throws ServiceException, JsonProcessingException {
-		return new ResponseEntity<Collection<ComandoDeEnvio>>(this.statusService.buscarTarefas(this.getRepAutenticado()),
+	// Método somente para testes, Lista as tarefas pelo numero de série do Rep
+	@RequestMapping(value = "tarefas/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<Collection<ComandoDeEnvio>> listar(@PathVariable("numSerie") String numSerie)
+			throws ServiceException, JsonProcessingException {
+		return new ResponseEntity<Collection<ComandoDeEnvio>>(this.statusService.buscarTarefas(this.getRep(numSerie)),
 				HttpStatus.OK);
 	}
 
-	// Método somente para testes
-	@RequestMapping(value = "todas", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<Collection<Tarefa>> listarTodos() throws ServiceException {
-		return new ResponseEntity<Collection<Tarefa>>(this.statusService.buscarTarefas(), HttpStatus.OK);
-	}
 }

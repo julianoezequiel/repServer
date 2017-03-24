@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
+import com.api.rep.dto.comunicacao.CriptoRnd;
 import com.api.rep.dto.comunicacao.RepDTO;
 import com.api.rep.dto.comunicacao.TokenDTO;
 import com.api.rep.rest.ApiRestController;
@@ -17,7 +18,6 @@ import com.api.rep.service.ServiceException;
 import com.api.rep.service.auth.AuthService;
 
 @RestController
-@RequestMapping(value = CONSTANTES.URL_AUTH)
 public class AuthRestController extends ApiRestController {
 
 	@Autowired
@@ -31,9 +31,14 @@ public class AuthRestController extends ApiRestController {
 	 * @return {@link TokenDTO}
 	 * @throws ServiceException
 	 */
-	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	@RequestMapping(value = CONSTANTES.URL_AUTH_SIGN, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
 	public ResponseEntity<TokenDTO> autenticar(@RequestBody RepDTO repDTO) throws ServiceException {
 		return new ResponseEntity<TokenDTO>(this.authService.autenticar(repDTO), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = CONSTANTES.URL_AUTH, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<CriptoRnd> criptoRnd(@RequestBody RepDTO repDTO) throws ServiceException {
+		return new ResponseEntity<CriptoRnd>(this.authService.criptoRnd(repDTO), HttpStatus.CREATED);
 	}
 
 }

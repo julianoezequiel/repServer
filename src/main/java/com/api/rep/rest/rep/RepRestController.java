@@ -18,49 +18,90 @@ import com.api.rep.service.ServiceException;
 import com.api.rep.service.rep.RepService;
 
 @RestController
+@RequestMapping(value = "cadastro/rep")
 public class RepRestController {
 
 	@Autowired
 	private RepService repService;
 
-	@RequestMapping(value = "rep", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	/**
+	 * Lista os Rep cadastrados
+	 * 
+	 * @return
+	 */
+	@RequestMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<Collection<RepDTO>> buscarTodos() {
 		return new ResponseEntity<Collection<RepDTO>>(this.repService.buscarTodos(), HttpStatus.OK);
 	}
-	
-	@RequestMapping(value = "rep/cadastro", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<Collection<RepDTO>> buscarTodosCad() {
-		return new ResponseEntity<Collection<RepDTO>>(this.repService.buscarTodos(), HttpStatus.OK);
-	}
 
-	@RequestMapping(value = "rep/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	/**
+	 * Lista um Rep pelo Id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<RepDTO> buscar(@PathVariable("id") Integer id) {
 		return new ResponseEntity<RepDTO>(this.repService.buscar(id), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "rep/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
-	public ResponseEntity<RepDTO> salvar(@PathVariable("id") Integer id, @RequestBody RepDTO repDTO)
+	/**
+	 * Lista um Rep pelo número de série
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public ResponseEntity<RepDTO> buscar(@PathVariable("numSerie") String numSerie) {
+		return new ResponseEntity<RepDTO>(new RepDTO(this.repService.buscarPorNumeroSerie(numSerie)), HttpStatus.OK);
+	}
+
+	/**
+	 * Atualiza um Rep pelo id
+	 * 
+	 * @param id
+	 * @param repDTO
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.PUT)
+	public ResponseEntity<RepDTO> salvar(@RequestBody RepDTO repDTO)
+			throws ServiceException {
+		return new ResponseEntity<RepDTO>(this.repService.atualizar(repDTO), HttpStatus.CREATED);
+	}
+
+	/**
+	 * Insere um Rep novo
+	 * 
+	 * @param id
+	 * @param repDTO
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<RepDTO> salvarRep(@RequestBody RepDTO repDTO)
 			throws ServiceException {
 		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "rep/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<RepDTO> salvarRep(@PathVariable("id") Integer id, @RequestBody RepDTO repDTO)
-			throws ServiceException {
-		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);
-	}
-
-	@RequestMapping(value = "rep/cadastro", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<RepDTO> salvarRepCad(@RequestBody RepDTO repDTO) throws ServiceException {
-		return new ResponseEntity<RepDTO>(this.repService.salvar(repDTO), HttpStatus.CREATED);
-	}
-
-	@RequestMapping(value = "rep/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
+	/**
+	 * Exclui um Rep pelo id
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ServiceException
+	 */
+	@RequestMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
 	public ResponseEntity<String> excluir(@PathVariable Integer id) throws ServiceException {
 		return new ResponseEntity<String>(this.repService.excluir(id), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "rep/monitoramento", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	/**
+	 * Realiza o monitoramento dos rep
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/monitoramento", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<Collection<RepMonitor>> buscarRepMonitoramento() {
 		return new ResponseEntity<Collection<RepMonitor>>(this.repService.buscarRepMonitoramento(), HttpStatus.OK);
 	}

@@ -31,6 +31,7 @@ public class Info {
 	private String versaoMrp;
 	private Integer numeroUsuario;
 	private Integer numeroUsuarioBio;
+	private Integer numeroBiometrias;
 	private String tipoBio;
 	private String modeloBio;
 	private Integer capacidadeBio;
@@ -161,6 +162,15 @@ public class Info {
 		this.repCollection = repCollection;
 	}
 
+	
+	public synchronized Integer getNumeroBiometrias() {
+		return numeroBiometrias;
+	}
+
+	public synchronized void setNumeroBiometrias(Integer numeroBiometrias) {
+		this.numeroBiometrias = numeroBiometrias;
+	}
+
 	public InfoCmd toInfoCmd() {
 		InfoCmd infoCmd = new InfoCmd();
 
@@ -177,6 +187,7 @@ public class Info {
 		infoCmd.setInfTpBio(this.tipoBio);
 		infoCmd.setInfVerApl(this.versaoApl);
 		infoCmd.setInfVerMrp(this.versaoMrp);
+		infoCmd.setInfNumUsuBio(this.numeroBiometrias.toString());
 
 		return infoCmd;
 	}

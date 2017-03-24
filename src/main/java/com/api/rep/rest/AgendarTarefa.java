@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.rep.contantes.CONSTANTES;
 import com.api.rep.dao.AjusteBioRepository;
+import com.api.rep.dao.ColetaDumpingRepository;
 import com.api.rep.dao.ColetaRepository;
 import com.api.rep.dao.ConfiguracoesCartoesRepository;
 import com.api.rep.dao.ConfiguracoesRedeRepository;
@@ -27,6 +28,7 @@ import com.api.rep.dao.RepRepository;
 import com.api.rep.dao.TarefaRepository;
 import com.api.rep.dto.comandos.AjustesBioCmd;
 import com.api.rep.dto.comandos.ColetaCmd;
+import com.api.rep.dto.comandos.ColetaDumpingCmd;
 import com.api.rep.dto.comandos.ConfiguracaoSenhaCmd;
 import com.api.rep.dto.comandos.ConfiguracoesCartoesCmd;
 import com.api.rep.dto.comandos.ConfiguracoesRedeCmd;
@@ -37,6 +39,7 @@ import com.api.rep.dto.comandos.HorarioVeraoCmd;
 import com.api.rep.dto.comandos.RelogioCmd;
 import com.api.rep.entity.AjustesBio;
 import com.api.rep.entity.Coleta;
+import com.api.rep.entity.ColetaDumping;
 import com.api.rep.entity.ConfiguracoesCartoes;
 import com.api.rep.entity.ConfiguracoesRede;
 import com.api.rep.entity.ConfiguracoesSenha;
@@ -90,27 +93,48 @@ public class AgendarTarefa extends ApiRestController {
 	@Autowired
 	private ConfiguracoesWebServerRepository configuracoesWebServerRepository;
 
-	@RequestMapping(value = "coleta", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa coletaCmd(@RequestBody ColetaCmd coletaCmd) throws ServiceException {
-		Tarefa tarefa = Tarefa.padraoTeste();
+	@Autowired
+	private ColetaDumpingRepository coletaDumpingRepository;
+
+	@RequestMapping(value = "coleta/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa coletaCmd(@PathVariable("numSerie") String numSerie, @RequestBody ColetaCmd coletaCmd)
+			throws ServiceException {
+
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.RECEBER.name(), rep);
 
 		Coleta coleta = coletaCmd.toColeta();
 		coleta = this.coletaRepository.save(coleta);
 
 		tarefa.setColetaId(coleta);
-		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA.ordinal());
 
 		return this.tarefaRepository.save(tarefa);
 	}
 
-	@RequestMapping(value = "empregado/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa empregado(@RequestBody EmpregadoCmd empregadoCmd, @PathVariable Integer operacao)
+	@RequestMapping(value = "coletadump/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa coletaCmd(@PathVariable("numSerie") String numSerie, @RequestBody ColetaDumpingCmd coletaDumpingCmd)
 			throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
-		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.RECEBER.name(), rep);
+
+		ColetaDumping coletaDumping = coletaDumpingCmd.toColetaDumping();
+
+		coletaDumping = this.coletaDumpingRepository.save(coletaDumping);
+
+		tarefa.setColetaDumpingId(coletaDumping);
+		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA_DUMPING.ordinal());
+
+		return this.tarefaRepository.save(tarefa);
+	}
+
+	@RequestMapping(value = "empregado/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa empregado(@PathVariable("numSerie") String numSerie, @RequestBody EmpregadoCmd empregadoCmd,
+			@PathVariable String operacao) throws ServiceException {
+
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		Optional<Empregado> empregado = this.empregadoRepository.buscarPorPis(empregadoCmd.getfPis(), rep);
 		Empregado empregado2 = empregadoCmd.toEmpregado();
@@ -120,104 +144,95 @@ public class AgendarTarefa extends ApiRestController {
 		empregado2 = this.empregadoRepository.save(empregado2);
 		tarefa.setEmpregadoId(empregado2);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADO.ordinal());
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "empregador/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa empregador(@RequestBody EmpregadorCmd empregadorCmd, @PathVariable Integer operacao)
-			throws ServiceException {
+	@RequestMapping(value = "empregador/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa empregador(@PathVariable("numSerie") String numSerie, @RequestBody EmpregadorCmd empregadorCmd,
+			@PathVariable String operacao) throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
-		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 		Empregador empregador = empregadorCmd.toEmpregador();
 		empregador.setId(rep.getEmpregadorId() != null ? rep.getEmpregadorId().getId() : null);
 		empregador = this.empregadorRepository.save(empregador);
+
 		rep.setEmpregadorId(empregador);
 		this.repRepository.save(rep);
 
 		tarefa.setEmpregadorId(empregador);
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.EMPREGADOR.ordinal());
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "biometria/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa biometria(@RequestBody EmpregadoCmd empregadoCmd, @PathVariable Integer operacao)
-			throws ServiceException {
+	@RequestMapping(value = "biometria/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa biometria(@PathVariable("numSerie") String numSerie, @RequestBody EmpregadoCmd empregadoCmd,
+			@PathVariable String operacao) throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.getRep(numSerie);
+
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		Empregado empregado = empregadoCmd.toEmpregado();
 		empregado = this.empregadoRepository.findOne(Example.of(empregado));
 		if (empregado != null) {
 			tarefa.setEmpregadoId(empregado);
 		}
-		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.BIOMETRIA.ordinal());
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "listabiometria", method = RequestMethod.GET)
-	public Tarefa listabiometria() throws ServiceException {
-		Tarefa tarefa = new Tarefa();
-		tarefa.setCpf(CONSTANTES.CPF_TESTE);
+	@RequestMapping(value = "listabiometria/{numSerie}", method = RequestMethod.GET)
+	public Tarefa listabiometria(@PathVariable("numSerie") String numSerie) throws ServiceException {
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.RECEBER.name(), rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.LISTA_BIO.ordinal());
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "listaempregados", method = RequestMethod.GET)
-	public Tarefa listaempreagados() throws ServiceException {
+	@RequestMapping(value = "listaempregados/{numSerie}", method = RequestMethod.GET)
+	public Tarefa listaempregados(@PathVariable("numSerie") String numSerie) throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.RECEBER.name(), rep);
 
 		long exluidos = this.empregadoRepository.removeByrepId(rep);
 		LOGGER.info("Lista de empregados excluida da base , total de excluidos " + exluidos);
 
-		Tarefa tarefa = Tarefa.padraoTeste();
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.LISTA_EMPREGADO.ordinal());
-		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 	}
 
-	@RequestMapping(value = "listaempregadosdumping/{operacao}", method = RequestMethod.POST)
-	public Tarefa listaempreagadosdump(@PathVariable("operacao") Integer operacao) throws ServiceException {
-		Tarefa tarefa = Tarefa.padraoTeste();
+	@RequestMapping(value = "listaempregadosdump/{operacao}/{numSerie}", method = RequestMethod.POST)
+	public Tarefa listaempreagadosdump(@PathVariable("numSerie") String numSerie,
+			@PathVariable("operacao") String operacao) throws ServiceException {
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.LISTA_EMPREGADO_DUMP.ordinal());
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
-		tarefa.setRepId(this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie()));
 		return this.tarefaRepository.save(tarefa);
 	}
 
-	@RequestMapping(value = "info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public Tarefa info() throws ServiceException {
+	@RequestMapping(value = "info/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa info(@PathVariable("numSerie") String numSerie) throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
-		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.ENVIAR.name(), rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.INFO.ordinal());
-		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "atualizarfirmware", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public Tarefa atualizarFw() throws ServiceException {
+	@RequestMapping(value = "atualizarfirmware/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa atualizarFw(@PathVariable("numSerie") String numSerie) throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
-		Tarefa tarefa = Tarefa.padraoTeste();
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.ENVIAR.name(), rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal());
-		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 
 	}
@@ -227,8 +242,7 @@ public class AgendarTarefa extends ApiRestController {
 
 		List<Rep> repList = this.repRepository.findAll();
 		repList.stream().forEach(r -> {
-			Tarefa tarefa = Tarefa.padraoTeste();
-			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+			Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.ENVIAR.name(), r);
 			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_FW.ordinal());
 			tarefa.setRepId(r);
 			this.tarefaRepository.save(tarefa);
@@ -236,14 +250,12 @@ public class AgendarTarefa extends ApiRestController {
 
 	}
 
-	@RequestMapping(value = "atualizarpaginas", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public Tarefa atualizarPaginas() throws ServiceException {
+	@RequestMapping(value = "atualizarpaginas/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa atualizarPaginas(@PathVariable("numSerie") String numSerie) throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
-		Tarefa tarefa = Tarefa.padraoTeste();
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.ENVIAR.name(), rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal());
-		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 
 	}
@@ -252,31 +264,29 @@ public class AgendarTarefa extends ApiRestController {
 	public void atualizarPaginasTodos() throws ServiceException {
 		List<Rep> repList = this.repRepository.findAll();
 		repList.stream().forEach(r -> {
-			Tarefa tarefa = Tarefa.padraoTeste();
-			tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+			Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.ENVIAR.name(), r);
 			tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.ATUALIZACAO_PAGINAS.ordinal());
-			tarefa.setRepId(r);
 			this.tarefaRepository.save(tarefa);
 		});
 	}
 
-	@RequestMapping(value = "identificadores", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public Tarefa identificadores() throws ServiceException {
+	@RequestMapping(value = "identificadores/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa identificadores(@PathVariable("numSerie") String numSerie) throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
-		Tarefa tarefa = Tarefa.padraoTeste();
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(CONSTANTES.TIPO_OPERACAO.RECEBER.name(), rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.IDENTFICACAO.ordinal());
-		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "configuracoes/senha/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa configSenha(@RequestBody ConfiguracaoSenhaCmd configuracaoSenhaCmd, @PathVariable Integer operacao)
+	@RequestMapping(value = "configuracoes/senha/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa configSenha(@PathVariable("numSerie") String numSerie,
+			@RequestBody ConfiguracaoSenhaCmd configuracaoSenhaCmd, @PathVariable String operacao)
 			throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		ConfiguracoesSenha configuracoesSenha = configuracaoSenhaCmd.toConfigurcacoesSenha();
 		configuracoesSenha
@@ -286,20 +296,18 @@ public class AgendarTarefa extends ApiRestController {
 		rep.setConfigurcacoesSenhaId(configuracoesSenha);
 		rep = this.repRepository.save(rep);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_SENHA.ordinal());
 		tarefa.setConfigurcacoesSenhaId(configuracoesSenha);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "relogio/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa relogio(@RequestBody RelogioCmd relogioCmd, @PathVariable Integer operacao) throws ServiceException {
+	@RequestMapping(value = "relogio/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa relogio(@PathVariable("numSerie") String numSerie, @RequestBody RelogioCmd relogioCmd,
+			@PathVariable String operacao) throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
-
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		Relogio relogio = relogioCmd.toRelogio();
 		relogio.setId(rep.getRelogioId() != null ? rep.getRelogioId().getId() : null);
@@ -308,8 +316,6 @@ public class AgendarTarefa extends ApiRestController {
 		rep.setRelogioId(relogio);
 		rep = this.repRepository.save(rep);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_RELOGIO.ordinal());
 		tarefa.setRelogioId(relogio);
 
@@ -317,12 +323,12 @@ public class AgendarTarefa extends ApiRestController {
 
 	}
 
-	@RequestMapping(value = "horarioverao/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa horarioverao(@RequestBody HorarioVeraoCmd horarioVeraoCmd, @PathVariable Integer operacao)
-			throws ServiceException {
+	@RequestMapping(value = "horarioverao/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa horarioverao(@PathVariable("numSerie") String numSerie, @RequestBody HorarioVeraoCmd horarioVeraoCmd,
+			@PathVariable String operacao) throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		HorarioVerao horarioVerao = horarioVeraoCmd.toHorarioVerao();
 		horarioVerao.setId(rep.getHorarioVeraoId() != null ? rep.getHorarioVeraoId().getId() : null);
@@ -331,20 +337,19 @@ public class AgendarTarefa extends ApiRestController {
 		rep.setHorarioVeraoId(horarioVerao);
 		rep = this.repRepository.save(rep);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_HORARIO_VERAO.ordinal());
 		tarefa.setHorarioVeraoId(horarioVerao);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "cartoes/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa cartoes(@RequestBody ConfiguracoesCartoesCmd configuracoesCartoesCmd, @PathVariable Integer operacao)
+	@RequestMapping(value = "cartoes/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa cartoes(@PathVariable("numSerie") String numSerie,
+			@RequestBody ConfiguracoesCartoesCmd configuracoesCartoesCmd, @PathVariable String operacao)
 			throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		ConfiguracoesCartoes configuracoesCartoes = configuracoesCartoesCmd.toConfiguracoesCartoes();
 		configuracoesCartoes
@@ -355,20 +360,19 @@ public class AgendarTarefa extends ApiRestController {
 		rep.setConfiguracoesCartoesId(configuracoesCartoes);
 		rep = this.repRepository.save(rep);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_CARTOES.ordinal());
 		tarefa.setConfiguracoesCartoesId(configuracoesCartoes);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "rede/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa rede(@RequestBody ConfiguracoesRedeCmd configuracoesRedeCmd, @PathVariable Integer operacao)
+	@RequestMapping(value = "rede/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa rede(@PathVariable("numSerie") String numSerie,
+			@RequestBody ConfiguracoesRedeCmd configuracoesRedeCmd, @PathVariable String operacao)
 			throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		ConfiguracoesRede configuracoesRede = configuracoesRedeCmd.toConfiguracoesRede();
 		configuracoesRede.setId(rep.getConfiguracoesRedeId() != null ? rep.getConfiguracoesRedeId().getId() : null);
@@ -378,56 +382,50 @@ public class AgendarTarefa extends ApiRestController {
 		rep.setConfiguracoesRedeId(configuracoesRede);
 		rep = this.repRepository.save(rep);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_REDE.ordinal());
 		tarefa.setConfiguracoesRedeId(configuracoesRede);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "ajustebio/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa ajusteBio(@RequestBody AjustesBioCmd ajustesBioCmd, @PathVariable Integer operacao)
-			throws ServiceException {
+	@RequestMapping(value = "ajustebio/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa ajusteBio(@PathVariable("numSerie") String numSerie, @RequestBody AjustesBioCmd ajustesBioCmd,
+			@PathVariable String operacao) throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		AjustesBio ajustesBio = ajustesBioCmd.toAjustesBio();
 		ajustesBio.setId(rep.getAjustesBioId() != null ? rep.getAjustesBioId().getId() : null);
-		;
 
 		this.ajusteBioRepository.save(ajustesBio);
 
 		rep.setAjustesBioId(ajustesBio);
 		rep = this.repRepository.save(rep);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_BIO.ordinal());
 		tarefa.setAjustesBioId(ajustesBio);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "verificacao", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public Tarefa verificacao() throws ServiceException {
+	@RequestMapping(value = "verificacao/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
+	public Tarefa verificacao(@PathVariable("numSerie") String numSerie) throws ServiceException {
 
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
-		Tarefa tarefa = Tarefa.padraoTeste();
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste("enviar", rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.VERIFICA_LISTA_BIO.ordinal());
-		tarefa.setRepId(rep);
 		return this.tarefaRepository.save(tarefa);
 
 	}
 
-	@RequestMapping(value = "configwebserve/{operacao}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public Tarefa configWebServer(@RequestBody ConfiguracacoesWebServerCmd configuracacoesWebServerCmd,
-			@PathVariable Integer operacao) throws ServiceException {
+	@RequestMapping(value = "configwebserve/{operacao}/{numSerie}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public Tarefa configWebServer(@PathVariable("numSerie") String numSerie,
+			@RequestBody ConfiguracacoesWebServerCmd configuracacoesWebServerCmd, @PathVariable String operacao)
+			throws ServiceException {
 
-		Tarefa tarefa = Tarefa.padraoTeste();
-		Rep rep = this.repRepository.buscarPorNumeroSerie(this.getRepAutenticado().getNumeroSerie());
+		Rep rep = this.getRep(numSerie);
+		Tarefa tarefa = tarefaTeste(operacao, rep);
 
 		ConfigurcacoesWebServer configurcacoesWebServer = configuracacoesWebServerCmd.toConfigurcacoesWebServer();
 		configurcacoesWebServer
@@ -438,12 +436,32 @@ public class AgendarTarefa extends ApiRestController {
 		rep.setConfigurcacoesWebServerId(configurcacoesWebServer);
 		rep = this.repRepository.save(rep);
 
-		tarefa.setRepId(rep);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.get(operacao).ordinal());
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_WEB_SERVER.ordinal());
 		tarefa.setConfigurcacoesWebServerId(configurcacoesWebServer);
 		return this.tarefaRepository.save(tarefa);
 
+	}
+
+	public Tarefa tarefaTeste(String operacao, Rep rep) {
+
+		Tarefa tarefa = new Tarefa();
+		tarefa.setCpf(CONSTANTES.CPF_TESTE);
+		tarefa.setTipoOperacao(getOperacao(operacao));
+		tarefa.setRepId(rep);
+
+		return tarefa;
+	}
+
+	public int getOperacao(String s) {
+		if (s.equals("receber")) {
+			return CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal();
+		} else if (s.equalsIgnoreCase("enviar")) {
+			return CONSTANTES.TIPO_OPERACAO.ENVIAR.ordinal();
+		} else if (s.equalsIgnoreCase("excluir")) {
+			return CONSTANTES.TIPO_OPERACAO.EXCLUIR.ordinal();
+		} else {
+			return CONSTANTES.TIPO_OPERACAO.NENHUMA.ordinal();
+		}
 	}
 
 }

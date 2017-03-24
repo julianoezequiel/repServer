@@ -20,6 +20,7 @@ public class ConfiguracoesRedeCmd implements Cmd {
 	private Integer cfgRTpDns;
 	private String cfgRNHost;
 	private Integer[] cfgRIpDns;
+	private Integer cfgRNInt;
 
 	public synchronized Integer[] getCfgRIpRep() {
 		return cfgRIpRep;
@@ -129,14 +130,20 @@ public class ConfiguracoesRedeCmd implements Cmd {
 		return serialVersionUID;
 	}
 
-	
-
 	public synchronized Integer getCfgRTpDns() {
 		return cfgRTpDns;
 	}
 
 	public synchronized void setCfgRTpDns(Integer cfgRTpDns) {
 		this.cfgRTpDns = cfgRTpDns;
+	}
+
+	public synchronized Integer getCfgRNInt() {
+		return cfgRNInt;
+	}
+
+	public synchronized void setCfgRNInt(Integer cfgRNInt) {
+		this.cfgRNInt = cfgRNInt;
 	}
 
 	public ConfiguracoesRede toConfiguracoesRede() {
@@ -155,6 +162,7 @@ public class ConfiguracoesRedeCmd implements Cmd {
 		configuracoesRede.setPortaRep(this.cfgRPortRep);
 		configuracoesRede.setPortaServidor(this.cfgRPortServ);
 		configuracoesRede.setRepInicia(this.cfgRRepIn);
+		configuracoesRede.setIntervaloComNuvem(this.cfgRNInt);
 
 		return configuracoesRede;
 	}

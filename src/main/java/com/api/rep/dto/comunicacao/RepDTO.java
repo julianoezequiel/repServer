@@ -18,6 +18,7 @@ public class RepDTO implements Serializable {
 	private Integer id;
 	private String numeroSerie;
 	private String chaveComunicacao;
+	private String sign;
 
 	public RepDTO() {
 	}
@@ -33,6 +34,10 @@ public class RepDTO implements Serializable {
 		this.numeroSerie = numeroSerie;
 	}
 
+	public RepDTO(String numeroSerie) {
+		this.numeroSerie = numeroSerie;
+	}
+
 	public String getNumeroSerie() {
 		return numeroSerie;
 	}
@@ -43,6 +48,30 @@ public class RepDTO implements Serializable {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public synchronized String getSign() {
+		return sign;
+	}
+
+	public synchronized void setSign(String sign) {
+		this.sign = sign;
+	}
+
+	public static synchronized long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public synchronized void setId(Integer id) {
+		this.id = id;
+	}
+
+	public synchronized void setNumeroSerie(String numeroSerie) {
+		this.numeroSerie = numeroSerie;
+	}
+
+	public synchronized void setChaveComunicacao(String chaveComunicacao) {
+		this.chaveComunicacao = chaveComunicacao;
 	}
 
 	@JsonIgnore

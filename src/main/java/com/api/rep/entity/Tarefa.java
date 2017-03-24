@@ -59,12 +59,6 @@ public class Tarefa implements Serializable {
 
 	private Integer tentativas = 0;
 
-	/*
-	 * @GeneratedValue
-	 * 
-	 * @Column(name = "nsu") private Integer nsu;
-	 */
-
 	@Column(name = "cpf")
 	private String cpf;
 
@@ -113,6 +107,10 @@ public class Tarefa implements Serializable {
 	@ManyToOne
 	private ConfigurcacoesWebServer configurcacoesWebServerId;
 
+	@JoinColumn(name = "coleta_dumping_id", referencedColumnName = "id")
+	@ManyToOne
+	private ColetaDumping coletaDumpingId;
+
 	public Tarefa() {
 	}
 
@@ -122,11 +120,6 @@ public class Tarefa implements Serializable {
 		this.tipoTarefa = tipoTarefa;
 		this.repId = rep;
 	}
-	/*
-	 * public Integer getId() { return id; }
-	 * 
-	 * public void setId(Integer id) { this.id = id; }
-	 */
 
 	public Integer getTipoOperacao() {
 		return tipoOperacao;
@@ -268,6 +261,14 @@ public class Tarefa implements Serializable {
 		this.status = status;
 	}
 
+	public synchronized ColetaDumping getColetaDumpingId() {
+		return coletaDumpingId;
+	}
+
+	public synchronized void setColetaDumpingId(ColetaDumping coletaDumpingId) {
+		this.coletaDumpingId = coletaDumpingId;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -340,6 +341,8 @@ public class Tarefa implements Serializable {
 			return this.ajustesBioId.toAjustesBioCmd();
 		} else if (this.configurcacoesWebServerId != null) {
 			return this.configurcacoesWebServerId.toConfigurcacoesWebServer();
+		} else if (this.coletaDumpingId != null) {
+			return this.coletaDumpingId.toColetaDumpingCmd();
 		} else {
 			return null;
 		}
@@ -357,17 +360,10 @@ public class Tarefa implements Serializable {
 		tarefa.setHorarioVeraoId(null);
 		tarefa.setAjustesBioId(null);
 		tarefa.setConfigurcacoesWebServerId(null);
+		tarefa.setColetaDumpingId(null);
 		return tarefa;
 
 	}
 
-	public static Tarefa padraoTeste() {
-
-		Tarefa tarefa = new Tarefa();
-		tarefa.setCpf(CONSTANTES.CPF_TESTE);
-		tarefa.setTipoOperacao(CONSTANTES.TIPO_OPERACAO.RECEBER.ordinal());
-
-		return tarefa;
-	}
-
+	
 }

@@ -139,5 +139,11 @@ public class BiometriaService extends ApiService {
 		return map;
 	}
 
+	public ListaBio getListaBio(Rep rep) {
+		if (BiometriaService.LISTA_BIO.containsKey(rep.getNumeroSerie())) {
+			return BiometriaService.LISTA_BIO.get(rep.getNumeroSerie());
+		}
+		return null;
+	}
 
 }
