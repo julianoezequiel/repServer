@@ -65,10 +65,13 @@ public class RepService {
 		if (repDTO.getNumeroSerie() == null) {
 			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série obrigatório");
 		}
+		try {
+			Rep repTeste = this.buscarPorNumeroSerie(repDTO.getNumeroSerie());
+			if (repTeste != null && repTeste.getId() != repDTO.getId()) {
+				throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série já cadastrado");
+			}
+		} catch (ServiceException e) {
 
-		Rep repTeste = this.buscarPorNumeroSerie(repDTO.getNumeroSerie());
-		if (repTeste != null && repTeste.getId() != repDTO.getId()) {
-			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série já cadastrado");
 		}
 
 		ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
