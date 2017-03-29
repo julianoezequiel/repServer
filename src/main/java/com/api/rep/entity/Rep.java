@@ -85,7 +85,7 @@ public class Rep implements Serializable {
 
 	@JoinColumn(name = "configuracoes_senha_id", referencedColumnName = "id")
 	@ManyToOne
-	private ConfiguracoesSenha configurcacoesSenhaId;
+	private ConfiguracoesSenha configuracoesSenhaId;
 
 	@JoinColumn(name = "configuracoes_cartoes_id", referencedColumnName = "id")
 	@ManyToOne
@@ -115,9 +115,9 @@ public class Rep implements Serializable {
 	@ManyToOne
 	private AjustesBio ajustesBioId;
 
-	@JoinColumn(name = "configurcacoes_webServer_id", referencedColumnName = "id")
+	@JoinColumn(name = "configuracoes_webServer_id", referencedColumnName = "id")
 	@ManyToOne
-	private ConfigurcacoesWebServer configurcacoesWebServerId;
+	private ConfiguracoesWebServer configuracoesWebServerId;
 
 	private Integer ultimoNsr = 0;
 
@@ -174,12 +174,12 @@ public class Rep implements Serializable {
 		this.tarefaCollection = tarefaCollection;
 	}
 
-	public synchronized ConfiguracoesSenha getConfigurcacoesSenhaId() {
-		return configurcacoesSenhaId;
+	public synchronized ConfiguracoesSenha getConfiguracoesSenhaId() {
+		return configuracoesSenhaId;
 	}
 
-	public synchronized void setConfigurcacoesSenhaId(ConfiguracoesSenha configurcacoesSenhaId) {
-		this.configurcacoesSenhaId = configurcacoesSenhaId;
+	public synchronized void setConfiguracoesSenhaId(ConfiguracoesSenha configurcacoesSenhaId) {
+		this.configuracoesSenhaId = configurcacoesSenhaId;
 	}
 
 	public static synchronized long getSerialversionuid() {
@@ -333,12 +333,12 @@ public class Rep implements Serializable {
 		this.status = status;
 	}
 
-	public synchronized ConfigurcacoesWebServer getConfigurcacoesWebServerId() {
-		return configurcacoesWebServerId;
+	public synchronized ConfiguracoesWebServer getConfiguracoesWebServerId() {
+		return configuracoesWebServerId;
 	}
 
-	public synchronized void setConfigurcacoesWebServerId(ConfigurcacoesWebServer configurcacoesWebServerId) {
-		this.configurcacoesWebServerId = configurcacoesWebServerId;
+	public synchronized void setConfiguracoesWebServerId(ConfiguracoesWebServer configurcacoesWebServerId) {
+		this.configuracoesWebServerId = configurcacoesWebServerId;
 	}
 
 	public RepMonitor toRepStatus() {

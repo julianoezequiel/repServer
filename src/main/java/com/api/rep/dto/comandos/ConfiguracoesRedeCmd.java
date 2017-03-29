@@ -162,7 +162,7 @@ public class ConfiguracoesRedeCmd implements Cmd {
 		configuracoesRede.setPortaRep(this.cfgRPortRep);
 		configuracoesRede.setPortaServidor(this.cfgRPortServ);
 		configuracoesRede.setRepInicia(this.cfgRRepIn);
-		configuracoesRede.setIntervaloComNuvem(this.cfgRNInt);
+		configuracoesRede.setIntervaloComunicacaoNuvem(this.cfgRNInt);
 
 		return configuracoesRede;
 	}

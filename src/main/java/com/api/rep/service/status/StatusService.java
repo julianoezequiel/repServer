@@ -1,37 +1,35 @@
+/**
+ *******************************************************************************
+ * Exemplo Comunicação HTTP
+ *
+ * Desenvolvido em Java 1.8
+ *
+ * Topdata Sistemas de Automação Ltda.
+ * ******************************************************************************
+ */
 package com.api.rep.service.status;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.api.rep.contantes.CONSTANTES;
-import com.api.rep.contantes.CONSTANTES.TIPO_OPERACAO;
-import com.api.rep.dao.ColetaRepository;
-import com.api.rep.dao.ConfiguracoesRedeRepository;
-import com.api.rep.dao.NsrRepository;
 import com.api.rep.dto.comunicacao.ComandoDeEnvio;
 import com.api.rep.dto.comunicacao.RespostaRepDTO;
 import com.api.rep.dto.comunicacao.RespostaSevidorDTO;
 import com.api.rep.dto.comunicacao.StatusDTO;
-import com.api.rep.entity.Coleta;
-import com.api.rep.entity.ConfiguracoesRede;
-import com.api.rep.entity.Nsr;
 import com.api.rep.entity.Rep;
 import com.api.rep.entity.Tarefa;
 import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.comandos.CmdHandler;
 import com.api.rep.service.comandos.ColetaService;
+import com.api.rep.service.comandos.ConfiguracaoService;
 import com.api.rep.service.rep.RepService;
 import com.api.rep.service.tarefa.TarefaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,16 +37,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @Service
 public class StatusService extends ApiService {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(StatusService.class.getName());
-
 	@Autowired
-	private NsrRepository nsrRepository;
-
-	@Autowired
-	private ColetaRepository coletaRepository;
-
-	@Autowired
-	private ConfiguracoesRedeRepository configuracoesRedeRepository;
+	private ConfiguracaoService configuracaoService;
 
 	@Autowired
 	private RepService repService;
@@ -69,58 +59,44 @@ public class StatusService extends ApiService {
 	Boolean coletaConfig;
 
 	/**
+	 * Valida as informações enviados pelo status do Rep
+	 * 
 	 * @param status
 	 * @param rep
 	 * @return
 	 * @throws ServiceException
 	 * @throws JsonProcessingException
 	 */
-	public ComandoDeEnvio validarStatus(HttpServletRequest request, StatusDTO status, Rep rep) throws ServiceException {
+	public ComandoDeEnvio validarStatus(HttpServletRequest request, StatusDTO status, Rep rep)
+			throws ServiceException, JsonProcessingException {
 
 		rep = validarDadosEntrada(status, rep);
 
 		atualizarStatus(rep, request);
 
-		// agendamento auto das configuracoes estiver habilitada
+		// agendamento auto das configuracoes
 		if (coletaConfig) {
-			agendarReceberConfiguracao(rep, status);
+			this.configuracaoService.validarAlteracoesConfiguracoes(rep, status);
 		}
-		// agendamento auto da coleta estiver habilitada
+		// agendamento auto da coleta
 		if (coletaAuto) {
-			agendarReceberColeta(rep, status);
+			this.tarefaService.agendarReceberColeta(rep, status);
 		}
 
-		// retorna a ultima Tarefa para o rep
+		// retorna a próxima Tarefa para o rep
 		return proximaTarefa(rep);
 
 	}
 
-	public Collection<ComandoDeEnvio> buscarTarefas(Rep rep) {
-
-		if (rep != null && rep.getNumeroSerie() != null) {
-			rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
-		}
-
-		Collection<ComandoDeEnvio> tarefasList = new ArrayList<>();
-
-		if (rep != null && !rep.getTarefaCollection().isEmpty()) {
-			rep.getTarefaCollection().stream().forEach(r -> {
-				tarefasList.add(r.toComandoDeEnvio());
-			});
-
-			return tarefasList;
-
-		} else {
-			return null;
-		}
-	}
-
-	public Collection<Tarefa> buscarTarefas() {
-		return this.getTarefaRepository().findAll();
-	}
-
-	// busca a ultima Tarefa para Rep executar
-	public ComandoDeEnvio proximaTarefa(Rep rep) throws ServiceException {
+	/**
+	 * busca a próxima Tarefa para Rep executar
+	 * 
+	 * @param rep
+	 * @return
+	 * @throws ServiceException
+	 * @throws JsonProcessingException
+	 */
+	public ComandoDeEnvio proximaTarefa(Rep rep) throws ServiceException, JsonProcessingException {
 
 		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
 
@@ -130,6 +106,7 @@ public class StatusService extends ApiService {
 		if (dto != null) {
 			LOGGER.info("Tarefa NSU : {} - Tipo Tarefa : {} - Operação : {}", new Object[] { dto.getNsu(),
 					CmdHandler.TIPO_CMD.get(dto.gettCmd()), CONSTANTES.TIPO_OPERACAO.get(dto.gettOp()) });
+			LOGGER.info("Dados do comando - " + this.getMapper().writeValueAsString(dto.getdCmd()));
 			LOGGER.info("------------------------");
 			return dto;
 		} else {
@@ -141,6 +118,14 @@ public class StatusService extends ApiService {
 		}
 	}
 
+	/**
+	 * Valida os dados recebido pelo status
+	 * 
+	 * @param status
+	 * @param rep
+	 * @return
+	 * @throws ServiceException
+	 */
 	private Rep validarDadosEntrada(StatusDTO status, Rep rep) throws ServiceException {
 		if (status == null || status.getUltimoNsr() == null || status.getUltimoNsr() == null) {
 			throw new ServiceException(HttpStatus.PARTIAL_CONTENT, "Status inválido");
@@ -157,69 +142,16 @@ public class StatusService extends ApiService {
 
 	}
 
-	private void agendarReceberConfiguracao(Rep rep, StatusDTO status) {
-		// TODO : colocar o tipo especifico de configurações
-		if (status.getConfig() == true) {
-
-			List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
-
-			ConfiguracoesRede configuracoesRede = new ConfiguracoesRede();
-			Tarefa tarefa = tarefaList.stream().filter(
-					p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.CONFIG_SENHA.ordinal())
-							&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
-					.findFirst().orElse(new Tarefa());
-
-			// se ja existe uma Tarefa do tipo ConfiguracoesRede, não agenda
-			// //
-			// outra solicitação
-			if (tarefa.getColetaId() == null) {
-				tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
-				tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.CONFIG_SENHA.ordinal());
-				tarefa.setConfiguracoesRedeId(this.configuracoesRedeRepository.save(configuracoesRede));
-				tarefa.setRepId(rep);
-				this.getTarefaRepository().save(tarefa);
-			}
-		}
-	}
-
-	private void agendarReceberColeta(Rep rep, StatusDTO status) {
-
-		// ultimo Nsr
-		Nsr ultimoNsrColetado = this.nsrRepository.buscarUltimoNsr(rep.getId()); //
-
-		if (ultimoNsrColetado == null) {
-			ultimoNsrColetado = new Nsr();
-			ultimoNsrColetado.setNumeroNsr(status.getUltimoNsr() > 500 ? status.getUltimoNsr() - 500 : 0);
-		} else if (ultimoNsrColetado.getNumeroNsr() + 500 < status.getUltimoNsr()) {
-			ultimoNsrColetado.setNumeroNsr(status.getUltimoNsr() - 500);
-		}
-
-		if (ultimoNsrColetado.getNumeroNsr() < status.getUltimoNsr()) {
-
-			List<Tarefa> tarefaList = this.getTarefaRepository().buscarPorRep(rep);
-
-			Tarefa tarefa = tarefaList.stream()
-					.filter(p -> p.getNsu() != null && (p.getTipoTarefa().equals(CmdHandler.TIPO_CMD.COLETA.ordinal())
-							&& p.getTipoOperacao().equals(TIPO_OPERACAO.RECEBER.ordinal())))
-					.findFirst().orElse(new Tarefa());
-			// se ja existe uma Tarefa do tipo coleta, atualiza o range
-			// de coleta
-			if (tarefa.getColetaId() != null) {
-				tarefa.getColetaId().setColetaNsrInicio(ultimoNsrColetado.getNumeroNsr());
-				tarefa.getColetaId().setColetaNsrFim(status.getUltimoNsr());
-			} else {
-				tarefa.setRepId(rep);
-				tarefa.setColetaId(this.coletaRepository
-						.save(new Coleta(ultimoNsrColetado.getNumeroNsr(), status.getUltimoNsr())));
-				tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.COLETA.ordinal());
-				tarefa.setTipoOperacao(TIPO_OPERACAO.RECEBER.ordinal());
-			}
-
-			this.getTarefaRepository().save(tarefa);
-		}
-	}
-
-	public RespostaSevidorDTO validarRespostaRep(RespostaRepDTO respostaRep, Rep repAutenticado) {
+	/**
+	 * Valida o resultado de uma tarefa executada pelo Rep
+	 * 
+	 * @param respostaRep
+	 * @param repAutenticado
+	 * @return
+	 * @throws ServiceException
+	 */
+	public RespostaSevidorDTO validarRespostaRep(RespostaRepDTO respostaRep, Rep repAutenticado)
+			throws ServiceException {
 		RespostaSevidorDTO respostaSevidorDTO = new RespostaSevidorDTO();
 		// se existe um NSU
 		if (respostaRep.getNSU() != null && !respostaRep.getStatus().isEmpty()) {

@@ -15,6 +15,7 @@ public class CONSTANTES {
 	public static final String URL_BIOMETRIA = "/restrict/empregado/bio";
 	public static final String URL_BIOMETRIA_AJUSTES = "/restrict/empregado/ajustes";
 	public static final String URL_LISTA_BIOMETRIA = "/restrict/empregado/listabio";
+	public static final String URL_LISTA_BIOMETRIA_COM_DIGITAIS = "/restrict/empregado/lista/digitais";
 	public static final String URL_VERIFICAR_BIO = "/restrict/verificarbio";
 	public static final String URL_CONFIG_SENHA = "/restrict/config/senha";
 	public static final String URL_CONFIG_CARTOES = "/restrict/config/cartoes";
@@ -31,6 +32,7 @@ public class CONSTANTES {
 	public static final String URL_AUTH = "/auth";
 	public static final String URL_STATUS = "/restrict/status";
 	public static final String URL_AUTH_SIGN = "/auth/sign";
+	
 	
 	public enum TIPO_OPERACAO {
 		NENHUMA, // 0

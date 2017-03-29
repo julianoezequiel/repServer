@@ -23,7 +23,7 @@ public class Utils {
 		c.set(Calendar.DAY_OF_MONTH, dia);
 		c.set(Calendar.MONTH, mes - 1);
 		c.set(Calendar.YEAR, ano);
-//		LOGGER.info("Data : " + dateFormat.format(c.getTime()));
+		// LOGGER.info("Data : " + dateFormat.format(c.getTime()));
 		return c.getTime();
 	}
 
@@ -34,7 +34,7 @@ public class Utils {
 		Calendar c = Calendar.getInstance();
 		c.set(Calendar.HOUR_OF_DAY, hora);
 		c.set(Calendar.MINUTE, minutos);
-//		LOGGER.info("Hora : " + timeFormat.format(c.getTime()));
+		// LOGGER.info("Hora : " + timeFormat.format(c.getTime()));
 		return c.getTime();
 	}
 

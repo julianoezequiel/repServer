@@ -9,22 +9,22 @@ package com.api.rep.dto.comunicacao;
 public class StatusDTO {
 
 	private Integer ultimoNsr;
-	private Boolean config;
-
-	public Boolean getConfig() {
-		return config;
-	}
+	private Integer config;
 
 	public Integer getUltimoNsr() {
 		return ultimoNsr;
 	}
 
-	public void setConfig(Boolean config) {
-		this.config = config;
-	}
-
 	public void setUltimoNsr(Integer ultimoNsr) {
 		this.ultimoNsr = ultimoNsr;
+	}
+
+	public synchronized Integer getConfig() {
+		return config;
+	}
+
+	public synchronized void setConfig(Integer config) {
+		this.config = config;
 	}
 
 }

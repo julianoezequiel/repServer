@@ -15,7 +15,7 @@ public class CmdHandler {
 
 		CMD_NENHUM() {// 0
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return null;
 			}
 
@@ -29,7 +29,7 @@ public class CmdHandler {
 		},
 		EMPREGADOR() {// 1
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_EMPREGADOR;
 			}
 
@@ -43,7 +43,7 @@ public class CmdHandler {
 		},
 		EMPREGADO() {// 2
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_EMPREGADO;
 			}
 
@@ -57,7 +57,7 @@ public class CmdHandler {
 		},
 		LISTA_EMPREGADO() {// 3
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_LISTA_EMPREGADO;
 			}
 
@@ -71,7 +71,7 @@ public class CmdHandler {
 		},
 		LISTA_EMPREGADO_DUMP() {// 4
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_LISTA_EMPREGADO_DUMPING;
 			}
 
@@ -85,7 +85,7 @@ public class CmdHandler {
 		},
 		COLETA() {// 5
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_COLETA;
 			}
 
@@ -99,7 +99,7 @@ public class CmdHandler {
 		},
 		COLETA_DUMPING() {// 5
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_COLETA_DUMPING;
 			}
 
@@ -113,7 +113,7 @@ public class CmdHandler {
 		},
 		BIOMETRIA() {// 6
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_BIOMETRIA;
 			}
 
@@ -127,8 +127,14 @@ public class CmdHandler {
 		},
 		LISTA_BIO() {// 7 pis dos funcionario bio
 			@Override
-			public String getUrl() {
-				return CONSTANTES.URL_LISTA_BIOMETRIA;
+			public String getUrl(int tipo) {
+				if (tipo == 1) {
+					return CONSTANTES.URL_LISTA_BIOMETRIA;
+				} else if (tipo == 2) {
+					return CONSTANTES.URL_LISTA_BIOMETRIA_COM_DIGITAIS;
+				} else {
+					return null;
+				}
 			}
 
 			@Override
@@ -142,7 +148,7 @@ public class CmdHandler {
 		VERIFICA_LISTA_BIO() {// 8
 
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				// TODO Auto-generated method stub
 				return CONSTANTES.URL_VERIFICAR_BIO;
 			}
@@ -158,7 +164,7 @@ public class CmdHandler {
 		CONFIG_BIO() {// 9
 
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_BIOMETRIA_AJUSTES;
 			}
 
@@ -172,7 +178,7 @@ public class CmdHandler {
 		},
 		CONFIG_SENHA() {// 10
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_CONFIG_SENHA;
 			}
 
@@ -186,7 +192,7 @@ public class CmdHandler {
 		},
 		CONFIG_REDE() {// 11
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_CONFIG_REDE;
 			}
 
@@ -200,7 +206,7 @@ public class CmdHandler {
 		},
 		CONFIG_CARTOES() {// 12
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_CONFIG_CARTOES;
 			}
 
@@ -214,7 +220,7 @@ public class CmdHandler {
 		},
 		CONFIG_HORARIO_VERAO() {// 13
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_CONFIG_HORARIO_VERAO;
 			}
 
@@ -228,7 +234,7 @@ public class CmdHandler {
 		},
 		CONFIG_RELOGIO() {// 14
 			@Override
-			public String getUrl() {
+			public String getUrl(int tpo) {
 				return CONSTANTES.URL_RELOGIO;
 			}
 
@@ -243,7 +249,7 @@ public class CmdHandler {
 		CONFIG_WEB_SERVER() {// 15
 
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				// TODO Auto-generated method stub
 				return CONSTANTES.URL_CONFIG_WEB_SERVER;
 			}
@@ -258,7 +264,7 @@ public class CmdHandler {
 		},
 		INFO() {// 16
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_INFO;
 			}
 
@@ -272,7 +278,7 @@ public class CmdHandler {
 		},
 		IDENTFICACAO() {// 17
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_IDENTFICACAO;
 			}
 
@@ -286,7 +292,7 @@ public class CmdHandler {
 		},
 		ATUALIZACAO_FW() {// 18
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_ATUALIZACAO_FW;
 			}
 
@@ -300,7 +306,7 @@ public class CmdHandler {
 		},
 		ATUALIZACAO_PAGINAS() {// 19
 			@Override
-			public String getUrl() {
+			public String getUrl(int tipo) {
 				return CONSTANTES.URL_ATUALIZACAO_PAGINAS;
 			}
 
@@ -324,7 +330,7 @@ public class CmdHandler {
 			return null;
 		}
 
-		public abstract String getUrl();
+		public abstract String getUrl(int tpo);
 
 		public abstract RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado,
 				ApiService apiService);

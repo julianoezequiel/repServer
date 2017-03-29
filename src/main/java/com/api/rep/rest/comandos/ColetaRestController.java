@@ -50,7 +50,7 @@ public class ColetaRestController extends ApiRestController {
 	@RequestMapping(value = "coleta/total/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<?> total(@PathVariable("numSerie") String numSerie) throws ServiceException {
 		HashMap<String, Long> total = new HashMap<>();
-		total.put("Total", this.coletaService.total(this.getRep(numSerie)));
+		total.put("Total", this.coletaService.total(this.buscarRepPorNumSerie(numSerie)));
 		return new ResponseEntity<HashMap<String, Long>>(total, HttpStatus.OK);
 	}
 
@@ -63,7 +63,7 @@ public class ColetaRestController extends ApiRestController {
 	@RequestMapping(value = "coleta/cancelar/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<?> cancelar(@PathVariable("numSerie") String numSerie) throws ServiceException {
 		HashMap<String, Boolean> total = new HashMap<>();
-		total.put("ColetaCmd cancelada", this.coletaService.cancelar(this.getRep(numSerie)));
+		total.put("ColetaCmd cancelada", this.coletaService.cancelar(this.buscarRepPorNumSerie(numSerie)));
 		return new ResponseEntity<HashMap<String, Boolean>>(total, HttpStatus.OK);
 	}
 

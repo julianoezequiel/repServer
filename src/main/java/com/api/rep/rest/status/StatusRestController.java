@@ -24,6 +24,7 @@ import com.api.rep.entity.Tarefa;
 import com.api.rep.rest.ApiRestController;
 import com.api.rep.service.ServiceException;
 import com.api.rep.service.status.StatusService;
+import com.api.rep.service.tarefa.TarefaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
@@ -42,6 +43,9 @@ public class StatusRestController extends ApiRestController {
 
 	@Autowired
 	private HttpServletRequest request;
+
+	@Autowired
+	private TarefaService tarefaService;
 
 	/**
 	 * O Rep envia periodicamente o comando de status, atravez do método POST.
@@ -89,8 +93,8 @@ public class StatusRestController extends ApiRestController {
 	@RequestMapping(value = "tarefas/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<Collection<ComandoDeEnvio>> listar(@PathVariable("numSerie") String numSerie)
 			throws ServiceException, JsonProcessingException {
-		return new ResponseEntity<Collection<ComandoDeEnvio>>(this.statusService.buscarTarefas(this.getRep(numSerie)),
-				HttpStatus.OK);
+		return new ResponseEntity<Collection<ComandoDeEnvio>>(
+				this.tarefaService.buscarTarefas(this.buscarRepPorNumSerie(numSerie)), HttpStatus.OK);
 	}
 
 }

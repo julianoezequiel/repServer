@@ -51,8 +51,12 @@ public class RepService {
 		return this.repRepository.findAll();
 	}
 
-	public Rep buscarPorNumeroSerie(String numSerie) {
-		return this.repRepository.buscarPorNumeroSerie(numSerie);
+	public Rep buscarPorNumeroSerie(String numSerie) throws ServiceException {
+		Rep rep = this.repRepository.buscarPorNumeroSerie(numSerie);
+		if (rep == null) {
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não encontrado");
+		}
+		return rep;
 	}
 
 	// inclui um rep na base

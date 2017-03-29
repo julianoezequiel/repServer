@@ -77,8 +77,10 @@ public class ColetaService extends ApiService {
 			}
 		}
 		if (nsr != null && nsr.getNumeroNsr() != null) {
-			rep.setUltimoNsr(nsr.getNumeroNsr());
-			this.getRepService().salvar(rep);
+			if (nsr.getNumeroNsr() > rep.getUltimoNsr()) {
+				rep.setUltimoNsr(nsr.getNumeroNsr());
+				this.getRepService().salvar(rep);
+			}
 		}
 	}
 

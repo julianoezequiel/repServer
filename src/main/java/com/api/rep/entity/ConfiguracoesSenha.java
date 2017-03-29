@@ -25,11 +25,11 @@ public class ConfiguracoesSenha {
 	private Integer id;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "configurcacoesSenhaId")
+	@OneToMany(mappedBy = "configuracoesSenhaId")
 	private Collection<Tarefa> tarefaCollection;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "configurcacoesSenhaId")
+	@OneToMany(mappedBy = "configuracoesSenhaId")
 	private Collection<Rep> repCollection;
 
 	private String senhaConfig;

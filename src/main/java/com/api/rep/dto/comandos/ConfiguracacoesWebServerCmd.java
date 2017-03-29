@@ -1,6 +1,6 @@
 package com.api.rep.dto.comandos;
 
-import com.api.rep.entity.ConfigurcacoesWebServer;
+import com.api.rep.entity.ConfiguracoesWebServer;
 
 public class ConfiguracacoesWebServerCmd implements Cmd {
 
@@ -41,12 +41,12 @@ public class ConfiguracacoesWebServerCmd implements Cmd {
 		this.cfgWP80 = cfgWP80;
 	}
 
-	public ConfigurcacoesWebServer toConfigurcacoesWebServer() {
-		ConfigurcacoesWebServer configurcacoesWebServer = new ConfigurcacoesWebServer();
-		configurcacoesWebServer.setIpSeguro(cfgWIPS);
-		configurcacoesWebServer.setTipoConfig(cfgWTpCfg);
-		configurcacoesWebServer.setHabilitaPorta80(cfgWP80);
-		return configurcacoesWebServer;
+	public ConfiguracoesWebServer toConfigurcacoesWebServer() {
+		ConfiguracoesWebServer configuracoesWebServer = new ConfiguracoesWebServer();
+		configuracoesWebServer.setIpSeguro(cfgWIPS);
+		configuracoesWebServer.setTipoConfig(cfgWTpCfg);
+		configuracoesWebServer.setHabilitaPorta80(cfgWP80);
+		return configuracoesWebServer;
 	}
 
 }

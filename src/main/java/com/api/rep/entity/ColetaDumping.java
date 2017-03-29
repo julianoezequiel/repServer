@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
-import com.api.rep.dto.comandos.ColetaDumpingCmd;
+import com.api.rep.dto.comandos.ColetaDumpCmd;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -47,8 +47,8 @@ public class ColetaDumping {
 		this.enderecoFim = enderecoFim;
 	}
 
-	public ColetaDumpingCmd toColetaDumpingCmd() {
-		ColetaDumpingCmd cmd = new ColetaDumpingCmd();
+	public ColetaDumpCmd toColetaDumpingCmd() {
+		ColetaDumpCmd cmd = new ColetaDumpCmd();
 		cmd.setcDEndFim(enderecoFim);
 		cmd.setcDEndIni(enderecoInicio);
 		return cmd;

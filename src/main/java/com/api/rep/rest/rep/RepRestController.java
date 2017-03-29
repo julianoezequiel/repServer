@@ -50,9 +50,10 @@ public class RepRestController {
 	 * 
 	 * @param id
 	 * @return
+	 * @throws ServiceException 
 	 */
 	@RequestMapping(value = "{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
-	public ResponseEntity<RepDTO> buscar(@PathVariable("numSerie") String numSerie) {
+	public ResponseEntity<RepDTO> buscar(@PathVariable("numSerie") String numSerie) throws ServiceException {
 		return new ResponseEntity<RepDTO>(new RepDTO(this.repService.buscarPorNumeroSerie(numSerie)), HttpStatus.OK);
 	}
 
@@ -88,7 +89,7 @@ public class RepRestController {
 	 * Exclui um Rep pelo id
 	 * 
 	 * @param id
-	 * @return
+	 * @return {@link RepDTO}
 	 * @throws ServiceException
 	 */
 	@RequestMapping(value = "{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)

@@ -69,7 +69,7 @@ public class ApiRestController {
 		return rep;
 	}
 
-	public Rep getRep(String numSerie) throws ServiceException {
+	public Rep buscarRepPorNumSerie(String numSerie) throws ServiceException {
 		Rep rep = this.repService.buscarPorNumeroSerie(numSerie);
 		if (rep == null) {
 			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não encontrado");

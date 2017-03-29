@@ -43,7 +43,7 @@ public class ComandoDeEnvio implements Serializable {
 		super();
 		this.tOp = CONSTANTES.TIPO_OPERACAO.get(tarefa.getTipoOperacao()).ordinal();
 		this.nsu = tarefa.getNsu();
-		this.url = CmdHandler.TIPO_CMD.get(tarefa.getTipoTarefa()).getUrl();
+		this.url = CmdHandler.TIPO_CMD.get(tarefa.getTipoTarefa()).getUrl(tarefa.getTipoUrl());
 	}
 
 	public Integer getNsu() {

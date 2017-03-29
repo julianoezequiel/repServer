@@ -84,7 +84,22 @@ public class BiometriaRestController extends ApiRestController {
 	@RequestMapping(value = "listabio/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<?> receberListaBio(@PathVariable("numSerie") String numSerie)
 			throws ServiceException, JsonProcessingException {
-		return new ResponseEntity<ListaBio>(this.biometriaService.getListaBio(this.getRep(numSerie)), HttpStatus.OK);
+		return new ResponseEntity<ListaBio>(this.biometriaService.getListaBio(this.buscarRepPorNumSerie(numSerie)), HttpStatus.OK);
+	}
+	
+	/**
+	 * recebe do Rep a lista de usuário que possuem biometria e agenda o recebimento das digitais de todos os usuário
+	 * 
+	 * @param listaBio
+	 * @return
+	 * @throws ServiceException
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value = CONSTANTES.URL_LISTA_BIOMETRIA_COM_DIGITAIS, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
+	public ResponseEntity<?> receberListaBioAgendarDigitais(@RequestBody ListaBio listaBio)
+			throws ServiceException, JsonProcessingException {
+		this.biometriaService.receberListaBioAgendarDigitais(listaBio, this.getRepAutenticado());
+		return new ResponseEntity<RespostaSevidorDTO>(HttpStatus.OK);
 	}
 
 }

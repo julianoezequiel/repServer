@@ -58,6 +58,7 @@ public class Tarefa implements Serializable {
 	private Integer[] status;
 
 	private Integer tentativas = 0;
+	private Integer tipoUrl;
 
 	@Column(name = "cpf")
 	private String cpf;
@@ -85,7 +86,7 @@ public class Tarefa implements Serializable {
 
 	@JoinColumn(name = "configuracoes_senha_id", referencedColumnName = "id")
 	@ManyToOne
-	private ConfiguracoesSenha configurcacoesSenhaId;
+	private ConfiguracoesSenha configuracoesSenhaId;
 
 	@JoinColumn(name = "configuracoes_cartoes_id", referencedColumnName = "id")
 	@ManyToOne
@@ -103,13 +104,21 @@ public class Tarefa implements Serializable {
 	@ManyToOne
 	private AjustesBio ajustesBioId;
 
-	@JoinColumn(name = "configurcacoes_webServer_id", referencedColumnName = "id")
+	@JoinColumn(name = "configuracoes_webServer_id", referencedColumnName = "id")
 	@ManyToOne
-	private ConfigurcacoesWebServer configurcacoesWebServerId;
+	private ConfiguracoesWebServer configuracoesWebServerId;
 
 	@JoinColumn(name = "coleta_dumping_id", referencedColumnName = "id")
 	@ManyToOne
 	private ColetaDumping coletaDumpingId;
+
+	public synchronized Integer getTipoUrl() {
+		return tipoUrl;
+	}
+
+	public synchronized void setTipoUrl(Integer tipoUrl) {
+		this.tipoUrl = tipoUrl;
+	}
 
 	public Tarefa() {
 	}
@@ -193,12 +202,12 @@ public class Tarefa implements Serializable {
 		this.empregadorId = empregadorId;
 	}
 
-	public ConfiguracoesSenha getConfigurcacoesSenhaId() {
-		return configurcacoesSenhaId;
+	public ConfiguracoesSenha getConfiguracoesSenhaId() {
+		return configuracoesSenhaId;
 	}
 
-	public void setConfigurcacoesSenhaId(ConfiguracoesSenha configurcacoesSenha) {
-		this.configurcacoesSenhaId = configurcacoesSenha;
+	public void setConfiguracoesSenhaId(ConfiguracoesSenha configurcacoesSenha) {
+		this.configuracoesSenhaId = configurcacoesSenha;
 	}
 
 	public ConfiguracoesCartoes getConfiguracoesCartoesId() {
@@ -237,12 +246,12 @@ public class Tarefa implements Serializable {
 		this.ajustesBioId = ajustesBioId;
 	}
 
-	public synchronized ConfigurcacoesWebServer getConfigurcacoesWebServerId() {
-		return configurcacoesWebServerId;
+	public synchronized ConfiguracoesWebServer getConfiguracoesWebServerId() {
+		return configuracoesWebServerId;
 	}
 
-	public synchronized void setConfigurcacoesWebServerId(ConfigurcacoesWebServer configurcacoesWebServerId) {
-		this.configurcacoesWebServerId = configurcacoesWebServerId;
+	public synchronized void setConfiguracoesWebServerId(ConfiguracoesWebServer configurcacoesWebServerId) {
+		this.configuracoesWebServerId = configurcacoesWebServerId;
 	}
 
 	public synchronized Integer getTentativas() {
@@ -305,7 +314,7 @@ public class Tarefa implements Serializable {
 			dto.settOp(CONSTANTES.TIPO_OPERACAO.get(this.tipoOperacao).ordinal());
 		}
 		if (this.tipoTarefa != null) {
-			dto.setUrl(CmdHandler.TIPO_CMD.get(this.tipoTarefa).getUrl());
+			dto.setUrl(CmdHandler.TIPO_CMD.get(this.tipoTarefa).getUrl(tipoUrl == null ? 0 : tipoUrl));
 			dto.settCmd(CmdHandler.TIPO_CMD.get(this.tipoTarefa).ordinal());
 		}
 		dto.setCpf(cpf);
@@ -331,16 +340,16 @@ public class Tarefa implements Serializable {
 			return this.empregadorId.toEmpregadorDTO();
 		} else if (this.configuracoesCartoesId != null) {
 			return this.configuracoesCartoesId.toConfiguracoesCartoesCmd();
-		} else if (this.configurcacoesSenhaId != null) {
-			return this.configurcacoesSenhaId.toConfiguracaoCmd();
+		} else if (this.configuracoesSenhaId != null) {
+			return this.configuracoesSenhaId.toConfiguracaoCmd();
 		} else if (this.relogioId != null) {
 			return this.relogioId.toRelogioCmd();
 		} else if (this.horarioVeraoId != null) {
 			return this.horarioVeraoId.toHorarioVeraoCmd();
 		} else if (this.ajustesBioId != null) {
 			return this.ajustesBioId.toAjustesBioCmd();
-		} else if (this.configurcacoesWebServerId != null) {
-			return this.configurcacoesWebServerId.toConfigurcacoesWebServer();
+		} else if (this.configuracoesWebServerId != null) {
+			return this.configuracoesWebServerId.toConfigurcacoesWebServer();
 		} else if (this.coletaDumpingId != null) {
 			return this.coletaDumpingId.toColetaDumpingCmd();
 		} else {
@@ -355,15 +364,14 @@ public class Tarefa implements Serializable {
 		tarefa.setEmpregadorId(null);
 		tarefa.setRepId(null);
 		tarefa.setConfiguracoesCartoesId(null);
-		tarefa.setConfigurcacoesSenhaId(null);
+		tarefa.setConfiguracoesSenhaId(null);
 		tarefa.setRelogioId(null);
 		tarefa.setHorarioVeraoId(null);
 		tarefa.setAjustesBioId(null);
-		tarefa.setConfigurcacoesWebServerId(null);
+		tarefa.setConfiguracoesWebServerId(null);
 		tarefa.setColetaDumpingId(null);
 		return tarefa;
 
 	}
 
-	
 }

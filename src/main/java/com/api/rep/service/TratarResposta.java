@@ -29,7 +29,7 @@ public class TratarResposta {
 		return tarefaRepository;
 	}
 
-	public RespostaSevidorDTO validarRespostaRep(RespostaRepDTO respostaRep, Rep repAutenticado) {
+	public RespostaSevidorDTO validarRespostaRep(RespostaRepDTO respostaRep, Rep repAutenticado) throws ServiceException {
 		RespostaSevidorDTO respostaSevidorDTO = new RespostaSevidorDTO();
 		// se existe um NSU
 		if (respostaRep.getNSU() != null && !respostaRep.getStatus().isEmpty()) {

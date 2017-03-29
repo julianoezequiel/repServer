@@ -45,7 +45,7 @@ public class ConfiguracoesRede {
 	private String nomeHost;
 	private Integer[] ipDns;
 	private Integer habilitaDhcp;
-	private Integer intervaloComNuvem;
+	private Integer intervaloComunicacaoNuvem;
 
 	public synchronized Integer getId() {
 		return id;
@@ -183,12 +183,12 @@ public class ConfiguracoesRede {
 		this.habilitaDhcp = habilitaDhcp;
 	}
 
-	public synchronized Integer getIntervaloComNuvem() {
-		return intervaloComNuvem;
+	public synchronized Integer getIntervaloComunicacaoNuvem() {
+		return intervaloComunicacaoNuvem;
 	}
 
-	public synchronized void setIntervaloComNuvem(Integer intervaloComNuvem) {
-		this.intervaloComNuvem = intervaloComNuvem;
+	public synchronized void setIntervaloComunicacaoNuvem(Integer intervaloComNuvem) {
+		this.intervaloComunicacaoNuvem = intervaloComNuvem;
 	}
 
 	public ConfiguracoesRedeCmd toConfiguracoesRedeCmd() {
@@ -196,7 +196,7 @@ public class ConfiguracoesRede {
 
 		configuracoesRedeCmd.setCfgRDhcp(this.habilitaDhcp);
 		configuracoesRedeCmd.setCfgRGat(this.gateway);
-		configuracoesRedeCmd.setCfgRTpDns(this.habilitaDhcp);
+		configuracoesRedeCmd.setCfgRTpDns(this.tipoDns);
 		configuracoesRedeCmd.setCfgRIntCom(this.intervaloCom);
 		configuracoesRedeCmd.setCfgRIpDns(this.ipDns);
 		configuracoesRedeCmd.setCfgRIpRep(this.ipRep);
@@ -208,7 +208,7 @@ public class ConfiguracoesRede {
 		configuracoesRedeCmd.setCfgRPortRep(this.portaRep);
 		configuracoesRedeCmd.setCfgRPortServ(this.portaServidor);
 		configuracoesRedeCmd.setCfgRRepIn(this.repInicia);
-		configuracoesRedeCmd.setCfgRNInt(this.intervaloComNuvem);
+		configuracoesRedeCmd.setCfgRNInt(this.intervaloComunicacaoNuvem);
 
 		return configuracoesRedeCmd;
 	}
