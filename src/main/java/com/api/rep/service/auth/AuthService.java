@@ -39,7 +39,6 @@ public class AuthService extends ApiService {
 			throw new ServiceException(HttpStatus.UNAUTHORIZED);
 		}
 
-		
 		LOGGER.info("Rep assinatura : " + repDTO.getSign());
 		// Campo obrigatório
 		if (repDTO == null || repDTO.getNumeroSerie() == null) {
@@ -72,7 +71,9 @@ public class AuthService extends ApiService {
 		}
 		CriptoRnd criptoRnd = new CriptoRnd();
 		Random random = new Random();
-		criptoRnd.setInfoRnd(new Long(random.nextLong()).toString());
+		Long num = new Long(random.nextLong());
+		LOGGER.info("Número gerado : " + num.toString());
+		criptoRnd.setInfoRnd(num.toString());
 		map.put(repDTO.getNumeroSerie(), criptoRnd);
 		return criptoRnd;
 	}

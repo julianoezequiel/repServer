@@ -9,6 +9,7 @@
  */
 package com.api.rep.service.status;
 
+import java.util.Comparator;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -100,8 +101,14 @@ public class StatusService extends ApiService {
 
 		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
 
-		ComandoDeEnvio dto = rep.getTarefaCollection().iterator().hasNext()
-				? rep.getTarefaCollection().iterator().next().toComandoDeEnvio() : null;
+		ComandoDeEnvio dto = null;
+
+		if (rep.getTarefaCollection().iterator().hasNext()) {
+			dto = rep.getTarefaCollection().iterator().next().getNsu() != null
+					? rep.getTarefaCollection().stream().sorted(Comparator.comparing(Tarefa::getNsu).reversed())
+							.iterator().next().toComandoDeEnvio()
+					: rep.getTarefaCollection().iterator().next().toComandoDeEnvio();
+		}
 
 		if (dto != null) {
 			LOGGER.info("Tarefa NSU : {} - Tipo Tarefa : {} - Operação : {}", new Object[] { dto.getNsu(),

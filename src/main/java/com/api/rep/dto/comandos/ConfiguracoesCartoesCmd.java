@@ -69,7 +69,7 @@ public class ConfiguracoesCartoesCmd implements Cmd {
 
 		ConfiguracoesCartoes cartoes = new ConfiguracoesCartoes();
 
-		cartoes.setDigitosFixo(new Integer(this.cfgCDigFixo));
+		cartoes.setDigitosFixo(this.cfgCDigFixo);
 		cartoes.setMascaraBarras(this.cfgCMascB);
 		cartoes.setMascaraProx(this.cfgCMascP);
 		cartoes.setTipoBarras(this.cfgCTpB);

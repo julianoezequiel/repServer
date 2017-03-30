@@ -69,19 +69,20 @@ public class HorarioVerao {
 
 		HorarioVeraoCmd cmd = new HorarioVeraoCmd();
 
-		Calendar calendarInicio = Calendar.getInstance();
-		calendarInicio.setTime(this.DataInicio);
+		if (this.DataInicio != null && this.DataFim != null) {
+			Calendar calendarInicio = Calendar.getInstance();
 
-		Calendar calendarFim = Calendar.getInstance();
-		calendarFim.setTime(this.DataFim);
+			calendarInicio.setTime(this.DataInicio);
+			Calendar calendarFim = Calendar.getInstance();
+			calendarFim.setTime(this.DataFim);
 
-		cmd.setCfgHVerAnoF(calendarFim.get(Calendar.YEAR));
-		cmd.setCfgHVerAnoI(calendarInicio.get(Calendar.YEAR));
-		cmd.setCfgHVerDiaF(calendarFim.get(Calendar.DAY_OF_MONTH));
-		cmd.setCfgHVerDiaI(calendarInicio.get(Calendar.DAY_OF_MONTH));
-		cmd.setCfgHVerMesF(calendarFim.get(Calendar.MONTH) + 1);
-		cmd.setCfgHVerMesI(calendarInicio.get(Calendar.MONTH) + 1);
-
+			cmd.setCfgHVerAnoF(calendarFim.get(Calendar.YEAR));
+			cmd.setCfgHVerAnoI(calendarInicio.get(Calendar.YEAR));
+			cmd.setCfgHVerDiaF(calendarFim.get(Calendar.DAY_OF_MONTH));
+			cmd.setCfgHVerDiaI(calendarInicio.get(Calendar.DAY_OF_MONTH));
+			cmd.setCfgHVerMesF(calendarFim.get(Calendar.MONTH) + 1);
+			cmd.setCfgHVerMesI(calendarInicio.get(Calendar.MONTH) + 1);
+		}
 		return cmd;
 	}
 

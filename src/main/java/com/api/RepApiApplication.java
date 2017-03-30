@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 
 import javax.servlet.MultipartConfigElement;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -20,7 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootApplication
 @EnableScheduling
 public class RepApiApplication {
-
+	
+	@Autowired
+	private TokenFilter tokenFilter;
+	
 	// filtro para debug,
 	@Bean
 	public FilterRegistrationBean filtroDebug() {
@@ -34,7 +38,7 @@ public class RepApiApplication {
 	@Bean
 	public FilterRegistrationBean filtroJwt() {
 		FilterRegistrationBean bean = new FilterRegistrationBean();
-		bean.setFilter(new TokenFilter());
+		bean.setFilter(tokenFilter);
 		bean.addUrlPatterns("/restrict/*");
 
 		return bean;
