@@ -3,10 +3,7 @@ package com.api.rep.dto.comandos;
 import com.api.rep.entity.Empregado;
 
 /**
- * Comando de Solicitacao e envio do Empregado. Os campos devem seguir as siglas
- * : fNome = Nome, fPis = Pis, fSenha = Senha, fNEx = Nome Exibição, fCB =
- * Número cartão Barrar, fCP = Número cartão Prox., fCT = Número Teclado, fPB =
- * Possui biometria
+ * Classe representa o comando EMPREGADO
  * 
  * @author juliano.ezequiel
  *
@@ -15,13 +12,44 @@ public class EmpregadoCmd implements Cmd {
 
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * EMPREGADO_NOME
+	 */
 	private String fNome;
+
+	/**
+	 * EMPREGADO_PIS
+	 */
 	private String fPis;
+
+	/**
+	 * EMPREGADO_SENHA
+	 */
 	private String fSenha;
+
+	/**
+	 * EMPREGADO_NOME_EXIBE
+	 */
 	private String fNEx;
+
+	/**
+	 * EMPREGADO_CARTAO_BARRAS
+	 */
 	private String fCB;
+
+	/**
+	 * EMPREGADO_CARTAO_PROX
+	 */
 	private String fCP;
+
+	/**
+	 * EMPREGADO_CARTAO_TECLADO
+	 */
 	private String fCT;
+
+	/**
+	 * EMPREGADO_POSSUI_BIO
+	 */
 	private Boolean fPB;
 
 	public String getfNome() {

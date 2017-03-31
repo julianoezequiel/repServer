@@ -1,5 +1,10 @@
 package com.api.rep.dto.comandos;
 
+/**
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 public class BiometriaCmd implements Cmd {
 
 	private static final long serialVersionUID = 1L;

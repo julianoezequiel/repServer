@@ -63,7 +63,7 @@ public class ConfiguracaoService extends ApiService {
 	 * @throws ServiceException
 	 */
 	public void salvar(ConfiguracaoSenhaCmd configuracaoSenhaCmd, Rep repAutenticado) throws ServiceException {
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 		ConfiguracoesSenha configuracoesSenha = configuracaoSenhaCmd.toConfigurcacoesSenha();
 		configuracoesSenha.setId(repAutenticado.getConfiguracoesSenhaId() != null
 				? repAutenticado.getConfiguracoesSenhaId().getId() : null);
@@ -78,7 +78,7 @@ public class ConfiguracaoService extends ApiService {
 	 * @throws ServiceException
 	 */
 	public void salvar(ConfiguracoesCartoesCmd configuracoesCartoesCmd, Rep repAutenticado) throws ServiceException {
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 		ConfiguracoesCartoes configuracoesCartoes = configuracoesCartoesCmd.toConfiguracoesCartoes();
 		configuracoesCartoes.setId(repAutenticado.getConfiguracoesCartoesId() != null
 				? repAutenticado.getConfiguracoesCartoesId().getDigitosFixo() : null);
@@ -94,7 +94,7 @@ public class ConfiguracaoService extends ApiService {
 	 * @throws ServiceException
 	 */
 	public void salvar(ConfiguracoesRedeCmd configuracoesRedeCmd, Rep repAutenticado) throws ServiceException {
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 		ConfiguracoesRede configuracoesRede = configuracoesRedeCmd.toConfiguracoesRede();
 		configuracoesRede.setId(repAutenticado.getConfiguracoesRedeId() != null
 				? repAutenticado.getConfiguracoesRedeId().getId() : null);
@@ -110,7 +110,7 @@ public class ConfiguracaoService extends ApiService {
 	 * @throws ServiceException
 	 */
 	public void salvar(RelogioCmd relogioCmd, Rep repAutenticado) throws ServiceException {
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 		Relogio relogio = relogioCmd.toRelogio();
 		relogio.setId(repAutenticado.getRelogioId() != null ? repAutenticado.getRelogioId().getId() : null);
 		this.relogioRepository.save(relogio);
@@ -125,7 +125,7 @@ public class ConfiguracaoService extends ApiService {
 	 * @throws ServiceException
 	 */
 	public void salvar(HorarioVeraoCmd horarioVeraoCmd, Rep repAutenticado) throws ServiceException {
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 		HorarioVerao horarioVerao = horarioVeraoCmd.toHorarioVerao();
 		horarioVerao
 				.setId(repAutenticado.getHorarioVeraoId() != null ? repAutenticado.getHorarioVeraoId().getId() : null);
@@ -140,7 +140,7 @@ public class ConfiguracaoService extends ApiService {
 	 * @throws ServiceException
 	 */
 	public void salvar(AjustesBioCmd ajustesBioCmd, Rep repAutenticado) throws ServiceException {
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 		AjustesBio ajustesBio = ajustesBioCmd.toAjustesBio();
 		ajustesBio.setId(repAutenticado.getAjustesBioId() != null ? repAutenticado.getAjustesBioId().getId() : null);
 		this.ajusteBioRepository.save(ajustesBio);
@@ -156,7 +156,7 @@ public class ConfiguracaoService extends ApiService {
 	 */
 	public void salvar(ConfiguracacoesWebServerCmd configuracacoesWebServerCmd, Rep repAutenticado)
 			throws ServiceException {
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 		ConfiguracoesWebServer configuracoesWebServer = configuracacoesWebServerCmd.toConfigurcacoesWebServer();
 		configuracoesWebServer.setId(repAutenticado.getConfiguracoesWebServerId() != null
 				? repAutenticado.getConfiguracoesWebServerId().getId() : null);

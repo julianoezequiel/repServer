@@ -47,7 +47,7 @@ public class EmpregadorService extends ApiService {
 		// TODO:validar todos os dados do empregador
 		if (empregador.getEmpregadorIdent() != null) {
 
-			rep = this.getRepPorNumeroSerie(rep);
+			rep = this.getRepService().buscarPorNumeroSerie(rep);
 
 			Empregador e = rep.getEmpregadorId();
 			if (e != null) {

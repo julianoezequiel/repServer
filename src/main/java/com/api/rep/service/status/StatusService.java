@@ -1,12 +1,3 @@
-/**
- *******************************************************************************
- * Exemplo Comunicação HTTP
- *
- * Desenvolvido em Java 1.8
- *
- * Topdata Sistemas de Automação Ltda.
- * ******************************************************************************
- */
 package com.api.rep.service.status;
 
 import java.util.Comparator;
@@ -34,6 +25,7 @@ import com.api.rep.service.comandos.ConfiguracaoService;
 import com.api.rep.service.rep.RepService;
 import com.api.rep.service.tarefa.TarefaService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
 
 @Service
 public class StatusService extends ApiService {
@@ -143,7 +135,7 @@ public class StatusService extends ApiService {
 		}
 
 		// busca na base a referencia do rep
-		rep = this.getRepPorNumeroSerie(rep);
+		rep = this.getRepService().buscarPorNumeroSerie(rep);
 
 		return rep;
 

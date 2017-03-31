@@ -54,21 +54,29 @@ public class RepService {
 	public Rep buscarPorNumeroSerie(String numSerie) throws ServiceException {
 		Rep rep = this.repRepository.buscarPorNumeroSerie(numSerie);
 		if (rep == null) {
-			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não encontrado");
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");
 		}
 		return rep;
+	}
+
+	public Rep buscarPorNumeroSerie(Rep rep) throws ServiceException {
+
+		if (rep == null) {
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");
+		}
+		return this.buscarPorNumeroSerie(rep.getNumeroSerie());
 	}
 
 	// inclui um rep na base
 	public RepDTO salvar(RepDTO repDTO) throws ServiceException {
 
 		if (repDTO.getNumeroSerie() == null) {
-			throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série obrigatório");
+			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Número de série obrigatório");
 		}
 		try {
 			Rep repTeste = this.buscarPorNumeroSerie(repDTO.getNumeroSerie());
 			if (repTeste != null && repTeste.getId() != repDTO.getId()) {
-				throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "Número de série já cadastrado");
+				throw new ServiceException(HttpStatus.UNAUTHORIZED, "Número de série já cadastrado");
 			}
 		} catch (ServiceException e) {
 

@@ -56,15 +56,16 @@ public class Relogio {
 
 	public RelogioCmd toRelogioCmd() {
 		RelogioCmd cmd = new RelogioCmd();
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(data);
-		cmd.setCfgRelAno(calendar.get(Calendar.YEAR));
-		cmd.setCfgRelDia(calendar.get(Calendar.DATE));
-		cmd.setCfgRelHora(calendar.get(Calendar.HOUR_OF_DAY));
-		cmd.setCfgRelMes(calendar.get(Calendar.MONTH) + 1);
-		cmd.setCfgRelMin(calendar.get(Calendar.MINUTE));
-		cmd.setCfgRelSeg(calendar.get(Calendar.SECOND));
-
+		if (data != null) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(data);
+			cmd.setCfgRelAno(calendar.get(Calendar.YEAR));
+			cmd.setCfgRelDia(calendar.get(Calendar.DATE));
+			cmd.setCfgRelHora(calendar.get(Calendar.HOUR_OF_DAY));
+			cmd.setCfgRelMes(calendar.get(Calendar.MONTH) + 1);
+			cmd.setCfgRelMin(calendar.get(Calendar.MINUTE));
+			cmd.setCfgRelSeg(calendar.get(Calendar.SECOND));
+		}
 		return cmd;
 	}
 

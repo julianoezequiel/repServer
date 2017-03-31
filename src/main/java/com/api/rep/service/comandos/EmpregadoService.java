@@ -54,7 +54,7 @@ public class EmpregadoService extends ApiService {
 
 	public Empregado salvar(Empregado empregado, Rep repAutenticado) throws ServiceException {
 
-		this.rep = this.getRepPorNumeroSerie(repAutenticado);
+		this.rep = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 
 		if (empregado.getEmpregadoPis() != null) {
 
@@ -66,7 +66,7 @@ public class EmpregadoService extends ApiService {
 			}
 
 			// buscao o Rep atual
-			repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+			repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 
 			// cria a Tarefa
 			Tarefa tarefa = new Tarefa();
@@ -92,7 +92,7 @@ public class EmpregadoService extends ApiService {
 	@Override
 	public void receber(Cmd cmd, Rep repAutenticado) throws ServiceException {
 
-		this.rep = this.getRepPorNumeroSerie(repAutenticado);
+		this.rep = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 
 		if (cmd instanceof EmpregadoCmd) {
 			EmpregadoCmd empregadorDTO = (EmpregadoCmd) cmd;
@@ -105,6 +105,7 @@ public class EmpregadoService extends ApiService {
 			LOGGER.info("Número prox : " + empregadorDTO.getfCP());
 			LOGGER.info("Número barras : " + empregadorDTO.getfCB());
 			LOGGER.info("Possui Bio : " + empregadorDTO.getfPB());
+			LOGGER.info("Senha : " + empregadorDTO.getfSenha());
 
 			Optional<Empregado> empregado = this.getEmpregadoRespository().buscarPorPis(empregadorDTO.getfPis(),
 					this.rep);
@@ -120,7 +121,7 @@ public class EmpregadoService extends ApiService {
 
 	public void receberLista(List<EmpregadoCmd> empregadoDTOList, Rep repAutenticado) throws ServiceException {
 
-		this.rep = this.getRepPorNumeroSerie(repAutenticado);
+		this.rep = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 
 		LOGGER.info("Lista Recebida");
 
@@ -153,7 +154,7 @@ public class EmpregadoService extends ApiService {
 		}
 	}
 
-	public HashMap<String, Object> enviarDump(Integer nsu, Rep repAutenticado) {
+	public HashMap<String, Object> enviarDump(Integer nsu, Rep repAutenticado) throws ServiceException {
 
 		List<Tarefa> tarefas = this.getTarefaRepository().buscarPorNsu(nsu);
 		InputStreamResource isr = null;
@@ -178,6 +179,8 @@ public class EmpregadoService extends ApiService {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			} else {
+				throw new ServiceException(HttpStatus.PRECONDITION_FAILED, "não existe dump na memória do servidor");
 			}
 		}
 		return map;

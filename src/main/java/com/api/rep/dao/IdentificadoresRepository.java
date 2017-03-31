@@ -5,7 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import com.api.rep.entity.Identificadores;
 
+/**
+ * Interface de repositório dos Idendificadores do Rep
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @Repository
-public interface IndentificadoresRepository extends JpaRepository<Identificadores, Integer> {
+public interface IdentificadoresRepository extends JpaRepository<Identificadores, Integer> {
 
 }

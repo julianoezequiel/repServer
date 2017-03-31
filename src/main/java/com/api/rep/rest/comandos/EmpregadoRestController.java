@@ -25,8 +25,9 @@ import com.api.rep.service.ServiceException;
 import com.api.rep.service.comandos.EmpregadoService;
 
 /**
- * Requisições Rest empregado.O Rep utiliza esta requisições para enviar a Lista
- * de empregado ou um empregado específico para o servidor
+ * Requisições Rest empregado.<br>
+ * O Rep utiliza esta requisições para enviar a Lista de empregado ou um
+ * empregado específico para o servidor
  * 
  * @author juliano.ezequiel
  *
@@ -37,22 +38,14 @@ public class EmpregadoRestController extends ApiRestController {
 	@Autowired
 	private EmpregadoService empregadoService;
 
+	/**
+	 * Consulta todos os empregados na base de dados
+	 * 
+	 * @return
+	 */
 	@RequestMapping(value = CONSTANTES.URL_EMPREGADO, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public ResponseEntity<Collection<Empregado>> buscarTodos() {
 		return new ResponseEntity<Collection<Empregado>>(this.empregadoService.listar(), HttpStatus.OK);
-	}
-
-	@RequestMapping(value = CONSTANTES.URL_EMPREGADO
-			+ "/cadastro", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.POST)
-	public ResponseEntity<Empregado> salvar(@RequestBody Empregado empregado) throws ServiceException {
-		return new ResponseEntity<Empregado>(this.empregadoService.salvar(empregado, this.getRepAutenticado()),
-				HttpStatus.CREATED);
-	}
-
-	@RequestMapping(value = CONSTANTES.URL_EMPREGADO
-			+ "/cadastro/{id}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.DELETE)
-	public ResponseEntity<String> excluir(@PathVariable Integer id) throws ServiceException {
-		return new ResponseEntity<String>(this.empregadoService.excluirPorId(id), HttpStatus.OK);
 	}
 
 	/**
@@ -110,7 +103,7 @@ public class EmpregadoRestController extends ApiRestController {
 	public ResponseEntity<?> enviarDump(@PathVariable("nsu") Integer nsu) throws ServiceException {
 		HashMap<String, Object> map = this.empregadoService.enviarDump(nsu, this.getRepAutenticado());
 		return ResponseEntity.ok().contentLength((long) map.get("tamanho"))
-				.contentType(MediaType.parseMediaType("application/octet-stream")).body(map.get("dump"));
+				.contentType(MediaType.parseMediaType(MediaType.MULTIPART_FORM_DATA_VALUE)).body(map.get("dump"));
 	}
 
 }

@@ -1,5 +1,11 @@
 package com.api.rep.contantes;
 
+/**
+ * Contantes e enumeradores do Sitema
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 public class CONSTANTES {
 
 	public static final String CHAVE_COMUNICACAO_DEFAULT = "**COMUNICACAO**";
@@ -28,12 +34,17 @@ public class CONSTANTES {
 	public static final String URL_IDENTFICACAO = "/restrict/identificacao";
 	public static final String URL_ATUALIZACAO_FW = "/restrict/atualizarfw";
 	public static final String URL_ATUALIZACAO_PAGINAS = "/restrict/atualizarpaginas";
-	
+
 	public static final String URL_AUTH = "/auth";
 	public static final String URL_STATUS = "/restrict/status";
 	public static final String URL_AUTH_SIGN = "/auth/sign";
-	
-	
+
+	/**
+	 * Tipos de Operações utilizadas pelo REP
+	 * 
+	 * @author juliano.ezequiel
+	 *
+	 */
 	public enum TIPO_OPERACAO {
 		NENHUMA, // 0
 		ENVIAR, // 1
@@ -53,6 +64,12 @@ public class CONSTANTES {
 
 	}
 
+	/**
+	 * Tipos de NSR
+	 * 
+	 * @author juliano.ezequiel
+	 *
+	 */
 	public enum TIPOS_NSR {
 		TRAILER, // 0
 		CABECALHO, // 1
@@ -63,6 +80,12 @@ public class CONSTANTES {
 		EVENTOS_SENSIVEIS// 6
 	}
 
+	/**
+	 * Tipos de Respostas do Rep
+	 * 
+	 * @author juliano.ezequiel
+	 *
+	 */
 	public enum STATUS_COM_REP {
 		HTTPC_RESULT_OK, // 0
 		HTTPC_RESULT_FALHA, // 1

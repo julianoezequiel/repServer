@@ -31,9 +31,6 @@ public class ApiService {
 	@Autowired
 	private ObjectMapper mapper;
 
-	@Autowired
-	private TratarResposta tratarResposta;
-
 	private Rep rep;
 
 	public TarefaRepository getTarefaRepository() {
@@ -52,17 +49,30 @@ public class ApiService {
 		this.repService = repService;
 	}
 
-	public Rep getRepPorNumeroSerie(Rep rep) throws ServiceException {
-
-		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
-
-		if (rep != null) {
-			return rep;
-		} else {
-			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");
-		}
-	}
-
+//	/**
+//	 * Busca o rep pelo numero de série
+//	 * 
+//	 * @param rep
+//	 * @return
+//	 * @throws ServiceException
+//	 */
+//	public Rep getRepPorNumeroSerie(Rep rep) throws ServiceException {
+//
+//		rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
+//
+//		if (rep != null) {
+//			return rep;
+//		} else {
+//			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");
+//		}
+//	}
+	
+	/**
+	 * Recebe os dados do Rep
+	 * @param cmd
+	 * @param rep
+	 * @throws ServiceException
+	 */
 	public void receber(Cmd cmd, Rep rep) throws ServiceException {
 
 		if (rep == null) {
@@ -101,11 +111,6 @@ public class ApiService {
 
 	public void setRep(Rep rep) {
 		this.rep = rep;
-	}
-
-	public RespostaSevidorDTO tratarResposta(TratarResposta respostaRep, Rep repAutenticado) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

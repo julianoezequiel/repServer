@@ -631,9 +631,8 @@ public class AgendarTarefa extends ApiRestController {
 	 */
 	@RequestMapping(value = "verificacao/{numSerie}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE, method = RequestMethod.GET)
 	public Tarefa verificacao(@PathVariable("numSerie") String numSerie) throws ServiceException {
-		// TODO : testar o comando
 		Rep rep = this.repService.buscarPorNumeroSerie(numSerie);
-		Tarefa tarefa = this.tarefaService.tarefaTeste(TIPO_OPERACAO.RECEBER.name(), rep);
+		Tarefa tarefa = this.tarefaService.tarefaTeste(TIPO_OPERACAO.ENVIAR.name(), rep);
 		tarefa.setTipoTarefa(CmdHandler.TIPO_CMD.VERIFICA_LISTA_BIO.ordinal());
 		return this.tarefaService.salvar(tarefa);
 

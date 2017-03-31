@@ -5,7 +5,13 @@ import org.springframework.stereotype.Repository;
 
 import com.api.rep.entity.Coleta;
 
+/**
+ * Interface de repositório da coleta
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @Repository
-public interface ColetaRepository extends JpaRepository<Coleta, Integer>{
+public interface ColetaRepository extends JpaRepository<Coleta, Integer> {
 
 }

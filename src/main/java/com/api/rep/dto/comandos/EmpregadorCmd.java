@@ -3,9 +3,8 @@ package com.api.rep.dto.comandos;
 import com.api.rep.entity.Empregador;
 
 /**
- * Comando de solicitacao e envio de Empregado(Funcionario) para Inner Rep. Os
- * campos devem seguir as Siglas: eRS = Razão Social, eTpId = Tipo
- * Identificador, eId = Identificador(CPF/CNPJ), eLoc = Local eCei = CEI
+ * Classe representa o comando EMPREGADOR
+ *
  * 
  * @author juliano.ezequiel
  *
@@ -14,14 +13,29 @@ public class EmpregadorCmd implements Cmd {
 
 	private static final long serialVersionUID = 1L;
 
-	private String eId;
-
-	private String eCei;
-
-	private String eLoc;
-
+	/**
+	 * EMPREGADOR_RAZAO
+	 */
 	private String eRS;
 
+	/**
+	 * EMPREGADOR_IDENT
+	 */
+	private String eId;
+
+	/**
+	 * EMPREGADOR_CEI
+	 */
+	private String eCei;
+
+	/**
+	 * EMPREGADOR_LOCAL
+	 */
+	private String eLoc;
+
+	/**
+	 * EMPREGADOR_TIPO_IDENT
+	 */
 	private String eTpId;
 
 	public String geteId() {

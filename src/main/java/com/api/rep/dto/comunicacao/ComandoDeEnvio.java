@@ -9,7 +9,7 @@ import com.api.rep.service.comandos.CmdHandler;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 /**
- * Os comandos que o Rep executa segue o padrão desta classe. Os nomes das
+ * Os comandos que o Rep executa seguem o padrão desta classe. Os nomes das
  * propriedades devem estar exatamente com as siglas: "nsu", "url", "cpf",
  * "tCmd", "tOp", "dCmd" e seguir esta ordem.
  * 

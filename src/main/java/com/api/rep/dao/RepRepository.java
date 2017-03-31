@@ -7,6 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import com.api.rep.entity.Rep;
 
+/**
+ * Interface de repositório do Rep
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @Repository
 public interface RepRepository extends JpaRepository<Rep, Integer> {
 

@@ -15,6 +15,12 @@ import com.api.rep.service.ApiService;
 import com.api.rep.service.ServiceException;
 import com.api.rep.utils.JwtUtil;
 
+/**
+ * Classe responsável pela autenticação do Rep no servidor
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @Service
 public class AuthService extends ApiService {
 
@@ -60,6 +66,13 @@ public class AuthService extends ApiService {
 		return new TokenDTO(token, rep.getChaveComunicacao());
 	}
 
+	/**
+	 * Gera o número aleatória para o Rep assinar
+	 * 
+	 * @param repDTO
+	 * @return
+	 * @throws ServiceException
+	 */
 	public CriptoRnd criptoRnd(RepDTO repDTO) throws ServiceException {
 		if (repDTO.getNumeroSerie() == null) {
 			throw new ServiceException(HttpStatus.UNAUTHORIZED, "Rep não cadastrado");

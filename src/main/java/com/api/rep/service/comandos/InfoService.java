@@ -18,7 +18,7 @@ public class InfoService extends ApiService {
 
 	public void salvar(InfoCmd infoCmd, Rep repAutenticado) throws ServiceException {
 
-		repAutenticado = this.getRepPorNumeroSerie(repAutenticado);
+		repAutenticado = this.getRepService().buscarPorNumeroSerie(repAutenticado);
 
 		Info info = infoCmd.toInfo();
 		info.setId(repAutenticado.getInfoId() != null ? repAutenticado.getInfoId().getId() : null);
@@ -28,6 +28,7 @@ public class InfoService extends ApiService {
 		repAutenticado.setUltimoNsr(new Integer(info.getUltimoNsr()));
 
 		this.getRepService().salvar(repAutenticado);
+		
 
 	}
 }

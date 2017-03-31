@@ -1,3 +1,12 @@
+/**
+ *******************************************************************************
+ * Exemplo Comunicação HTTP
+ *
+ * Desenvolvido em Java 1.8
+ *
+ * Topdata Sistemas de Automação Ltda.
+ * ******************************************************************************
+ */
 package com.api;
 
 import java.text.SimpleDateFormat;
@@ -18,13 +27,19 @@ import com.api.rep.filter.TokenFilter;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Classe Principal
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @SpringBootApplication
 @EnableScheduling
 public class RepApiApplication {
-	
+
 	@Autowired
 	private TokenFilter tokenFilter;
-	
+
 	// filtro para debug,
 	@Bean
 	public FilterRegistrationBean filtroDebug() {
@@ -55,7 +70,8 @@ public class RepApiApplication {
 		b.configure(mapper);
 		return b;
 	}
-
+	
+	//configura o multipart
 	@Bean
 	MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();

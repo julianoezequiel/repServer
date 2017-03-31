@@ -3,7 +3,6 @@ package com.api.rep.service.comandos;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collection;
@@ -29,9 +28,6 @@ import com.api.rep.service.ServiceException;
 @Service
 public class ColetaService extends ApiService {
 
-	private static final String NUM_TRAILER = "999999999";
-	private static final String NUM_CABECALHO = "000000000";
-
 	public static HashMap<Integer, byte[]> dumpingColetaMap = new HashMap<>();
 
 	@Autowired
@@ -42,7 +38,15 @@ public class ColetaService extends ApiService {
 	@Value("${coleta.alteracoes}")
 	Boolean coletarAlteracoes;
 
-	// recebe o NSR
+	private String rootPath = System.getProperty("catalina.home");
+	private String path = rootPath + File.separator + "tmpFiles";
+
+	/**
+	 * Recebe os registro de NSR
+	 * 
+	 * @param registros
+	 * @param rep
+	 */
 	public void coletaNsr(String registros, Rep rep) {
 
 		this.setRep(rep);
@@ -54,27 +58,24 @@ public class ColetaService extends ApiService {
 
 			Integer numNsr = ColetaNsrHandler.getNumNsr(nsrRegistro);
 
-			if (!numNsr.equals(NUM_CABECALHO) && !numNsr.equals(NUM_TRAILER)) {
-				try {
+			try {
+				nsr = this.nsrRepository.buscarPorNumNsr(numNsr, rep.getId());
 
-					nsr = this.nsrRepository.buscarPorNumNsr(numNsr);
-
-					if (nsr == null) {
-						if (coletarAlteracoes) {
-							nsr = ColetaNsrHandler.NSR_HANDLER.get(nsrRegistro).convert(nsrRegistro, this);
-							nsr.setRepId(rep);
-							this.nsrRepository.saveAndFlush(nsr);
-						}
-						LOGGER.info("Novo NSR Coletado :" + registro[i].replace("\r", ""));
-					} else {
-						LOGGER.info("NSR Já coletado :" + registro[i].replace("\r", ""));
+				if (nsr == null) {
+					if (coletarAlteracoes) {
+						nsr = ColetaNsrHandler.NSR_HANDLER.get(nsrRegistro).convert(nsrRegistro, this);
+						nsr.setRepId(rep);
+						this.nsrRepository.saveAndFlush(nsr);
 					}
-
-				} catch (Exception e) {
-					System.err.println(e);
+					LOGGER.info("Novo NSR Coletado :" + registro[i].replace("\r", ""));
+				} else {
+					LOGGER.info("NSR Já coletado :" + registro[i].replace("\r", ""));
 				}
 
+			} catch (Exception e) {
+				System.err.println(e);
 			}
+
 		}
 		if (nsr != null && nsr.getNumeroNsr() != null) {
 			if (nsr.getNumeroNsr() > rep.getUltimoNsr()) {
@@ -84,6 +85,14 @@ public class ColetaService extends ApiService {
 		}
 	}
 
+	/**
+	 * Recebe os Registro
+	 * 
+	 * @param registros
+	 * @param rep
+	 * @return
+	 * @throws ServiceException
+	 */
 	public RespostaSevidorDTO receber(String registros, Rep rep) throws ServiceException {
 		LOGGER.info("Inicio do recebimento do coleta");
 		if (rep == null) {
@@ -108,6 +117,14 @@ public class ColetaService extends ApiService {
 
 	}
 
+	/**
+	 * Método não esta em uso
+	 * 
+	 * @param statusColetaDTO
+	 * @param repAutenticado
+	 * @return
+	 * @throws ServiceException
+	 */
 	public RespostaSevidorDTO statusColeta(StatusColetaDTO statusColetaDTO, Rep repAutenticado)
 			throws ServiceException {
 		LOGGER.info("Status da coleta : " + statusColetaDTO.getRegistrosColeto() + " Rep : "
@@ -120,6 +137,13 @@ public class ColetaService extends ApiService {
 		}
 	}
 
+	/**
+	 * Consulta na base de dados os NSR pelo Rep
+	 * 
+	 * @param rep
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Collection<Nsr> buscarNsrPorRep(Rep rep) throws ServiceException {
 		if (rep != null) {
 			rep = this.getRepService().buscarPorNumeroSerie(rep.getNumeroSerie());
@@ -130,22 +154,49 @@ public class ColetaService extends ApiService {
 
 	}
 
+	/**
+	 * Exclui todos os NSR da base de dados.
+	 * 
+	 * @param repAutenticado
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Long excluirTodos(Rep repAutenticado) throws ServiceException {
-		return this.nsrRepository.removeByrepId(this.getRepPorNumeroSerie(repAutenticado));
+		return this.nsrRepository.removeByrepId(this.getRepService().buscarPorNumeroSerie(repAutenticado));
 	}
 
+	/**
+	 * Calcula o total de NSR coletado de um Rep
+	 * 
+	 * @param repAutenticado
+	 * @return
+	 * @throws ServiceException
+	 */
 	public Long total(Rep repAutenticado) throws ServiceException {
-		this.setRep(this.getRepPorNumeroSerie(repAutenticado));
+		this.setRep(this.getRepService().buscarPorNumeroSerie(repAutenticado));
 		Nsr nsr = new Nsr();
 		nsr.setRepId(this.getRep());
 		return this.nsrRepository.count(Example.of(nsr));
 	}
 
+	/**
+	 * Cancela um acoleta iniciada
+	 * 
+	 * @param repAutenticado
+	 * @return
+	 */
 	public Boolean cancelar(Rep repAutenticado) {
 		cancelarColeta = true;
 		return cancelarColeta;
 	}
 
+	/**
+	 * Recebe o Dump da MRP do Rep
+	 * 
+	 * @param arquivoColeta
+	 * @param repAutenticado
+	 * @param nsu
+	 */
 	public void receberDumping(MultipartFile arquivoColeta, Rep repAutenticado, Integer nsu) {
 		try {
 			if (ColetaService.dumpingColetaMap.containsKey(nsu)) {
@@ -164,9 +215,11 @@ public class ColetaService extends ApiService {
 
 	}
 
-	private String rootPath = System.getProperty("catalina.home");
-	private String path = rootPath + File.separator + "tmpFiles";
-
+	/**
+	 * Salva o arquivo da MRP no Servidor
+	 * 
+	 * @param nsu
+	 */
 	public void salvarArquivoDumpEmDisco(Integer nsu) {
 
 		if (ColetaService.dumpingColetaMap.containsKey(nsu)) {

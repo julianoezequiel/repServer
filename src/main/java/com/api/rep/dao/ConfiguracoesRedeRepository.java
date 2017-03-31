@@ -5,6 +5,12 @@ import org.springframework.stereotype.Repository;
 
 import com.api.rep.entity.ConfiguracoesRede;
 
+/**
+ * Interface de repositório das configurações de Rede
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @Repository
 public interface ConfiguracoesRedeRepository extends JpaRepository<ConfiguracoesRede, Integer> {
 

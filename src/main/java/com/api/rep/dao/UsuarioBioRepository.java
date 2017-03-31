@@ -10,6 +10,12 @@ import org.springframework.stereotype.Repository;
 
 import com.api.rep.entity.UsuarioBio;
 
+/**
+ * Interface de repositório do Usuário Biométrico do Rep
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @Repository
 @Transactional(value = TxType.NEVER)
 public interface UsuarioBioRepository extends JpaRepository<UsuarioBio, Integer> {

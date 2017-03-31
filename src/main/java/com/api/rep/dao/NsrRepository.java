@@ -14,6 +14,12 @@ import org.springframework.stereotype.Repository;
 import com.api.rep.entity.Nsr;
 import com.api.rep.entity.Rep;
 
+/**
+ * Interface de repositório dos NSR do Rep
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 @Repository
 public interface NsrRepository extends JpaRepository<Nsr, Integer> {
 
@@ -27,17 +33,13 @@ public interface NsrRepository extends JpaRepository<Nsr, Integer> {
 	@Query(value = "select * from Nsr where rep_id = :id order by numero_nsr desc LIMIT 1", nativeQuery = true)
 	public Nsr buscarUltimoNsr(@Param("id") Integer id);
 
-	@Query(value = "select n from Nsr n where n.numeroNsr = :numNsr")
-	public Nsr buscarPorNumNsr(@Param("numNsr") Integer numNsr);
+	@Query(value = "select * from Nsr where rep_id = :id and numero_nsr = :numNsr",nativeQuery = true)
+	public Nsr buscarPorNumNsr(@Param("id") Integer id, @Param("numNsr") Integer numNsr);
 
 	@Query(value = "select n from Nsr n where n.repId = :prep")
 	public List<Nsr> buscarPorRep(@Param("prep") Rep rep);
 
-	// @Query(value = "delete from Nsr where rep_id = :id", nativeQuery = true)
 	@Transactional
 	public long removeByrepId(Rep rep);
-
-	// @Query(value = "select count(n) from Nsr n where n.repId = :rep")
-	// public Long total(@Param("rep") Rep rep);
 
 }

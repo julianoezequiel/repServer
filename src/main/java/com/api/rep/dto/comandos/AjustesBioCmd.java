@@ -2,10 +2,16 @@ package com.api.rep.dto.comandos;
 
 import com.api.rep.entity.AjustesBio;
 
+/**
+ * Classe representa o Comando CONFIG_BIO
+ * 
+ * @author juliano.ezequiel
+ *
+ */
 public class AjustesBioCmd implements Cmd {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private Integer cfgBSegI;
 	private Integer cfgBSegV;
 	private Integer cfgBFL;
